@@ -5,7 +5,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 
 // This is client side config only - don't put anything in here that shouldn't be public!
 const endpoint = 'http://localhost:4000';
-const prodEndpoint = 'https://murmuring-basin-25872.herokuapp.com';
+const prodEndpoint = 'https://graphql.beddertravel.com';
 
 const httpLink = createHttpLink({
   uri: process.env.NODE_ENV === 'development' ? endpoint : prodEndpoint,

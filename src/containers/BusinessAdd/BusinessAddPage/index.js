@@ -57,15 +57,11 @@ export class BusinessAddPage extends React.Component {
     this.roomsRef = React.createRef();
   }
 
-  componentWillUnmount() {
-    // console.log("B ADD UNMOUNT")
-  }
-
   submitDraft() {
     let ret = true;
-    // if (!this.validateRest()) {
-    //   ret = false;
-    // }
+//     if (!this.validateRest()) {
+//       ret = false;
+//     }
 //     if (!BedderValidator.validate(this.vRefs)) {
 //       this.setState({ valid: false });
 //       ret = false;
@@ -107,7 +103,6 @@ export class BusinessAddPage extends React.Component {
     }
 
     this.setState({roomDoValidation: !this.state.roomDoValidation});
-
 
     if (this.props.stars == 0) {
       validationErrors.stars = true;
