@@ -6,9 +6,9 @@ const PageTitle = styled.h1`
   font-family: Ubuntu;
   font-weight: 300;
   text-align: center;
-  margin-top: 0px;
+  margin-top: ${props => props.spaced ? '20px' :'0px'};
   @media (min-width: 600px) {
-    margin-top: 10px;
+    margin-top: ${props => props.spaced ? '30px' : '10px'};
     font-size: 38px;
     line-height: 44px;
   }

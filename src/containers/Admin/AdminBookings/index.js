@@ -12,33 +12,39 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import MessageError from 'components/MessageError';
 import Table from 'components/Table';
 
-import BusinessActions from './BusinessActions';
 import adminBookingsStyle from './adminBookingsStyle';
 
-const BUSINESSES_QUERY = gql`
-  query BUSINESSES_QUERY {
-    businesses {
+const BOOKINGS_QUERY = gql`
+  query BOOKINGS_QUERY {
+    bookings {
       id
-      name
-      reviewsNum
-      reviewsAvg
-      bookingsCount
+      user {
+        id
+        email
+      }
+      business {
+        id
+        name
+      }
+      businessUnit {
+        id
+        name
+      }
+      amount
       status
     }
   }
 `;
 
+// We use the same statuses as businesses, but we don't need them all.
 const statusTexts = [
-  'NEW',
-  'PENDING OWNER',
-  'DRAFT',
   'PENDING',
-  'CANCELLED',
-  'DECLINED',
+  '',
+  '',
+  '',
+  '',
+  'REFUSED',
   'ACCEPTED',
-  'PAUSED',
-  'TO MODIFY',
-  'LIVE',
 ];
 
 class AdminBookings extends React.Component {
@@ -50,30 +56,21 @@ class AdminBookings extends React.Component {
     const { classes } = this.props;
     return (
       <Query
-        query={BUSINESSES_QUERY}
+        query={BOOKINGS_QUERY}
       >
         {({ data, loading, error }) => {
           if (error) return <MessageError error={error} />;
           if (loading) return <p>Loading...</p>;
-          let pendingTable = [];
-          let businessTable = [];
-          if (data && data.businesses.length) {
-            data.businesses.map(business => {
-              const object = [
-                <Link key={business.id} to={`/business/view/${business.id}`}>{business.id}</Link>,
-                <Link key={business.id} to={`/business/view/${business.id}`}>{business.name}</Link>, 
-                business.reviewsNum, 
-                business.reviewsAvg, 
-                business.bookingsCount,
-                <BusinessActions key={business.id} businessId={business.id} status={business.status} />
-              ];
-              if (business.status === 3) {
-                return pendingTable.push(object);
-              }
-              return businessTable.push(object);
-            });
-          }
-          const businessTableHead = ['ID', 'Name', 'Nb of Reviews', 'Review', 'Bookings', 'Status'];
+          console.log(data);
+          const bookingTable = data ? data.bookings.map(booking => [
+            <Link key={booking.id} to={`/booking/${booking.id}`}>{booking.id}</Link>, 
+            <Link key={booking.id} to={`/admin/user/${booking.user.id}`}>{booking.user.email}</Link>, 
+            <Link key={booking.id} to={`/business/view/${booking.business.id}`}>{booking.business.name}</Link>, 
+            booking.businessUnit.name,
+            booking.amount,
+            statusTexts[booking.status],
+          ]) : null;
+          const bookingTableHead = ['ID', 'User', 'Business', 'Room', 'Amount', 'Status'];
           return (
             <Card>
               <CardHeader color="success">
@@ -82,23 +79,9 @@ class AdminBookings extends React.Component {
               <CardContent>
                 <Grid container justify="space-between">
                   <Grid item xs={12} sm={12} md={12}>
-                    {pendingTable.length > 0 && <Table
-                      tableData={pendingTable}
-                      tableHead={businessTableHead}
-                      customCellClasses={[
-                        classes.center,
-                      ]}
-                      customClassesForCells={[6]}
-                      customHeadCellClasses={[
-                        classes.center,
-                      ]}
-                      customHeadClassesForCells={[6]}
-                    />}
-                  </Grid>
-                  <Grid item xs={12} sm={12} md={12}>
-                    {businessTable.length > 0  && <Table
-                      tableData={businessTable}
-                      tableHead={businessTableHead}
+                    {bookingTable.length > 0  && <Table
+                      tableData={bookingTable}
+                      tableHead={bookingTableHead}
                       customCellClasses={[
                         classes.center,
                       ]}
@@ -120,4 +103,4 @@ class AdminBookings extends React.Component {
 }
 
 export default withStyles(adminBookingsStyle)(AdminBookings);
-export { BUSINESSES_QUERY, statusTexts };
+export { BOOKINGS_QUERY };

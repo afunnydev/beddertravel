@@ -1,9 +1,3 @@
-/**
- *
- * BookingsPage
- *
- */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
@@ -17,9 +11,10 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { Button } from '@material-ui/core';
 
+import SearchBar from 'containers/SearchBar/Loadable';
 import BookingItem from 'components/BookingItem';
 import BedderLoadingIndicator from 'components/BedderLoadingIndicator';
-import SearchBar from 'containers/SearchBar/Loadable';
+import PageTitle from 'components/styles/PageTitle';
 
 import injectSaga from 'utils/injectSaga';
 import saga from './saga';
@@ -54,20 +49,18 @@ export class BookingsPage extends React.Component {
         </Helmet>
         <SearchBar />
 
-        <Typography align="center" style={{ padding: 35 }} variant="display1">
-          Reservations
-        </Typography>
+        <PageTitle spaced>Reservations</PageTitle>
 
         {this.props.getBookingsSubmitting && (
-          <BedderLoadingIndicator/>
+          <BedderLoadingIndicator center full />
         )}
 
         {this.props.getBookingsSubmitting || (
 
           <React.Fragment>
             <div align="center">
-              <Button onClick={this.props.switchUpcoming} variant="contained" color={this.props.bookingsUpcoming ? "primary" : "default"} className={classes.navButton}>Upcoming</Button>
-              <Button onClick={this.props.switchPassed} variant="contained" color={this.props.bookingsPassed ? "primary" : "default"} className={classes.navButton}>Passed</Button>
+              <Button onClick={this.props.switchUpcoming} variant="contained" color={this.props.bookingsUpcoming ? 'primary' : 'default'} className={classes.navButton}>Upcoming</Button>
+              <Button onClick={this.props.switchPassed} variant="contained" color={this.props.bookingsPassed ? 'primary' : 'default'} className={classes.navButton}>Passed</Button>
             </div>
 
             <Grid container justify="center" alignContent="center">
@@ -86,11 +79,11 @@ export class BookingsPage extends React.Component {
                   })}
 
                   { ohMyGod != 0 && this.props.getBookingsResult && this.props.getBookingsResult.result && this.props.getBookingsResult.result.length == 0 && (
-                    <Typography variant="title" style={{margin: 20}}>No bookings.</Typography>
+                    <Typography variant="body1" style={{margin: 20}}>No bookings.</Typography>
                   )}
 
                   {ohMyGod == 0 && (
-                    <Typography variant="title" style={{margin: 20}}>No result.</Typography>
+                    <Typography variant="body1" style={{margin: 20}}>No result.</Typography>
                   )}
 
                 </Grid>
@@ -121,8 +114,7 @@ const withSaga = injectSaga({ key: 'bookingsPage', saga });
 export default compose(
   withSaga,
   withConnect,
-  withStyles(styles),
   withMobileDialog(),
-)(BookingsPage);
+)(withStyles(styles)(BookingsPage));
 
 export { withConnect };

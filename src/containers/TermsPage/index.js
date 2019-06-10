@@ -4,13 +4,13 @@ import { Helmet } from 'react-helmet';
 import GeneralTemplate from 'components/GeneralTemplate';
 import json from './data.json';
 
-const AboutPage = () => (
+const TermsPage = () => (
   <>
     <Helmet>
-      <title>About</title>
+      <title>Terms & Conditions</title>
     </Helmet>
     <GeneralTemplate markdown={json.text} />
   </>
 );
 
-export default AboutPage;
+export default TermsPage;

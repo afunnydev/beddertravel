@@ -1,9 +1,3 @@
-/**
- *
- * BookingPage
- *
- */
-
 import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -11,16 +5,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { compose } from 'redux';
-
-import BedderConfig from 'bedder/bedderConfig';
-
-import injectSaga from 'utils/injectSaga';
-import BackButton from 'components/BackButton';
-import SearchBar from 'containers/SearchBar/Loadable';
-import SupportTicket from 'components/SupportTicket/Loadable';
-import AskQuestion from 'components/AskQuestion/Loadable';
-
 import styled from 'styled-components';
+import { EmailShareButton } from 'react-share';
 
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -30,14 +16,19 @@ import withMobileDialog from '@material-ui/core/withMobileDialog';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
-import StarRate from '@material-ui/icons/Star';
 import Place from '@material-ui/icons/PlaceOutlined';
 import Security from '@material-ui/icons/Security';
 import ErrorOutline from '@material-ui/icons/ErrorOutline';
 import ShareOutlined from '@material-ui/icons/ShareOutlined';
 import { Button } from '@material-ui/core';
 
-import { EmailShareButton } from 'react-share';
+import injectSaga from 'utils/injectSaga';
+import BedderConfig from 'bedder/bedderConfig';
+
+import SearchBar from 'containers/SearchBar/Loadable';
+import SupportTicket from 'components/SupportTicket/Loadable';
+import AskQuestion from 'components/AskQuestion/Loadable';
+import TitleWithBackButton from 'components/TitleWithBackButton';
 
 import saga from './saga';
 
@@ -198,16 +189,13 @@ export class BookingPage extends React.Component {
 
         <Grid container justify="center" alignContent="center" style={isMobile ? { marginTop: -85 } : {}}>
           <Grid item xs={12} md={10} lg={8} style={{ padding: 20 }}>
-            <Grid container justify="center" alignContent="center" spacing={24}>
+            <Grid container justify="center" alignContent="center" spacing={3}>
               <Hidden mdUp>
                 <Grid item xs={12}>
                 </Grid>
               </Hidden>
-
-              <Grid item xs={12}>
-                <BackButton style={{ position: 'absolute', zIndex: 100 }} />
-                <Typography align="center" style={{ position: 'relative' }} variant="display1">Reservation</Typography>
-              </Grid>
+              
+              <TitleWithBackButton title="Reservation" />
 
               <Grid item xs={12}>
                 <Paper>
@@ -217,10 +205,7 @@ export class BookingPage extends React.Component {
 
               <Grid item sm={8} xs={8} align="center">
                 <StyledBlockPaper>
-                  {/* {[...Array(this.props.bStars)].map((v, i) => ( */}
-                  {/*   <StarRate key={i} color="primary" /> */}
-                  {/* ))} */}
-                  <Typography style={{ margin: '5px 0px' }} noWrap variant="headline">{this.props.bName}</Typography>
+                  <Typography style={{ margin: '5px 0px' }} noWrap variant="h5">{this.props.bName}</Typography>
                   <Divider />
                   <Typography noWrap style={{ margin: '10px 0px', fontStyle: 'italic' }} color="primary">
                     <Place />
@@ -258,7 +243,7 @@ export class BookingPage extends React.Component {
                       </Typography>
                     </Grid>
                     <Grid item xs={12}>
-                      <Typography color="primary" variant="title">{this.props.bReviewScore > 0 ? messages[Math.round(this.props.bReviewScore)] : 'New'}</Typography>
+                      <Typography color="primary" variant="h5">{this.props.bReviewScore > 0 ? messages[Math.round(this.props.bReviewScore)] : 'New'}</Typography>
                     </Grid>
                   </Grid>
                 </StyledBlockPaper>
@@ -284,7 +269,7 @@ export class BookingPage extends React.Component {
                   </Grid>}
 
                   <StyledPaper style={{ marginBottom: 25 }}>
-                    <Typography variant="title" style={{ marginBottom: 7, marginTop: 7 }}>Directions</Typography>
+                    <Typography variant="h6" style={{ marginBottom: 7, marginTop: 7 }}>Directions</Typography>
                     <Typography variant="body1" style={{ marginTop: 0 }}>
                       {this.props.getResultModel.result.business.howToFind}
                     </Typography>
@@ -292,13 +277,13 @@ export class BookingPage extends React.Component {
 
                   <StyledPaper>
 
-                    <Typography variant="title" style={{ marginBottom: 7 }}>Dates</Typography>
+                    <Typography variant="h6" style={{ marginBottom: 7 }}>Dates</Typography>
                     <Typography variant="body2">
                       {moment(this.props.getResultModel.result.from).format('MMMM Do YYYY')} to {moment(this.props.getResultModel.result.to).format('MMMM Do YYYY')}
                     </Typography>
                     {this.props.getResultModel.result.payload && 
                       <React.Fragment>
-                        <Typography variant="title" style={{ marginBottom: 7, marginTop: 7 }}>Informations</Typography>
+                        <Typography variant="h6" style={{ marginBottom: 7, marginTop: 7 }}>Informations</Typography>
                         <Typography variant="body2">
                           This reservation is for {this.props.getResultModel.result.payload.numPeople} person{this.props.getResultModel.result.payload.numPeople > 1 ? 's' : ''}.
                         </Typography>
@@ -306,7 +291,7 @@ export class BookingPage extends React.Component {
                           You booked {this.props.getResultModel.result.payload.numRooms} room{this.props.getResultModel.result.payload.numRooms > 1 ? 's' : ''}.
                         </Typography>
                       </React.Fragment>}
-                    <Typography variant="title" style={{ marginBottom: 7, marginTop: 7 }}>Costs Details</Typography>
+                    <Typography variant="h6" style={{ marginBottom: 7, marginTop: 7 }}>Costs Details</Typography>
                     <Typography variant="body1" style={{ marginTop: 0 }}>
                       Total cost: {amount} USD<br />
                       Deposit: {deposit} USD<br />
@@ -317,21 +302,21 @@ export class BookingPage extends React.Component {
               </Grid>
 
               <Grid item xs={12} sm={4}>
-                <StyledPaper style={{ height: 43 }}>
+                {this.props.bReviewsCount > 5 && <StyledPaper style={{ height: 43 }}>
                   <Grid container>
                     <Grid item xs={11}>
-                      <Typography variant="title" style={{ fontStyle: 'italic', fontSize: '12pt', lineHeight: 1.5 }}>This establishment is safe</Typography>
+                      <Typography variant="subtitle1" style={{ fontStyle: 'italic', fontSize: '12pt', lineHeight: 1.5 }}>This establishment is safe</Typography>
                     </Grid>
                     <Grid item xs={1}>
                       <Security color="primary" />
                     </Grid>
                   </Grid>
-                </StyledPaper>
+                </StyledPaper>}
 
                 <StyledPaper style={{ marginTop: 15, height: 43 }}>
                   <Grid container>
                     <Grid item xs={11}>
-                      <Typography variant="title" style={{ fontStyle: 'italic', fontSize: '12pt', lineHeight: 1.5 }}>Report this establishment</Typography>
+                      <Typography variant="subtitle1" style={{ fontStyle: 'italic', fontSize: '12pt', lineHeight: 1.5 }}>Report this establishment</Typography>
                     </Grid>
                     <Grid item xs={1}>
                       <ErrorOutline color="primary" />
@@ -342,7 +327,7 @@ export class BookingPage extends React.Component {
                 <StyledPaper style={{ marginTop: 15, height: 43 }}>
                   <Grid container>
                     <Grid item xs={11}>
-                      <Typography variant="title" style={{ fontStyle: 'italic', fontSize: '12pt', lineHeight: 1.5 }}>
+                      <Typography variant="subtitle1" style={{ fontStyle: 'italic', fontSize: '12pt', lineHeight: 1.5 }}>
                         Share your reservation
                       </Typography>
                     </Grid>

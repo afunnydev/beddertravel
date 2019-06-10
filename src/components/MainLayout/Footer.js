@@ -75,16 +75,16 @@ const Footer = () => (
             <WhiteA>
               <li><Link to="/faq">FAQ</Link></li>
               <li><Link to="/about">Learn more</Link></li>
-              <li><Link to="/#">Terms & Conditions</Link></li>
-              <li><Link to="/#">Privacy Policy</Link></li>
+              <li><Link to="/terms-and-conditions">Terms & Conditions</Link></li>
+              <li><Link to="/privacy-policy">Privacy Policy</Link></li>
             </WhiteA>
           </Grid>
           <Grid item xs={12} sm={12} md={4}>
             <h4>Follow Us</h4>
             <hr style={style.topHr} />
             <IconA>
-              <li><a href={BedderConfig.getSocialUrls().facebook} target="_blank" rel="noopener noreferer"><span className="fa fa-facebook"></span></a></li>
-              <li><a href={BedderConfig.getSocialUrls().instagram} target="_blank" rel="noopener noreferer"><span className="fa fa-instagram"></span></a></li>
+              <li><a href={BedderConfig.getSocialUrls().facebook} target="_blank" rel="noopener noreferrer"><span className="fa fa-facebook"></span></a></li>
+              <li><a href={BedderConfig.getSocialUrls().instagram} target="_blank" rel="noopener noreferrer"><span className="fa fa-instagram"></span></a></li>
             </IconA>
           </Grid>
           <Grid item xs={12}>

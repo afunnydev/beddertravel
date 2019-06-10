@@ -27,9 +27,14 @@ const style = {
     marginLeft: 'auto',
     padding: '0px 15px',
   },
-  textBox: {
+  title: {
+    fontSize: 42,
+    fontWeight: 300,
+    lineHeight: '50px',
+    marginTop: 30,
     marginBottom: 30,
-  },
+    color: 'black',
+  }
 };
 
 const FaqPage = () => (
@@ -37,24 +42,26 @@ const FaqPage = () => (
     <Helmet>
       <title>FAQ</title>
     </Helmet>
-    <Grid container spacing={0} direction="row" style={style.aboutContainer} >
+    <Grid container direction="row" style={style.aboutContainer} >
       <Grid item sm={12} md={8} style={style.aboutContent}>
-        <Grid container direction="row">
+        <Grid container spacing={2} direction="row">
           <Hidden mdUp>
             <Grid item xs={12}>
               <BackButton />
             </Grid>
           </Hidden>
-          <Grid item lg={12}>
+          <Grid item xs={12}>
             <Typography
               align="left"
-              style={{ paddingTop: 30, paddingBottom: 30 }}
-              variant="headline"
+              variant="h3"
+              style={style.title}
             >
               Frequently Asked Question
             </Typography>
             <Accordion questions={json.questions} />
-            <p style={{ marginTop: 30 }}>Your question is still unanswered? Contact us at <a href="mailto:info@beddertravel.com">info@beddertravel.com</a> for more information.</p>
+          </Grid>
+          <Grid item xs={12}>
+            <p>Your question is still unanswered? Contact us at <a href="mailto:info@beddertravel.com">info@beddertravel.com</a> for more information.</p>
           </Grid>
         </Grid>
       </Grid>

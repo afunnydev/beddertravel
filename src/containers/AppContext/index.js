@@ -9,6 +9,8 @@ import injectReducer from 'utils/injectReducer';
 import Bedder from 'bedder/bedder';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
+import ScrollToTop from 'components/ScrollToTop';
+
 import {
   makeSelectAppContextUser,
   makeSelectAppContextRole,
@@ -177,7 +179,7 @@ export class AppContext extends React.Component {
     const theme = this.props.role == ROLE_EXPLORER ? themeExplorer : (this.props.role == ROLE_OWNER ? themeOwner : themeTraveler);
 
     return (
-      <React.Fragment>
+      <ScrollToTop>
         <UserProvider value={this.props.user}>
           <RoleProvider value={this.props.role}>
             <MuiThemeProvider  theme={theme}>
@@ -185,7 +187,7 @@ export class AppContext extends React.Component {
             </MuiThemeProvider>
           </RoleProvider>
         </UserProvider>
-      </React.Fragment>
+      </ScrollToTop>
     );
   }
 }

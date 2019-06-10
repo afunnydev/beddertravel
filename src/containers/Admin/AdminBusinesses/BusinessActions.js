@@ -38,7 +38,6 @@ const BusinessActions = ({ businessId, status,  enqueueSnackbar }) => (
             console.log(e);
             return enqueueSnackbar(e.message, { variant: 'error' });
           }
-          console.log(messageObj);
           const message = messageObj && messageObj.data && messageObj.data.updateBusinessStatus && messageObj.data.updateBusinessStatus.message;
           if (message) {
             return enqueueSnackbar(message);

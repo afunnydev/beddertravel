@@ -53,7 +53,6 @@ const DrawerMenuItemTo = props => (
     component={Link}
     to={props.to ? props.to : false}
     style={styles.button}
-    // onClick={props.onClick}
   >
     <ListItemText
       primary={props.children}
@@ -82,9 +81,9 @@ const DrawerMenuItem = props => (
 );
 
 const DrawerMenu = ({ user, role, dispatch }) => {
-  const dispatchRoleExplorer = () => {dispatch(changeRoleAction(ROLE_EXPLORER))};
-  const dispatchRoleTraveler = () => {dispatch(changeRoleAction(ROLE_TRAVELER))};
-  const dispatchRoleOwner = () => {dispatch(changeRoleAction(ROLE_OWNER))};
+  const dispatchRoleExplorer = () => { dispatch(changeRoleAction(ROLE_EXPLORER)); };
+  const dispatchRoleTraveler = () => { dispatch(changeRoleAction(ROLE_TRAVELER)); };
+  const dispatchRoleOwner = () => { dispatch(changeRoleAction(ROLE_OWNER)); };
 
   return (
     <DrawerMenuWrapper>
@@ -153,6 +152,5 @@ const DrawerMenu = ({ user, role, dispatch }) => {
 export default compose(
   WithUserContext,
   WithRoleContext,
-  withStyles(styles),
   connect(),
-)(DrawerMenu);
+)(withStyles(styles)(DrawerMenu));

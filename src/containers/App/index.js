@@ -14,6 +14,8 @@ import BusinessAddPage from 'containers/BusinessAdd/Loadable';
 import BusinessEditPage from 'containers/BusinessEdit/BusinessEditPage/Loadable';
 import ReviewAddPage from 'containers/ReviewAddPage/Loadable';
 import AboutPage from 'containers/AboutPage/Loadable';
+import PrivacyPolicyPage from 'containers/PrivacyPolicyPage/Loadable';
+import TermsPage from 'containers/TermsPage/Loadable';
 import FaqPage from 'containers/FaqPage/Loadable';
 import BusinessViewPropConnector from 'containers/BusinessView/BusinessViewPropConnector/Loadable';
 import BookingsPropConnector from 'containers/Bookings/BookingsPropConnector/Loadable';
@@ -62,6 +64,8 @@ const PlatformPages = () => (
       <Route path="/profile" component={UserProfilePropConnector} />
 
       <Route path="/about" component={AboutPage} />
+      <Route path="/privacy-policy" component={PrivacyPolicyPage} />
+      <Route path="/terms-and-conditions" component={TermsPage} />
       <Route path="/faq" component={FaqPage} />
 
       <Route path="/admin" component={Admin} />

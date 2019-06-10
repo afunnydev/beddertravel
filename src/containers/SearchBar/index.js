@@ -117,7 +117,6 @@ momentNow.setHours(0,0,0,0);
 class SearchBar extends React.Component {
   constructor(props) {
     super(props);
-    let start = new Date();
     this.state = {
       latitude: null,
       longitude: null,
@@ -535,7 +534,6 @@ class SearchBar extends React.Component {
 }
 
 export default compose(
-  withStyles(styles),
   withReduxProps,
   withRouter,
-)(SearchBar);
+)(withStyles(styles)(SearchBar));
