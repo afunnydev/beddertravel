@@ -36,7 +36,7 @@
             "always"
         ],
         "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
-        "react/prop-types": [2, { "ignore": ["classes", "children", "history", "dispatch", "enqueueSnackbar"] }],
+        "react/prop-types": [2, { "ignore": ["classes", "children", "history", "match", "dispatch", "enqueueSnackbar"] }],
         "func-style": ["error", "declaration", { "allowArrowFunctions": true }]
     },
     "settings": {

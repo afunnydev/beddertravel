@@ -1,40 +1,9 @@
-/**
- *
- * AuthPagePropainer
- * ??????
- *
- */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
 import injectReducer from 'utils/injectReducer';
-import {
-  makeSelectAuthPagePropainer,
-  makeSelectFacebookSubmitting,
-  makeSelectFacebookResult,
-  makeSelectFacebookError,
-  makeSelectFacebookOauthResult,
-} from './selectors';
-import {
-  changeFacebookSubmittingAction,
-  changeFacebookResultAction,
-  changeFacebookErrorAction,
-  changeFacebookOauthResultAction,
-  submitFacebookAction,
-  successFacebookAction,
-} from './actions';
-import {
-  CHANGE_FACEBOOKSUBMITTING,
-  CHANGE_FACEBOOKRESULT,
-  CHANGE_FACEBOOKERROR,
-  CHANGE_FACEBOOKOAUTHRESULT,
-  SUBMITFACEBOOK,
-  SUCCESSFACEBOOK,
-} from './constants';
 
 import { mapStateToProps, mapDispatchToProps } from './mapProps';
 

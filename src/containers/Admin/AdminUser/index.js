@@ -7,12 +7,8 @@ import styled from 'styled-components';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography';
-
-import Edit from '@material-ui/icons/Edit';
-import Close from '@material-ui/icons/Close';
 
 import MessageError from 'components/MessageError';
 import Table from 'components/Table';
@@ -91,23 +87,23 @@ class AdminUser extends React.Component {
           if (loading) return <p>Loading...</p>;
           if (!data || !data.user) return <p>No user found for {match.params.id}</p>;
           const bookingsData = data.user.bookings ? data.user.bookings.map(booking => [
-            <Link to={`/booking/${booking.id}`}>{booking.id}</Link>,
+            <Link key={booking.id} to={`/booking/${booking.id}`}>{booking.id}</Link>,
             booking.amount,
             booking.from.date.split(' ')[0],
             booking.to.date.split(' ')[0],
             booking.status === 5 ? 'Approved' : 'Pending',
-            <Link to={`/business/view/${booking.business.id}`}>{booking.business.name}</Link>,
+            <Link key={booking.id} to={`/business/view/${booking.business.id}`}>{booking.business.name}</Link>,
             booking.businessUnit.name,
           ]) : null;
           const businessesData = data.user.businesses ? data.user.businesses.map(business => [
-            <Link to={`/business/view/${business.id}`}>{business.id}</Link>,
+            <Link key={business.id} to={`/business/view/${business.id}`}>{business.id}</Link>,
             business.name,
             business.reviewsAvg,
             business.reviewsNum,
             business.bookingsCount,
           ]) : null;
           const supportTicketsData = data.user.supportTickets ? data.user.supportTickets.map(supportTicket => [
-            <Link to={`/admin/support/${supportTicket.id}`}>{supportTicket.id}</Link>,
+            <Link key={supportTicket.id} to={`/admin/support/${supportTicket.id}`}>{supportTicket.id}</Link>,
             supportTicket.subject,
             supportTicket.message,
             supportTicket.status === 0 ? 'Unanswered' : 'Answered',
@@ -119,7 +115,7 @@ class AdminUser extends React.Component {
                 <CardContent>
                   <Grid container justify="space-between">
                     <Grid item xs={12} sm={12} md={12}>
-                      <Typography variant="headline">Basic Informations</Typography>
+                      <Typography variant="h5">Basic Informations</Typography>
                       <ul>
                         <li>ID: {data.user.id}</li>
                         <li>Full name: {data.user.firstname} {data.user.lastname}</li>
@@ -137,7 +133,7 @@ class AdminUser extends React.Component {
                 <CardContent>
                   <Grid container justify="space-between">
                     <Grid item xs={12} sm={12} md={12}>
-                      <Typography variant="headline">Bookings</Typography>
+                      <Typography variant="h5">Bookings</Typography>
                       {bookingsData && <Table
                         tableHead={['ID', 'Amount', 'To', 'From', 'Status', 'Accomodation', 'Room']}
                         tableData={bookingsData}
@@ -150,7 +146,7 @@ class AdminUser extends React.Component {
                 <CardContent>
                   <Grid container justify="space-between">
                     <Grid item xs={12} sm={12} md={12}>
-                      <Typography variant="headline">Businesses</Typography>
+                      <Typography variant="h5">Businesses</Typography>
                       {businessesData && <Table
                         tableHead={['ID', 'Name', 'Review Score', 'Nb of Reviews', 'Nb of Bookings']}
                         tableData={businessesData}
@@ -163,7 +159,7 @@ class AdminUser extends React.Component {
                 <CardContent>
                   <Grid container justify="space-between">
                     <Grid item xs={12} sm={12} md={12}>
-                      <Typography variant="headline">Support Tickets</Typography>
+                      <Typography variant="h5">Support Tickets</Typography>
                       {supportTicketsData && <Table
                         tableHead={['ID', 'Subject', 'Message', 'Status', 'Type']}
                         tableData={supportTicketsData}

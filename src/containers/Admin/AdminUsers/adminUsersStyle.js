@@ -22,7 +22,7 @@ const adminUsersStyle = {
     position: 'relative',
   },
   center: {
-    textAlign: "center",
+    textAlign: 'center',
     fontWeight: 700,
   },
 };

@@ -50,7 +50,7 @@ class BedderValidator {
     };
   }
 
-  getBusinessAddRoomPage() {
+  getBusinessEditRoomPage() {
     return {
       roomName: {},
       roomNumRooms: {},
@@ -83,19 +83,12 @@ class BedderValidator {
     };
   }
 
-  getBusinessAddPage() {
+  getBusinessEditPage() {
     return {
       name: {},
       email: {},
       mood: {},
       type: {},
-    };
-  }
-
-  getBusinessCreatePage() {
-    return {
-      name: {},
-      ownerEmail: {},
     };
   }
 

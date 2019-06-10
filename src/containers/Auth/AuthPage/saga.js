@@ -1,4 +1,4 @@
-import { take, call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
 import request from 'utils/request';
 
 import BedderConfig from 'bedder/bedderConfig';
@@ -10,11 +10,7 @@ import { makeSelectFacebookOauthResult } from './AuthPagePropainer/selectors';
 export function* submitFacebookToken() {
   
   const facebookPayload = yield select(makeSelectFacebookOauthResult());
-  // const code = yield select(makeSelectCode());
-  // const password = yield select(makeSelectPassword());
-  
   const requestURL = `${BedderConfig.getApiUrl()}/user/facebook?XDEBUG_SESSION_START=phpstorm`;
-  // const requestURL = `http://bedder.omg/app_dev.php/api/v1/user/token`;
 
   try {
     const res = yield call(request, requestURL, {

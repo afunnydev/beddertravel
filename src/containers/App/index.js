@@ -10,8 +10,8 @@ import AppContext from 'containers/AppContext';
 
 import Auth from 'containers/Auth/Loadable';
 import HomePage from 'containers/HomePage/Loadable';
-import BusinessAddPage from 'containers/BusinessAdd/New/Loadable';
-import BusinessEditPage from 'containers/BusinessAdd/BusinessAddPage/Loadable';
+import BusinessAddPage from 'containers/BusinessAdd/Loadable';
+import BusinessEditPage from 'containers/BusinessEdit/BusinessEditPage/Loadable';
 import ReviewAddPage from 'containers/ReviewAddPage/Loadable';
 import AboutPage from 'containers/AboutPage/Loadable';
 import FaqPage from 'containers/FaqPage/Loadable';

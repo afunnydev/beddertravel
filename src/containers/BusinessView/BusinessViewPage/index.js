@@ -39,7 +39,7 @@ import WithUserContext from '../../AppContext/context';
 import saga from './saga';
 import BedderLoadingIndicator from '../../../components/BedderLoadingIndicator';
 import BusinessViewRoom from './BusinessViewRoom';
-import Amenities from '../../BusinessAdd/BusinessAddGeneralInformation/Amenities';
+import Amenities from '../../BusinessEdit/BusinessEditGeneralInformation/Amenities';
 import BusinessViewReviews from './BusinessViewReviews';
 
 const HeaderImage = styled.div`

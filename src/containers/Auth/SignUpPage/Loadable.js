@@ -10,5 +10,5 @@ import BedderLoadingIndicator from 'components/BedderLoadingIndicator';
 
 export default Loadable({
   loader: () => import('./index'),
-  loading: () => <BedderLoadingIndicator white center />,
+  loading: () => <BedderLoadingIndicator white center full />,
 });

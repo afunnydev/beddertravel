@@ -1,13 +1,3 @@
-/**
- *
- * LoginPage
- *
- */
-
-import BedderConfig from 'bedder/bedderConfig';
-
-import MessageError from 'components/MessageError';
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -16,6 +6,7 @@ import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { Link } from 'react-router-dom';
+import { Validation } from 'react-validation-framework';
 
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
@@ -26,13 +17,13 @@ import 'whatwg-fetch';
 
 import Bedder from 'bedder/bedder';
 
-import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
 import StyledButton from 'components/StyledButton';
+import MessageError from 'components/MessageError';
 
 import BedderValidator from 'bedder/bedderValidator';
-import { Validation } from 'react-validation-framework';
+import BedderConfig from 'bedder/bedderConfig';
 
 import ErrorNetwork from 'components/ErrorNetwork';
 
@@ -43,7 +34,6 @@ import {
   userLoginSuccessAction,
   userLoginErrorAction,
 } from './actions';
-import saga from './saga';
 import reducer from './reducer';
 import {
   makeSelectPassword,
@@ -52,6 +42,7 @@ import {
   makeSelectResult,
   makeSelectError,
 } from './selectors';
+
 BedderValidator.prepareTextField();
 
 const styles = () => ({
@@ -246,23 +237,16 @@ function submitThunk() {
       })
         .then(response => response.json())
         .then(res => {
-          // console.log('res', res);
-
           dispatch(userLoginSuccessAction(res));
-
           if (res.token) {
             Bedder.setToken(res.token);
             Bedder.setUser(res.user);
             Bedder.login(dispatch);
-            // console.log('setting mf token for user ', res.user);
-            // dispatch(appContextUserLoginAction(res.user));
           } else {
-            dispatch(userLoginSuccessAction(res));
-            // dispatch(userLoginErrorAction('Oups, there\'s been an error in your email or your password. Please double check.'));
+            dispatch(userLoginErrorAction(res.error));
           }
         })
         .catch(error => {
-          // console.log('should errror here', error);
           dispatch(userLoginErrorAction(error));
         });
     }
@@ -271,7 +255,7 @@ function submitThunk() {
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
+function mapDispatchToProps(dispatch) {
   return {
     onChangeUsername: evt => dispatch(changeUsername(evt.target.value)),
     onChangePassword: evt => dispatch(changePassword(evt.target.value)),
@@ -285,11 +269,9 @@ const withConnect = connect(
 );
 
 const withReducer = injectReducer({ key: 'loginPage', reducer });
-const withSaga = injectSaga({ key: 'loginPage', saga });
 
 export default compose(
   withReducer,
-  withSaga,
   withConnect,
   withStyles(styles),
 )(LoginPage);

@@ -12,22 +12,17 @@ import {
   USER_LOGIN_ERROR,
   CHANGE_PASSWORD,
   CHANGE_USERNAME,
-  USER_LOGIN_VALIDATE,
 } from './constants';
 
 export const initialState = fromJS({
   username: '',
-  // username: 'wo.f.fkack@gmail.com',
   password: '',
   submitting: false,
   result: null,
   error: null,
-  // validationError: false,
 });
 
 function loginPageReducer(state = initialState, action) {
-  // console.log('reducer', action)
-  // console.log('loginPageReducer', action);
   switch (action.type) {
     case CHANGE_PASSWORD:
       return state.set('password', action.password);
@@ -41,7 +36,6 @@ function loginPageReducer(state = initialState, action) {
         .set('result', action.result)
         .set('error', false);
     case USER_LOGIN_ERROR:
-      // console.log('wtfrearry', action.error);
       return state
         .set('submitting', false)
         .set('error', { error: action.error })
