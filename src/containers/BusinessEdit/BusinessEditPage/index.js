@@ -189,6 +189,7 @@ export class BusinessEditPage extends React.Component {
       this.props.modelResult &&
       this.props.modelResult.result &&
       this.props.modelResult.result.status;
+    console.log("STATUS", businessStatus);
     const validationErrors = this.state.validationErrors;
     const refresh = this.state.refresh;
     const isXS = this.props.width == 'xs';
@@ -290,7 +291,7 @@ export class BusinessEditPage extends React.Component {
                   )}
                 </Grid>
               </Grid>
-              : <Grid container justify="center"><Grid item xs={12} sm={6}><Typography variant="subtitle1" align="center">This business isn't currently available. Please make sure that the owner of this business has successfully created an account before you  can start adding information. Contact us at info@beddertravel.com if you need any help.</Typography></Grid></Grid>}
+              : <Grid container justify="center"><Grid item xs={12} sm={6}><Typography variant="subtitle1" align="center">{this.props.modelError ? 'An error occured while trying to retrieve this business. Please contact info@beddertravel.com if you need any help.' : 'This business isn\'t currently available. Please make sure that the owner of this business has successfully created an account before you  can start adding information. Contact us at info@beddertravel.com if you need any help.'}</Typography></Grid></Grid>}
         </Grid>
       </div>
     );

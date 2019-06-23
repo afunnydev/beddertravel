@@ -1,22 +1,27 @@
 import { createSelector } from 'reselect';
 import { initialState } from './reducer';
 
-/**
- * Direct selector to the myAdsPage state domain
- */
-
-const selectMyAdsPageDomain = state => state.get('myAdsPage', initialState);
-
-/**
- * Other specific selectors
- */
-
-/**
- * Default selector used by MyAdsPage
- */
+const selectMyAdsPageDomain = state =>
+  state.get('myAdsPage', initialState);
 
 const makeSelectMyAdsPage = () =>
   createSelector(selectMyAdsPageDomain, substate => substate.toJS());
 
+const makeSelectResult = () =>
+  createSelector(selectMyAdsPageDomain, state => state.get('result'));
+const makeSelectError = () =>
+  createSelector(selectMyAdsPageDomain, state => state.get('error'));
+const makeSelectSubmitting = () =>
+  createSelector(selectMyAdsPageDomain, state => state.get('submitting'));
+const makeSelectData = () =>
+  createSelector(selectMyAdsPageDomain, state => state.get('data'));
+
 export default makeSelectMyAdsPage;
-export { selectMyAdsPageDomain };
+export {
+  selectMyAdsPageDomain,
+  makeSelectMyAdsPage,
+  makeSelectResult,
+  makeSelectError,
+  makeSelectSubmitting,
+  makeSelectData,
+};

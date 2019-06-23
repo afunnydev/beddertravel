@@ -18,6 +18,7 @@ import {
   CHANGE_ROOMEQUIPMENT,
   CHANGE_ROOMPHOTOS,
   CHANGE_ROOMPRICE,
+  CHANGE_ROOMCURRENCY,
   CHANGE_ROOMDISCOUNT,
   CHANGE_ISDELETED,
   CHANGE_ISNEW,
@@ -145,6 +146,12 @@ export function changeRoomPriceAction(roomPrice) {
   return {
     type: CHANGE_ROOMPRICE,
     roomPrice,
+  };
+}
+export function changeRoomCurrencyAction(roomCurrency) {
+  return {
+    type: CHANGE_ROOMCURRENCY,
+    roomCurrency,
   };
 }
 export function changeRoomDiscountAction(roomDiscount) {

@@ -61,7 +61,7 @@ export class SignUpPage extends React.Component {
     this.state = {
       withEmail: false,
       validationCode: false,
-      email: 'felix@tinysociety.co',
+      email: '',
     };
     this.vRefs = BedderValidator.makeRefs(BedderValidator.getSignupPage());
   }
@@ -92,7 +92,7 @@ export class SignUpPage extends React.Component {
     return (
       <ApolloProvider client={client}>
         <Helmet>
-          <title>Signup</title>
+          <title>Sign up</title>
         </Helmet>
         {!this.state.withEmail &&
           <Mutation
@@ -114,7 +114,7 @@ export class SignUpPage extends React.Component {
                     >
                       {loading ? (
                         <CircularProgress size={20} classes={{ circle: classes.white }} />) : (
-                          <React.Fragment><AuthIcon className="fa fa-facebook" /> Sign Up with Facebook</React.Fragment>)}
+                        <React.Fragment><AuthIcon className="fa fa-facebook" /> Sign Up with Facebook</React.Fragment>)}
                     </StyledButton>
                   )}
                 />
@@ -124,7 +124,7 @@ export class SignUpPage extends React.Component {
                   style={{ marginBottom: 30, marginLeft: 10 }}
                 >
                   <EmailIcon style={{ marginRight: 10 }} />
-                  Sign Up with an email
+                  Sign up with an email
                 </StyledButton>
                 {error && <MessageError error={error} />}
               </div>

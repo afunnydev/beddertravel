@@ -30,6 +30,7 @@ export const CHANGE_ROOMEQUIPMENT =
 export const CHANGE_ROOMPHOTOS =
   'app/BusinessEditBedroomsRedux/CHANGE_ROOMPHOTOS';
 export const CHANGE_ROOMPRICE = 'app/BusinessEditBedroomsRedux/CHANGE_ROOMPRICE';
+export const CHANGE_ROOMCURRENCY = 'app/BusinessEditBedroomsRedux/CHANGE_ROOMCURRENCY';
 export const CHANGE_ROOMDISCOUNT =
   'app/BusinessEditBedroomsRedux/CHANGE_ROOMDISCOUNT';
 export const CHANGE_ISDELETED = 'app/BusinessEditBedroomsRedux/CHANGE_ISDELETED';

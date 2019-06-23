@@ -55,16 +55,15 @@ export function* makeGetBusiness() {
         'Authorization': Bedder.getHeaderToken(),
       },
     });
-
+    console.log("RES", res);
     yield put(changeModelResultAction(res));
   } catch (err) {
+    console.log("ERROR", err);
     yield put(changeModelErrorAction(err));
   }
 }
 
 export function* makeSubmit() {
-
-  // if(BedderValidator.validate(this.vRefs)) {}
 
   const modelId = yield select(makeSelectModelId());
 
@@ -99,10 +98,12 @@ export function* makeSubmit() {
   const country = 'CD';
   const city = 'dummy';
 
+  let requestURL;
+
   if (modelId > 0) {
-    var requestURL = `${BedderConfig.getApiUrl()}/business/${modelId}?XDEBUG_SESSION_START=phpstorm`;
+    requestURL = `${BedderConfig.getApiUrl()}/business/${modelId}?XDEBUG_SESSION_START=phpstorm`;
   } else {
-    var requestURL = `${BedderConfig.getApiUrl()}/business?XDEBUG_SESSION_START=phpstorm`;
+    requestURL = `${BedderConfig.getApiUrl()}/business?XDEBUG_SESSION_START=phpstorm`;
   }
 
   try {

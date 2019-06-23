@@ -73,7 +73,7 @@ class Bedder {
   logout() {
     this.set('bedder_auth_token', null);
     this.set('bedder_auth_user', null);
-    // this.dispatcher(userLogoutAction());
+    // dispatch(userLogoutAction());
   }
 
   onAppContextDidMount(dispatch) {

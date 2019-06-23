@@ -6,7 +6,6 @@ import {
   submitAction,
 } from './actions';
 import {
-  makeSelectMyAdsPageRedux,
   makeSelectResult,
   makeSelectError,
   makeSelectSubmitting,
@@ -15,8 +14,6 @@ import {
 import { createStructuredSelector } from 'reselect';
 
 const mapStateToProps = createStructuredSelector({
-  myadspageredux: makeSelectMyAdsPageRedux(),
-
   result: makeSelectResult(),
   error: makeSelectError(),
   submitting: makeSelectSubmitting(),

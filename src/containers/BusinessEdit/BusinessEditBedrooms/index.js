@@ -29,8 +29,6 @@ BedderValidator.prepareTextField();
 export class BusinessEditBedrooms extends React.Component {
   constructor(props) {
     super(props);
-    // this.changeLocation = this.changeLocation.bind(this);
-    // this.mapApply = this.mapApply.bind(this);
     this.state = {
       refresh: false,
       removeDialogOpen: false,
@@ -98,19 +96,6 @@ export class BusinessEditBedrooms extends React.Component {
     if(prevProps != this.props && this.state.isRoomValid == false) {
       this.validate();
     }
-
-    if(prevProps.activeRoom != this.props.activeRoom) {
-      // this.validate();
-    }
-
-    if(prevProps._validateRoom != this.props._validateRoom) {
-      this.validate();
-    }
-
-    if(prevProps.roomDoValidation != this.props.roomDoValidation) {
-      this.validate();
-    }
-
   }
 
   validateRest() {
@@ -227,7 +212,7 @@ export class BusinessEditBedrooms extends React.Component {
 
         <Grid item xs={12} md={9}>
           <Grid container spacing={2}>
-            <Grid xs={12}>
+            <Grid item xs={12}>
               {rooms && rooms.size > 0 ? (
                 <RoomButtons
                   rooms={rooms}

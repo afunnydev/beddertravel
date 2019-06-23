@@ -11,10 +11,10 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Grid from '@material-ui/core/Grid';
 import MenuItem from '@material-ui/core/MenuItem';
 import Tooltip from '@material-ui/core/Tooltip';
-import Select from '@material-ui/core/Select';
+
+import CurrencySelector from 'components/CurrencySelector';
 
 import Photos from './Photos';
-
 import Amenities from '../../BusinessEditGeneralInformation/Amenities';
 import { addPhotoAction, removePhotoAction } from '../../BusinessEditBedroomsRedux/actions';
 
@@ -212,14 +212,7 @@ export class Room extends React.Component {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <Select value="cad">
-                        <MenuItem value="cad">
-                          CAD
-                        </MenuItem>
-                        <MenuItem value="usd">
-                          USD
-                        </MenuItem>
-                      </Select>
+                      <CurrencySelector currency={this.props.roomCurrency} onChange={this.props.onChangeRoomCurrency}/>
                     </InputAdornment>),
                   classes: { root: this.props.classes.spacedInput },
                 }}

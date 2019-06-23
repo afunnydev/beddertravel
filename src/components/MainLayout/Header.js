@@ -31,8 +31,8 @@ const Header = (props) => {
     location,
   } = props;
 
-  const roleBgExplorer = 'linear-gradient(90deg, #4b418c 0%, #8d4041 100%)';
-  const roleBgTraveler = 'linear-gradient(90deg, #8d4041 0%, #4b418c 100%)';
+  const roleBgTraveler = 'linear-gradient(90deg, #4b418c 0%, #8d4041 100%)';
+  const roleBgExplorer = 'linear-gradient(90deg, #8d4041 0%, #4b418c 100%)';
   const roleBgOwner = 'linear-gradient(90deg, #000 0%, #000 100%)';
 
   const backgroundStr =

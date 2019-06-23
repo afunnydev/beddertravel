@@ -27,7 +27,7 @@ const theme = createMuiTheme({
   },
 });
 
-const Auth = props => (
+const Auth = () => (
   <AuthLayout>
     <MuiThemeProvider theme={theme}>
       <LogoFormGrid>

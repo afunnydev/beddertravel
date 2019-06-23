@@ -38,7 +38,7 @@ function loginPageReducer(state = initialState, action) {
     case USER_LOGIN_ERROR:
       return state
         .set('submitting', false)
-        .set('error', { error: action.error })
+        .set('error', action.error)
         .set('result', null);
     case USER_LOGOUT:
       return state

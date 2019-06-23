@@ -138,13 +138,14 @@ export const pathnameToRole = {
     '/ownerAds',
   ],
   ROLE_EXPLORER: [
-    // '/'
-    '/myAds',
-    '/gains',
+    '/businesses',
+    '/business/add',
+    '/earnings',
   ],
   ROLE_TRAVELER: [
     '/home',
     '/bookings',
+    '/view'
   ],
 };
 
@@ -154,19 +155,19 @@ export class AppContext extends React.Component {
     if (
       pathnameToRole[ROLE_OWNER].indexOf(this.props.location.pathname) !== -1
     ) {
-      this.props.dispatch(changeRoleAction(ROLE_OWNER));
+      return this.props.dispatch(changeRoleAction(ROLE_OWNER));
     }
 
     if (
-      pathnameToRole[ROLE_EXPLORER].indexOf(this.props.location.pathname) !== -1
+      pathnameToRole[ROLE_TRAVELER].indexOf(this.props.location.pathname) !== -1 || this.props.location.pathname.includes('view')
     ) {
-      this.props.dispatch(changeRoleAction(ROLE_EXPLORER));
+      return this.props.dispatch(changeRoleAction(ROLE_TRAVELER));
     }
 
     if (
-      pathnameToRole[ROLE_TRAVELER].indexOf(this.props.location.pathname) !== -1
+      pathnameToRole[ROLE_EXPLORER].indexOf(this.props.location.pathname) !== -1 || this.props.location.pathname.includes('business')
     ) {
-      this.props.dispatch(changeRoleAction(ROLE_TRAVELER));
+      return this.props.dispatch(changeRoleAction(ROLE_EXPLORER));
     }
   }
 

@@ -3,10 +3,6 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 
-import ViewListIcon from '@material-ui/icons/ViewList';
-import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
-import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
-
 import styles from './HeaderMenuStyles';
 
 const HeaderMenuExplorer = ({ user, locationPathname }) => (
@@ -15,20 +11,20 @@ const HeaderMenuExplorer = ({ user, locationPathname }) => (
     &&
     <React.Fragment>
       <Button component={Link} to="/businesses" style={(locationPathname === '/businesses') ? { ...styles.button, ...styles.activeButton } : styles.button}>
-        <ViewListIcon style={styles.icon}></ViewListIcon>
+        <span style={styles.icon} className="icon-ads"></span>
         My Pages
       </Button>
       <Button component={Link} to="/earnings" style={(locationPathname === '/earnings') ? { ...styles.button, ...styles.activeButton } : styles.button}>
-        <MonetizationOnIcon style={styles.icon}></MonetizationOnIcon>
+        <span style={styles.icon} className="icon-gains"></span>
         My Earnings
       </Button>
     </React.Fragment>
     }
 
     <Button style={{ ...styles.button, ...styles.buttonSeparator }} disabled >|</Button>
-    <Button component={Link} to="/business/add" style={(locationPathname === '/business/add') ? { ...styles.button, ...styles.activeButton } : styles.button}>
+    <Button component={Link} to="/business/add" style={(locationPathname === '/business/add') ? { ...styles.addButton, ...styles.button, ...styles.activeButton } : { ...styles.button, ...styles.addButton }}>
       Add
-      <LibraryAddIcon style={styles.icon}></LibraryAddIcon>
+      <span style={styles.addButtonIcon} className="icon-new"></span>
     </Button>
   </React.Fragment>
 );

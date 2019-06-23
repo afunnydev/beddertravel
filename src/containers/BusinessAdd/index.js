@@ -122,7 +122,7 @@ export class BusinessAddPage extends React.Component {
                 <BackButton style={{ position: 'absolute', top: 10 }} />
               </Hidden>
               <PageTitle>
-                Create a new publication
+                Create a new accomodation
               </PageTitle>
             </div>
             <Grid container spacing={3}>

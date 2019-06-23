@@ -54,7 +54,6 @@ export function userLoginSuccessAction(result) {
 }
 
 export function userLoginErrorAction(error) {
-  // console.log('wtf', error);
   return {
     type: USER_LOGIN_ERROR,
     error,

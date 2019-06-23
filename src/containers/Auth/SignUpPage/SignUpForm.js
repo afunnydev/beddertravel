@@ -63,8 +63,6 @@ class SignUpForm extends React.Component {
 
   saveToState = e => this.setState({ [e.target.name]: e.target.value });
 
-  componentDidMount = () => this.props.nextStep('felix@tinysociety.co');
-
   render() {
     const { classes, nextStep } = this.props;
     const {
@@ -113,8 +111,8 @@ class SignUpForm extends React.Component {
                 return nextStep(res.data.signUp.email);
               }}
             >
-              <Typography variant="subtitle1" className={classes.white}>
-                Sign Up
+              <Typography variant="subtitle1" className={classes.white} style={{ marginBottom: 20 }}>
+                Sign up
               </Typography>
               <div className={classes.fieldContainer}>
                 <Validation

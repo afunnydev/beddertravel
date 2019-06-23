@@ -104,10 +104,8 @@ export class LoginPage extends React.Component {
         <Helmet>
           <title>Login</title>
         </Helmet>
-        <WhiteText>
-          Sign In
-        </WhiteText>
-        <form onSubmit={this.props.handleSubmit}>
+        <WhiteText>Sign In</WhiteText>
+        <form>
           <div className={classes.fieldContainer}>
             <Validation
               componentTag="TextField"
@@ -149,7 +147,6 @@ export class LoginPage extends React.Component {
                 type="password"
                 value={this.props.password}
                 onChange={this.props.onChangePassword}
-                // error={(this.props.result && this.props.result.error) ? true : false}
                 InputProps={{
                   classes: {
                     root: classes.white,
@@ -164,21 +161,10 @@ export class LoginPage extends React.Component {
             </Validation>
           </div>
 
-          <div>
-            {this.props.result &&
-              this.props.result.error &&
-              this.props.result.error.code == 401 && (
-              <MessageError
-                error="Please double check your email and your password"
-                style={{ marginBottom: 20 }}
-              />
-            )}
-            {!this.props.result && !this.props.error && (
-              <Typography>&nbsp;</Typography>
-            )}
-          </div>
-
-          <ErrorNetwork error={this.props.error} />
+          {this.props.error && <MessageError
+            error={this.props.error.error}
+            style={{ marginBottom: 20 }}
+          />}
 
           <StyledButton
             type="submit"
@@ -237,8 +223,9 @@ function submitThunk() {
       })
         .then(response => response.json())
         .then(res => {
-          dispatch(userLoginSuccessAction(res));
+          console.log(res);
           if (res.token) {
+            dispatch(userLoginSuccessAction(res));
             Bedder.setToken(res.token);
             Bedder.setUser(res.user);
             Bedder.login(dispatch);

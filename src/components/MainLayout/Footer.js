@@ -77,6 +77,7 @@ const Footer = () => (
               <li><Link to="/about">Learn more</Link></li>
               <li><Link to="/terms-and-conditions">Terms & Conditions</Link></li>
               <li><Link to="/privacy-policy">Privacy Policy</Link></li>
+              <li><Link to="#">Blog</Link></li>
             </WhiteA>
           </Grid>
           <Grid item xs={12} sm={12} md={4}>

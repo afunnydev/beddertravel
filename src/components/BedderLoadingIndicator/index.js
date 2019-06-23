@@ -19,10 +19,11 @@ const LoadingContainer = styled.div`
   top: ${props => props.center ? '50%' : 'initial'};
   left: ${props => props.center ? '50%' : 'initial'};
   margin-bottom: ${props => props.full ? '250px' : '0px'};
+  width: ${props => props.containerWidth ? `${props.containerWidth}px` : 'initial'};
 `;
 
 const BedderLoadingIndicator = props => (
-  <LoadingContainer center={props.center} full={props.full}>
+  <LoadingContainer center={props.center} full={props.full} containerWidth={props.size}>
     <CircularProgress size={props.size} classes={{ circle: props.white ? props.classes.white : null }} />
   </LoadingContainer>
 );

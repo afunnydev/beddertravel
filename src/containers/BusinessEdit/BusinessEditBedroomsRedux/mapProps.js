@@ -12,6 +12,7 @@ import {
   changeRoomEquipmentAction,
   changeRoomPhotosAction,
   changeRoomPriceAction,
+  changeRoomCurrencyAction,
   changeRoomDiscountAction,
   changeIsDeletedAction,
   changeIsNewAction,
@@ -41,6 +42,7 @@ import {
   makeSelectRoomEquipment,
   makeSelectRoomPhotos,
   makeSelectRoomPrice,
+  makeSelectRoomCurrency,
   makeSelectRoomDiscount,
   makeSelectIsDeleted,
   makeSelectIsNew,
@@ -65,6 +67,7 @@ const mapStateToProps = createStructuredSelector({
   roomEquipment: makeSelectRoomEquipment(),
   roomPhotos: makeSelectRoomPhotos(),
   roomPrice: makeSelectRoomPrice(),
+  roomCurrency: makeSelectRoomCurrency(),
   roomDiscount: makeSelectRoomDiscount(),
   isDeleted: makeSelectIsDeleted(),
   isNew: makeSelectIsNew(),
@@ -142,6 +145,9 @@ function mapDispatchToProps(dispatch) {
     },
     onChangeRoomPrice: evt => {
       dispatch(changeRoomPriceAction(evt.target.value));
+    },
+    onChangeRoomCurrency: evt => {
+      dispatch(changeRoomCurrencyAction(evt.target.value));
     },
     onChangeRoomDiscount: evt => {
       dispatch(changeRoomDiscountAction(evt.target.value));

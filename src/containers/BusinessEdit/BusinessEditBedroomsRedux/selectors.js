@@ -73,6 +73,10 @@ const makeSelectRoomPrice = () =>
   createSelector(selectBusinessEditBedroomsReduxDomain, state =>
     state.get('roomPrice'),
   );
+const makeSelectRoomCurrency = () =>
+  createSelector(selectBusinessEditBedroomsReduxDomain, state =>
+    state.get('roomCurrency'),
+  );
 const makeSelectRoomDiscount = () =>
   createSelector(selectBusinessEditBedroomsReduxDomain, state =>
     state.get('roomDiscount'),
@@ -111,6 +115,7 @@ export {
   makeSelectRoomEquipment,
   makeSelectRoomPhotos,
   makeSelectRoomPrice,
+  makeSelectRoomCurrency,
   makeSelectRoomDiscount,
   makeSelectIsDeleted,
   makeSelectIsNew,

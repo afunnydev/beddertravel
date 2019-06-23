@@ -14,6 +14,7 @@ import {
   CHANGE_ROOMEQUIPMENT,
   CHANGE_ROOMPHOTOS,
   CHANGE_ROOMPRICE,
+  CHANGE_ROOMCURRENCY,
   CHANGE_ROOMDISCOUNT,
   CHANGE_ISDELETED,
   CHANGE_ISNEW,
@@ -44,6 +45,7 @@ export const newRoomState = fromJS({
   roomEquipment: BedderConfig.getEquipment(),
   roomPhotos: defaultEmptyPhotos,
   roomPrice: 0,
+  roomCurrency: 'USD',
   roomDiscount: 0,
   isDeleted: false,
   isNew: true,
@@ -70,6 +72,7 @@ export const initialState = fromJS({
   roomEquipment: BedderConfig.getEquipment(),
   roomPhotos: defaultEmptyPhotos,
   roomPrice: 0,
+  roomCurrency: 'USD',
   roomDiscount: 0,
   isDeleted: false,
   isNew: true,
@@ -129,6 +132,7 @@ function businessAddBedroomsReduxReducer(state = initialState, action) {
               .set('roomEquipment', oldState.get('roomEquipment'))
               .set('roomPhotos', oldState.get('roomPhotos'))
               .set('roomPrice', oldState.get('roomPrice'))
+              .set('roomCurrency', oldState.get('roomCurrency'))
               .set('roomDiscount', oldState.get('roomDiscount'))
               .set('isDeleted', oldState.get('isDeleted'))
               .set('isNew', oldState.get('isNew')),
@@ -150,6 +154,7 @@ function businessAddBedroomsReduxReducer(state = initialState, action) {
       .set('roomEquipment', activeRoom.get('roomEquipment'))
       .set('roomPhotos', activeRoom.get('roomPhotos'))
       .set('roomPrice', activeRoom.get('roomPrice'))
+      .set('roomCurrency', activeRoom.get('roomCurrency'))
       .set('roomDiscount', activeRoom.get('roomDiscount'))
       .set('isDeleted', activeRoom.get('isDeleted'))
       .set('isNew', activeRoom.get('isNew'));
@@ -192,6 +197,8 @@ function businessAddBedroomsReduxReducer(state = initialState, action) {
     return state.set('roomPhotos', action.roomPhotos);
   case CHANGE_ROOMPRICE:
     return state.set('roomPrice', Math.round(action.roomPrice * 100));
+  case CHANGE_ROOMCURRENCY:
+    return state.set('roomCurrency', action.roomCurrency);
   case CHANGE_ROOMDISCOUNT:
     return state.set('roomDiscount', action.roomDiscount);
   case CHANGE_ISDELETED:
@@ -257,6 +264,7 @@ function businessAddBedroomsReduxReducer(state = initialState, action) {
             .set('roomEquipment', oldState.get('roomEquipment'))
             .set('roomPhotos', oldState.get('roomPhotos'))
             .set('roomPrice', oldState.get('roomPrice'))
+            .set('roomCurrency', oldState.get('roomCurrency'))
             .set('roomDiscount', oldState.get('roomDiscount'))
             .set('isDeleted', oldState.get('isDeleted'))
             .set('isNew', oldState.get('isNew')),
@@ -327,6 +335,7 @@ function businessAddBedroomsReduxReducer(state = initialState, action) {
         roomEquipment: v.equipment,
         roomPhotos: fromJS(roomPhotos),
         roomPrice: parseInt(v.rate),
+        roomCurrency: v.currency,
         roomDiscount: parseInt(v.discount),
         isDeleted: false,
         isNew: true,
@@ -376,7 +385,7 @@ function businessAddBedroomsReduxReducer(state = initialState, action) {
           activeRoom.roomEquipment ? fromJS(activeRoom.roomEquipment) : '',
         )
         .set('roomPrice', activeRoom.roomPrice ? activeRoom.roomPrice : '')
-
+        .set('roomCurrency', activeRoom.roomCurrency ? activeRoom.roomCurrency : 'USD')
         .set(
           'roomDiscount',
           activeRoom.roomDiscount ? activeRoom.roomDiscount : '',
