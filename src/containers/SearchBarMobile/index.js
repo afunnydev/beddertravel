@@ -17,7 +17,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 
 import DatePicker from 'react-datepicker';
-import moment from 'moment';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -26,7 +25,6 @@ import { compose } from 'redux';
 import { withConnect as withReduxProps } from './SearchBarMobileRedux';
 import SearchBarMobileRedux from './SearchBarMobileRedux/Loadable';
 import { withRouter } from 'react-router-dom';
-// import { changeLatAction, changeLocationAction, changeLonAction } from '../HomePage/actions';
 import {
   changeLatAction,
   changeLocationAction,
@@ -152,7 +150,9 @@ export const theme = createMuiTheme({
   },
 });
 
-/* eslint-disable react/prefer-stateless-function */
+let momentNow = new Date();
+momentNow.setHours(0,0,0,0);
+
 class SearchBarMobile extends React.Component {
   constructor(props) {
     super(props);
@@ -163,7 +163,6 @@ class SearchBarMobile extends React.Component {
       locationError: false,
       toError: false,
       fromError: false,
-      momentNow: moment().startOf('day'),
       location: '',
     };
     this.suggestionSelected = this.suggestionSelected.bind(this);
@@ -181,21 +180,12 @@ class SearchBarMobile extends React.Component {
   }
 
   submit() {
-
-    // if(!BedderValidator.validate(BedderValidator.getSearchBarMobile())) {
-    //   return false;
-    // }
-
-    // console.log('this.facking.props', this.props)
-
     if(!this.validate()) {
       return false;
     }
 
     if(this.props.searchCallback) {
       this.props.searchCallback();
-    // } else {
-      // console.log('no yeah (((')
     }
 
     switch(this.props.location.pathname) {
@@ -206,11 +196,8 @@ class SearchBarMobile extends React.Component {
         this.props.history.push('/home');
         setTimeout(this.dispatchSubmit, 700);
         break;
-        // this.props.handleSubmit();
     }
-
   }
-
 
   validate() {
     let isValid = true;
@@ -220,23 +207,20 @@ class SearchBarMobile extends React.Component {
       isValid = false;
     } else {
       this.setState({'locationError': false});
-      // isValid = true;
     }
 
-    if(!this.props.from || this.props.from.isBefore(this.state.momentNow)) {
+    if(!this.props.from || this.props.from < momentNow) {
       this.setState({'fromError': true});
       isValid = false;
     } else {
       this.setState({'fromError': false});
-      // isValid = true;
     }
 
-    if(!this.props.to || this.props.to.isSameOrBefore(this.props.from)) {
+    if(!this.props.to || this.props.to <= this.props.from) {
       this.setState({'toError': true});
       isValid = false;
     } else {
       this.setState({'toError': false});
-      // isValid = true;
     }
 
     this.setState({isValid});
@@ -246,8 +230,6 @@ class SearchBarMobile extends React.Component {
 
 
   componentDidUpdate(prevProps, prevState) {
-    // console.log('searchBarMobile componentDidUpdate');
-
     if(prevProps.from != this.props.from ||
        prevProps.to != this.props.to ||
        prevProps.locationText != this.props.locationText) {
@@ -261,33 +243,21 @@ class SearchBarMobile extends React.Component {
     }
 
     if(prevProps.from != this.props.from) {
-      // console.log('updated this.props.from', this.props.from)
-      if(this.props.from && (this.props.from.isAfter(this.props.to) || this.props.from.isSame(this.props.to))) {
-        // console.log('yeah');
-        this.props.onChangeToVal(this.props.from.clone().add(3, 'days'));
+      if(this.props.from && (this.props.from >= this.props.to)) {
+        const newDate = this.props.from.addDays(3);
+        this.props.onChangeToVal(newDate);
       }
-      // else if (this.props.from.isSame(this.props.to)) {
-      //   this.props.onChangeToVal(this.props.from.clone().add(1, 'days'));
-      // }
     }
   }
 
-  getFrom(moment) {
-    // this.props.onChangeFromVal(moment.format('MM/DD/YYYY'));
-    this.props.onChangeFromVal(moment);
-  }
-
-  getTo(moment) {
-    // this.props.onChangeFromVal(moment.format('MM/DD/YYYY'));
-    this.props.onChangeToVal(moment);
-  }
+  getFrom = (date) => this.props.onChangeFromVal(date);
+  getTo = (date) => this.props.onChangeToVal(date);
 
   getGeolocationF() {
     navigator.geolocation.getCurrentPosition(this.getGeolocation);
   }
 
   getGeolocation(location) {
-    // navigator.geolocation.getCurrentPosition(function(location) {
     const { latitude, longitude, accuracy } = location.coords;
     this.setState({
       latitude,
@@ -303,19 +273,8 @@ class SearchBarMobile extends React.Component {
       (results, status) => {
         if (status === 'OK') {
           if (results[0]) {
-            // map.setZoom(11);
-            // var marker = new google.maps.Marker({
-            //   position: latlng,
-            //   map: map
-            // });
-            // infowindow.setContent(results[0].formatted_address);
             this.setState({ location: results[0].formatted_address });
-            // onGeocodeLocation(results[0].formatted_address);
-            // console.log('results[0].formatted_address', results[0].formatted_address);
-            // infowindow.open(map, marker);
           } else {
-            // console.log('No results found');
-            // onGeocodeLocation('');
             this.setState({ location: '' });
           }
         } else {
@@ -323,11 +282,6 @@ class SearchBarMobile extends React.Component {
         }
       },
     );
-
-    // console.log(location.coords.latitude);
-    // console.log(location.coords.longitude);
-    // console.log(location.coords.accuracy);
-    // });
   }
 
   suggestionSelected(suggestion) {
@@ -335,13 +289,6 @@ class SearchBarMobile extends React.Component {
     geocodeBySuggestion(suggestion)
       .then(results => {
         if (results.length < 1) {
-          // this.setState({
-          //   errorMessage:
-          // console.log(
-          //   'Geocode request completed successfully but without any results',
-          // );
-          // });
-
           return;
         }
 
@@ -357,315 +304,223 @@ class SearchBarMobile extends React.Component {
       })
       .catch(err => {
         console.log('geocode err.message', err.message);
-        // this.setState({ errorMessage: err.message });
       });
   }
 
-  // const RenderMUIInput = (input) => (
-  //   <Validation
-  //     ref={this.vRefs.location}
-  //     onChangeCallback="onChange"
-  //     validators={[BedderValidator.getValidators().notEmpty]}>
-  //     <TextField
-
-  //     />
-  //   </Validation>
-  // )
-
   render() {
     const { classes } = this.props;
-    const vs = BedderValidator.getValidators();
-    // console.log('serach props', this.props);
-    // console.log('serach locationError', this.state.locationError);
 
     return (
       <React.Fragment>
         <SearchBarMobileRedux />
-        {/* <Paper className={classes.searchPaperWrapper} square background="none"> */}
-          {/* <Paper className={classes.searchPaper} elevation={0}> */}
-            <Grid container>
-              <Grid item xs={12}>
-                <div className={classes.gridColumn}>
-                  <Paper className={classes.searchPaperItem}>
-                    <MUIPlacesAutocomplete
-                      // renderTarget={RenderMUIInput}
-                      // error={this.state.locationError}
-                      textFieldProps={{
-                        fullWidth: true,
+        <Grid container>
+          <Grid item xs={12}>
+            <div className={classes.gridColumn}>
+              <Paper className={classes.searchPaperItem}>
+                <MUIPlacesAutocomplete
+                  textFieldProps={{
+                    fullWidth: true,
 
-                        value: this.props.locationText,
-                        id: 'location',
-                        onChange: this.props.onChangeLocation,
-                        InputProps: {
-                          style: this.state.locationError ? {color: 'red'} : {},
-                          disableUnderline: true,
-                          startAdornment: (
-                            <InputAdornment
-                              position="start"
-                              className={classes.adornment}
-                            >
-                              {/*<Search /> */}
-                              {/*<span className={classes.primaryColor}> */}
-                                <span className="icon-search"/>
-                              {/*</span> */}
-                            </InputAdornment>
-                          ),
-                          endAdornment: (
-                            <InputAdornment
-                              // component={IconButton}
-                              onClick={this.getGeolocationF}
-                              position="end"
-                              className={classes.adornmentEnd}
-                            >
-                              <MyLocation color="primary" />
-                            </InputAdornment>
-                          ),
-                        },
+                    value: this.props.locationText,
+                    id: 'location',
+                    onChange: this.props.onChangeLocation,
+                    InputProps: {
+                      style: this.state.locationError ? {color: 'red'} : {},
+                      disableUnderline: true,
+                      startAdornment: (
+                        <InputAdornment
+                          position="start"
+                          className={classes.adornment}
+                        >
+                          <span className="icon-search"/>
+                        </InputAdornment>
+                      ),
+                      endAdornment: (
+                        <InputAdornment
+                          onClick={this.getGeolocationF}
+                          position="end"
+                          className={classes.adornmentEnd}
+                        >
+                          <MyLocation color="primary" />
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
+                  onSuggestionSelected={this.suggestionSelected}
+                  renderTarget={() => <div className={classes.renderDiv} />}
+                />
+              </Paper>
+            </div>
+          </Grid>
+          <Grid item xs={6}>
+            <div className={classes.gridColumnLeft}>
+              <Paper className={classes.searchPaperItem}>
+                <DatePicker
+                  id="from"
+                  selected={this.props.from}
+                  fullWidth
+                  onChange={this.getFrom}
+                  customInput={
+                    <TextField
+                      fullWidth
+                      error
+                      inputProps={{
+                        style: {maxWidth: 130}
                       }}
-                      onSuggestionSelected={this.suggestionSelected}
-                      renderTarget={() => <div className={classes.renderDiv} />}
+                      InputProps={{
+                        style: this.state.fromError ? {color: 'red'} : {},
+                        disableUnderline: true,
+                        startAdornment: (
+                          <InputAdornment
+                            position="start"
+                            className={classes.adornment}
+                          >
+                            {/*<FlightTakeoff />*/}
+                            <span className={classes.primaryColor}>
+                              <span className="icon-go"/>
+                            </span>
+                          </InputAdornment>
+                        ),
+                      }}
                     />
+                  }
+                />
+              </Paper>
+            </div>
+          </Grid>
+          <Grid item xs={6}>
+            <div className={classes.gridColumnRight}>
+              <Paper className={classes.searchPaperItem}>
+                <DatePicker
+                  id="to"
+                  selected={this.props.to}
+                  fullWidth
+                  onChange={this.getTo}
+                  customInput={
+                    <TextField
+                      fullWidth
+                      inputProps={{
+                        style: {maxWidth: 130}
+                      }}
+                      InputProps={{
+                        style: this.state.toError ? {color: 'red'} : {},
+                        disableUnderline: true,
+                        startAdornment: (
+                          <InputAdornment
+                            position="start"
+                            className={classes.adornment}
+                          >
+                            <span className={classes.primaryColor}>
+                              <span className="icon-back"/>
+                            </span>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  }
+                />
+              </Paper>
+            </div>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Grid container>
+              <Grid item xs={6}>
+                <div className={classes.gridColumnLeft}>
+                  <Paper className={classes.searchPaperItem}>
+                    <TextField
+                      id="numPeople"
+                      value={this.props.numPeople}
+                      select
+                      fullWidth
+                      onChange={this.props.onChangeNumPeople}
+                      InputProps={{
+                        disableUnderline: true,
+                        startAdornment: (
+                          <InputAdornment
+                            position="start"
+                            className={classes.adornment}
+                          >
+                            <PersonIcon className={classes.primaryColor} />
+                          </InputAdornment>
+                        ),
+                      }}
+                    >
+                      {nums.map(option => (
+                        <MenuItem
+                          key={option}
+                          value={option}
+                        >
+                          {option}
+                        </MenuItem>
+                      ))}
+                    </TextField>
                   </Paper>
                 </div>
               </Grid>
               <Grid item xs={6}>
-              <div className={classes.gridColumnLeft}>
-                      <Paper className={classes.searchPaperItem}>
-                        <DatePicker
-                          id="from"
-                          // value={this.props.from}
-                          // selected={moment()}
-                          selected={this.props.from}
-                          // selected={(this.props.from != '') ? this.props.from : moment()}
-                          fullWidth
-                          // error={true}
-                          // onChange={this.props.onChangeFrom}
-                          onChange={this.getFrom}
-                          // onChange={date => console.log('date', date)}
-                          customInput={
-                            // <Validation
-                            //   ref={this.vRefs.from}
-                            //   onChangeCallback="onChange"
-                            //   validators={[vs.notEmpty]}>
-                            <TextField
-                              // type="date"
-
-                              fullWidth
-                              // onChange={this.props.onChangeFrom}
-                              error
-                              inputProps={{
-                                style: {maxWidth: 130}
-                              }}
-                              InputProps={{
-                                style: this.state.fromError ? {color: 'red'} : {},
-                                // error: true,
-                                disableUnderline: true,
-                                startAdornment: (
-                                  <InputAdornment
-                                    position="start"
-                                    className={classes.adornment}
-                                  >
-                                    {/*<FlightTakeoff />*/}
-                                    <span className={classes.primaryColor}>
-                                      <span className="icon-go"/>
-                                    </span>
-                                  </InputAdornment>
-                                ),
-                              }}
-                            />
-                            // </Validation>
-                          }
-                        />
-                      </Paper>
-                    </div>
-              </Grid>
-              <Grid item xs={6}>
-              <div className={classes.gridColumnRight}>
-                      <Paper className={classes.searchPaperItem}>
-                        <DatePicker
-                          id="to"
-                          // value={this.props.to}
-                          // selected={moment()}
-                          selected={this.props.to}
-                          // selected={(this.props.from != '') ? this.props.from : moment()}
-                          fullWidth
-                          // onChange={this.props.onChangeFrom}
-                          onChange={this.getTo}
-                          // onChange={date => console.log('date', date)}
-                          customInput={
-                            // <Validation
-                            //   ref={this.vRefs.to}
-                            //   onChangeCallback="onChange"
-                            //   validators={[vs.notEmpty]}>
-                            <TextField
-                              // type="date"
-                              fullWidth
-                              // onChange={this.props.onChangeFrom}
-                              // error={this.state.errorTo}
-                              inputProps={{
-                                style: {maxWidth: 130}
-                              }}
-                              InputProps={{
-                                style: this.state.toError ? {color: 'red'} : {},
-                                disableUnderline: true,
-                                startAdornment: (
-                                  <InputAdornment
-                                    position="start"
-                                    className={classes.adornment}
-                                  >
-                                    {/*<FlightLand />*/}
-                                    <span className={classes.primaryColor}>
-                                      <span className="icon-back"/>
-                                    </span>
-                                  </InputAdornment>
-                                ),
-                              }}
-                            />
-                            // </Validation>
-                          }
-                        />
-                      </Paper>
-                    </div>
-              </Grid>
-              {/* <Grid item xs={6}>
-                <Grid container>
-                  <Grid item xs={6}>
-
-                  </Grid>
-                  <Grid item xs={6}>
-
-                  </Grid>
-                </Grid>
-              </Grid> */}
-
-              <Grid item xs={12}>
-                <Grid container>
-                  <Grid item xs={6}>
-                    <div className={classes.gridColumnLeft}>
-                      <Paper className={classes.searchPaperItem}>
-                        <TextField
-                          id="numPeople"
-                          value={this.props.numPeople}
-                          select
-                          fullWidth
-                          // classes={{root: classes.rootSelect}}
-                          // className={classes.rootSelect}
-                          onChange={this.props.onChangeNumPeople}
-                          InputProps={{
-                            disableUnderline: true,
-                            startAdornment: (
-                              <InputAdornment
-                                position="start"
-                                className={classes.adornment}
-                              >
-                                {/*<GroupIcon className={classes.primaryColor} />*/}
-                                <PersonIcon className={classes.primaryColor} />
-                                {/*<span className={classes.primaryColor}>*/}
-                                  {/*<span className="icon-go"/>*/}
-                                {/*</span>*/}
-                              </InputAdornment>
-                            ),
-                          }}
-                          SelectProps={{
-                            // classes: {root: classes.rootSelect},
-                            // className: classes.rootSelect,
-                            MenuProps: {
-                              // className: classes.menu,
-                            },
-                          }}
-                        >
-                          {nums.map(option => (
-                            <MenuItem
-                              key={option}
-                              value={option}
-                              // selected={option == 1 ? true : false}
-                            >
-                              {option}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </Paper>
-                    </div>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <div className={classes.gridColumnRight}>
-                      <Paper className={classes.searchPaperItem}>
-                        <TextField
-                          id="numBed"
-                          value={this.props.numBed}
-                          select
-                          fullWidth
-                          onChange={this.props.onChangeNumBed}
-                          InputProps={{
-                            disableUnderline: true,
-                            startAdornment: (
-                              <InputAdornment
-                                position="start"
-                                className={classes.adornment}
-                              >
-                                {/*<LocalHotelIcon />*/}
-                                <span className={classes.primaryColor}>
-                                  <span className="icon-bed"/>
-                                </span>
-                              </InputAdornment>
-                            ),
-                          }}
-                          SelectProps={{
-                            MenuProps: {
-                              // className: classes.menu,
-                            },
-                          }}
-                        >
-                          {nums.map(option => (
-                            <MenuItem key={option} value={option}>
-                              {option}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </Paper>
-                    </div>
-                  </Grid>
-                </Grid>
-              </Grid>
-
-              <Grid item xs={12}>
-                {/*<Typography align="right">*/}
-                <div className={classes.gridColumn} align="right">
-                  <Typography noWrap>
-                    <Button
+                <div className={classes.gridColumnRight}>
+                  <Paper className={classes.searchPaperItem}>
+                    <TextField
+                      id="numBed"
+                      value={this.props.numBed}
+                      select
                       fullWidth
-                      onClick={this.submit}
-                      // disabled={!this.state.isValid}
-                      classes={{
-                        root: classes.findButton,
+                      onChange={this.props.onChangeNumBed}
+                      InputProps={{
+                        disableUnderline: true,
+                        startAdornment: (
+                          <InputAdornment
+                            position="start"
+                            className={classes.adornment}
+                          >
+                            {/*<LocalHotelIcon />*/}
+                            <span className={classes.primaryColor}>
+                              <span className="icon-bed"/>
+                            </span>
+                          </InputAdornment>
+                        ),
+                      }}
+                      SelectProps={{
+                        MenuProps: {
+                          // className: classes.menu,
+                        },
                       }}
                     >
-                      Find!
-                    </Button>
-                  </Typography>
+                      {nums.map(option => (
+                        <MenuItem key={option} value={option}>
+                          {option}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Paper>
                 </div>
-                {/*</Typography>*/}
               </Grid>
             </Grid>
-          {/* </Paper> */}
-        {/* </Paper> */}
+          </Grid>
+
+          <Grid item xs={12}>
+            <div className={classes.gridColumn} align="right">
+              <Typography noWrap>
+                <Button
+                  fullWidth
+                  onClick={this.submit}
+                  classes={{
+                    root: classes.findButton,
+                  }}
+                >
+                  Find!
+                </Button>
+              </Typography>
+            </div>
+          </Grid>
+        </Grid>
       </React.Fragment>
     );
   }
 }
 
 SearchBarMobile.propTypes = {};
-
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     dispatch,
-//   };
-// }
-//
-// const withConnect = connect(
-//   null,
-//   mapDispatchToProps,
-// );
 
 export default compose(
   withStyles(styles),

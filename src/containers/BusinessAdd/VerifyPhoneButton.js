@@ -21,8 +21,8 @@ const VerfiyPhoneButton = ({ verificationCode, saveToState, ownerPhone, handleVe
   <Mutation
     mutation={VERIFY_PHONE_MUTATION}
     variables={{
-      code: this.state.verificationCode,
-      number: this.state.ownerPhone,
+      code: verificationCode,
+      number: ownerPhone,
     }}
   >
     {(verifyPhone, { error, loading }) => (

@@ -79,7 +79,7 @@ export class SignUpPage extends React.Component {
       ...message.data.facebookSignup,
     });
     Bedder.login(this.props.dispatch);
-    this.props.enqueueSnackbar(`Bienvenu(e) sur Bedder Travel ${message.data.facebookSignup.firstname}✌️`, { variant: 'default' });
+    this.props.enqueueSnackbar(`Welcome to Bedder Travel ${message.data.facebookSignup.firstname}✌️`, { variant: 'default' });
     return this.props.history.push('/home');
   }
 

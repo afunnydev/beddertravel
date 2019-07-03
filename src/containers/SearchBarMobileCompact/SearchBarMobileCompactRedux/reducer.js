@@ -1,9 +1,3 @@
-/*
- *
- * SearchBarRedux reducer
- *
- */
-
 import { fromJS } from 'immutable';
 import {
   CHANGE_LOCATION,
@@ -21,8 +15,8 @@ import moment from 'moment';
 
 export const initialState = fromJS({
   locationText: 'Montréal',
-  from: moment(),
-  to: moment().add(3, 'days'),
+  from: new Date(),
+  to: new Date().addDays(3),
   numPeople: 2,
   numBed: 1,
   lat: 45.52,

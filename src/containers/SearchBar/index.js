@@ -173,8 +173,6 @@ class SearchBar extends React.Component {
     }
 
     if (!this.props.from || this.props.from < momentNow) {
-      console.log(this.props.from);
-      console.log(momentNow);
       this.setState({ 'fromError': true });
       isValid = false;
     } else {

@@ -98,17 +98,11 @@ export function* makeSubmit() {
   const country = 'CD';
   const city = 'dummy';
 
-  let requestURL;
-
-  if (modelId > 0) {
-    requestURL = `${BedderConfig.getApiUrl()}/business/${modelId}?XDEBUG_SESSION_START=phpstorm`;
-  } else {
-    requestURL = `${BedderConfig.getApiUrl()}/business?XDEBUG_SESSION_START=phpstorm`;
-  }
+  const requestURL = `${BedderConfig.getApiUrl()}/business/${modelId}?XDEBUG_SESSION_START=phpstorm`;
 
   try {
     const res = yield call(request, requestURL, {
-      method: modelId > 0 ? 'PUT' : 'POST',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': Bedder.getHeaderToken(),

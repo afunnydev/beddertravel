@@ -143,7 +143,9 @@ export const theme = createMuiTheme({
   },
 });
 
-/* eslint-disable react/prefer-stateless-function */
+let momentNow = new Date();
+momentNow.setHours(0,0,0,0);
+
 class SearchBarMobileCompact extends React.Component {
   constructor(props) {
     super(props);
@@ -214,7 +216,7 @@ class SearchBarMobileCompact extends React.Component {
       // isValid = true;
     }
 
-    if(!this.props.from || this.props.from.isBefore(this.state.momentNow)) {
+    if(!this.props.from || this.props.from < momentNow) {
       this.setState({'fromError': true});
       isValid = false;
     } else {
@@ -222,7 +224,7 @@ class SearchBarMobileCompact extends React.Component {
       // isValid = true;
     }
 
-    if(!this.props.to || this.props.to.isSameOrBefore(this.props.from)) {
+    if(!this.props.to || this.props.to <= this.props.from) {
       this.setState({'toError': true});
       isValid = false;
     } else {
@@ -252,26 +254,15 @@ class SearchBarMobileCompact extends React.Component {
     }
 
     if(prevProps.from != this.props.from) {
-      // console.log('updated this.props.from', this.props.from)
-      if(this.props.from && (this.props.from.isAfter(this.props.to) || this.props.from.isSame(this.props.to))) {
-        // console.log('yeah');
-        this.props.onChangeToVal(this.props.from.clone().add(3, 'days'));
+      if(this.props.from && (this.props.from >= this.props.to)) {
+        const newDate = this.props.from.addDays(3);
+        this.props.onChangeToVal(newDate);
       }
-      // else if (this.props.from.isSame(this.props.to)) {
-      //   this.props.onChangeToVal(this.props.from.clone().add(1, 'days'));
-      // }
     }
   }
 
-  getFrom(moment) {
-    // this.props.onChangeFromVal(moment.format('MM/DD/YYYY'));
-    this.props.onChangeFromVal(moment);
-  }
-
-  getTo(moment) {
-    // this.props.onChangeFromVal(moment.format('MM/DD/YYYY'));
-    this.props.onChangeToVal(moment);
-  }
+  getFrom = (date) => this.props.onChangeFromVal(date);
+  getTo = (date) => this.props.onChangeToVal(date);
 
   getGeolocationF() {
     navigator.geolocation.getCurrentPosition(this.getGeolocation);
