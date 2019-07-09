@@ -1,3 +1,40 @@
+## Setup
+
+git clone this repo and ```yarn```to install the dependencies.
+
+### Endpoints
+
+The endpoint for saga/thunk (used by redux to fetch the API) are in ```src/bedder/bedderConfig.js``` and ```src/bedder/bedderSetting.js```. Please make sure you query to live endpoint, and not the local. The endpoints for the GraphQL server can be found in ```src/utils/createClient.js```. If you're not using the local graphql endpoint, you should change the ```endpoint```for the live one.
+
+### GraphQL and Redux
+
+This project was started using Redux and Saga. Then, Thunk was added to all this. To simplify the code, we started implementing an Apollo Client and an Apollo server in some components. From now on, we shall use the Apollo Client to query our backend, and not Saga or Thunk.
+
+The Redux implementation works, but is clunky and doesn't follow best practices. If you have time to rewrite some components, feel free to do so, but be careful. The reducers and sagas are injected dynamically in components.
+
+### Routing and loading
+
+This project loads components dynamically, using ```react-loadable```. It also uses ```react-router```.
+
+### Containers and Components
+
+Please note the the containers should be used for views only. It is not the case currently. If you have time to rewrite, please do it.
+
+The components should be as reusable as possible. It is not the case currently (i.e "SearchBar", "SearchBarMobile" and "SearchBarMobileCompact"). If you have time to rewrite, please do it.
+
+### Admin
+
+I wrote a basic admin system for secure database access. The static content (for example "Terms and conditions" page) is managed through NetlifyCMS.
+
+### TODO
+
+- Load all reviews for a business on "See more reviews" click (see the page "Reviews" in the XD, can be simplified).
+- Test and improve the Sign In and Sign Up process with all the appropriate feedback.
+- Style the search map according to the design. You can use the same style than the BusinessEdit view ```src/containers/BusinessEdit/BusinessEditGeneralInformation/Map/mapStyle.js```. Make search relaunch possible from the map (especially from mobile).
+- Mobile Business Tile on the search map
+
+## Create React App
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

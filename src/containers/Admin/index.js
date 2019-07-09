@@ -59,12 +59,12 @@ const Routes = () => (
     </Grid>
     <Grid item xs={12} md={4}>
       <BigPaper elevation={3}>
-        <Link to="https://beddertravel.freshdesk.com/a/dashboard/sample" target="_blank" rel="noopener noreferrer">Freshdesk</Link>
+        <a href="https://beddertravel.freshdesk.com/a/dashboard/sample" target="_blank" rel="noopener noreferrer">Freshdesk</a>
       </BigPaper>
     </Grid>
     <Grid item xs={12} md={4}>
       <BigPaper elevation={3}>
-        <Link to="https://dashboard.stripe.com" target="_blank" rel="noopener noreferrer">Stripe</Link>
+        <a href="https://dashboard.stripe.com" target="_blank" rel="noopener noreferrer">Stripe</a>
       </BigPaper>
     </Grid>
   </Grid>
