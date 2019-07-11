@@ -35,11 +35,11 @@ import Security from '@material-ui/icons/Security';
 import ErrorOutline from '@material-ui/icons/ErrorOutline';
 
 import WithUserContext from '../../AppContext/context';
-
 import saga from './saga';
-import BedderLoadingIndicator from '../../../components/BedderLoadingIndicator';
+
+import BedderLoadingIndicator from 'components/BedderLoadingIndicator';
+import Amenities from 'components/Amenities';
 import BusinessViewRoom from './BusinessViewRoom';
-import Amenities from '../../BusinessEdit/BusinessEditGeneralInformation/Amenities';
 import BusinessViewReviews from './BusinessViewReviews';
 
 const HeaderImage = styled.div`

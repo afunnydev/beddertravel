@@ -81,7 +81,7 @@ const Room = (props) => {
         console.log(error);
         if (error) return <p>Error</p>;
         if (loading) return <p>Loading...</p>;
-        if (!data || !data.businessUnit) return <p>No Room</p>;
+        if (!data || !data.businessUnit) return <p>Please select a room.</p>;
         const { businessUnit } = data; 
         if (businessUnit.equipment) {
           amenities = JSON.parse(businessUnit.equipment);

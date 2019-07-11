@@ -1,6 +1,7 @@
 import React from 'react';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
+import { withSnackbar } from 'notistack';
 
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -33,17 +34,28 @@ const SubmitButton = (props) => {
     delete business.__typename;
     delete address.id;
     delete address.__typename;
-    updateFn({
-      variables: {
-        business: {
-          ...business,
-          ...address,
-          coverPhotos,
-          businessUnits,
-          status
+    let res;
+    try {
+      res = await updateFn({
+        variables: {
+          business: {
+            ...business,
+            ...address,
+            coverPhotos,
+            businessUnits,
+            status
+          }
         }
-      }
-    });
+      });
+    } catch(e) {
+      console.log(e);
+      return props.enqueueSnackbar('Something went wrong. Please make sure you filled at least the address before saving.', { variant: 'error' });
+    }
+    if (res && res.data && res.data.updateBusiness && res.data.updateBusiness.message == 'YEAH') {
+      props.enqueueSnackbar('Saved ✌️', { variant: 'success' });
+    } else {
+      props.enqueueSnackbar('Something went wrong. Please make sure you filled at least the address before saving.', { variant: 'error' });
+    }
   };
 
   return (
@@ -55,9 +67,9 @@ const SubmitButton = (props) => {
           variables={{
             id: props.id
           }}
-          // refetchQueries={[{ query: BUSINESS_QUERY, variables: { businessId: props.id } }]}
+          refetchQueries={[{ query: BUSINESS_QUERY, variables: { businessId: props.id } }]}
         >
-          {( updateBusiness, {error, loading}) => (
+          {( updateBusiness, {loading}) => (
             <>
               <Button
                 disabled={loading}
@@ -95,4 +107,4 @@ const SubmitButton = (props) => {
   );
 };
 
-export default SubmitButton;
+export default withSnackbar(SubmitButton);
