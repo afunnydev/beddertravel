@@ -1,8 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
 import withMobileDialog from '@material-ui/core/withMobileDialog';
@@ -17,20 +14,13 @@ import BedderLoadingIndicator from 'components/BedderLoadingIndicator';
 
 import BedderValidator from 'bedder/bedderValidator';
 
-import injectSaga from 'utils/injectSaga';
-import injectReducer from 'utils/injectReducer';
-import makeSelectBusinessEditPage from './selectors';
-import reducer from './reducer';
-import saga from './saga';
 import BusinessEditPageHeader from './BusinessEditPageHeader';
-
 import BusinessEditGeneralInformation from '../BusinessEditGeneralInformation';
 import BusinessEditGeneralInformationMore from '../BusinessEditGeneralInformationMore';
 import BusinessEditBedrooms from '../BusinessEditBedrooms';
-import { withConnect as withReduxConnect } from '../BusinessEditPageRedux';
+import BusinessEditPageRedux, { withConnect as withReduxConnect } from './BusinessEditPageRedux';
 import { withConnect as withGeneralReduxConnect } from '../BusinessEditGeneralInformationRedux';
 import { withConnect as withBedroomsReduxConnect } from '../BusinessEditBedroomsRedux';
-import BusinessEditPageRedux from '../BusinessEditPageRedux';
 
 BedderValidator.prepareTextField();
 
@@ -53,8 +43,6 @@ export class BusinessEditPage extends React.Component {
     this.vRefs = BedderValidator.makeRefs(BedderValidator.getBusinessEditPage());
     this.submitDraft = this.submitDraft.bind(this);
     this.submitPublic = this.submitPublic.bind(this);
-
-    this.roomsRef = React.createRef();
   }
 
   submitDraft() {
@@ -219,7 +207,6 @@ export class BusinessEditPage extends React.Component {
                 />
 
                 <BusinessEditBedrooms
-                  ref={instance => { this.roomsRef = instance; }}
                   validateRoom={this.state.validateRoom}
                   width={this.props.width}
                   isMobile={isMobile}
@@ -298,38 +285,11 @@ export class BusinessEditPage extends React.Component {
   }
 }
 
-BusinessEditPage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-};
-
 BusinessEditPage.defaultProps = {
   submitting: true,
 };
 
-const mapStateToProps = createStructuredSelector({
-  businessaddpage: makeSelectBusinessEditPage(),
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
-}
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-  null,
-  {forwardRef: true, pure: true}
-);
-
-const withReducer = injectReducer({ key: 'businessEditPage', reducer });
-const withSaga = injectSaga({ key: 'businessEditPage', saga });
-
 export default compose(
-  withReducer,
-  withSaga,
-  withConnect,
   withReduxConnect,
   withGeneralReduxConnect,
   withBedroomsReduxConnect,

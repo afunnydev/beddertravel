@@ -27,8 +27,6 @@ export const CHANGE_ROOMSIZEMEASURE =
   'app/BusinessEditBedroomsRedux/CHANGE_ROOMSIZEMEASURE';
 export const CHANGE_ROOMEQUIPMENT =
   'app/BusinessEditBedroomsRedux/CHANGE_ROOMEQUIPMENT';
-export const CHANGE_ROOMPHOTOS =
-  'app/BusinessEditBedroomsRedux/CHANGE_ROOMPHOTOS';
 export const CHANGE_ROOMPRICE = 'app/BusinessEditBedroomsRedux/CHANGE_ROOMPRICE';
 export const CHANGE_ROOMCURRENCY = 'app/BusinessEditBedroomsRedux/CHANGE_ROOMCURRENCY';
 export const CHANGE_ROOMDISCOUNT =
@@ -41,4 +39,3 @@ export const CLONEROOM = 'app/BusinessEditBedroomsRedux/CLONEROOM';
 export const SORTROOM = 'app/BusinessEditBedroomsRedux/SORTROOM';
 export const ADDPHOTO = 'app/BusinessEditBedroomsRedux/ADDPHOTO';
 export const REMOVEPHOTO = 'app/BusinessEditBedroomsRedux/REMOVEPHOTO';
-export const SELECTPHOTO = 'app/BusinessEditBedroomsRedux/SELECTPHOTO';

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
-import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
 import {
@@ -13,42 +12,15 @@ import {
 import { mapStateToProps, mapDispatchToProps } from './mapProps';
 
 import reducer from './reducer';
-import saga from './saga';
 
 /* eslint-disable react/prefer-stateless-function */
 export class BusinessEditGeneralInformationRedux extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      modelResultId: null,
-    };
   }
 
   componentWillUnmount() {
     this.props.dispatch(locationApplyAction());
-  }
-
-  processModel() {
-    if (this.props.modelResult) {
-      if (
-        this.props.modelResult.result &&
-        this.props.modelResult.result.business &&
-        this.props.modelResult.result.business.id > 0
-      ) {
-        this.setState({modelResultId: this.props.modelResult.result.business.id});
-        this.props.processModel(this.props.modelResult);
-      }
-    }
-  }
-
-  componentDidMount() {
-    this.processModel();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.modelResult !== this.props.modelResult) {
-      this.processModel();
-    }
   }
 
   render() {
@@ -71,14 +43,9 @@ const withReducer = injectReducer({
   key: 'businessEditGeneralInformationRedux',
   reducer,
 });
-const withSaga = injectSaga({
-  key: 'businessEditGeneralInformationRedux',
-  saga,
-});
 
 export default compose(
   withReducer,
-  withSaga,
   withConnect,
 )(BusinessEditGeneralInformationRedux);
 

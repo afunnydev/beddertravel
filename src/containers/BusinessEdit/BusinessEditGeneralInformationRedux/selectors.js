@@ -9,10 +9,6 @@ const selectBusinessEditGeneralInformationReduxDomain = state =>
   state.get('businessEditGeneralInformationRedux', initialState);
 
 /**
- * Other specific selectors
- */
-
-/**
  * Default selector used by BusinessEditGeneralInformationRedux
  */
 
@@ -20,7 +16,6 @@ const makeSelectBusinessEditGeneralInformationRedux = () =>
   createSelector(selectBusinessEditGeneralInformationReduxDomain, substate =>
     substate.toJS(),
   );
-
 const makeSelectName = () =>
   createSelector(selectBusinessEditGeneralInformationReduxDomain, state =>
     state.get('name'),
@@ -44,18 +39,6 @@ const makeSelectLocation = () =>
 const makeSelectAmenities = () =>
   createSelector(selectBusinessEditGeneralInformationReduxDomain, state =>
     state.get('amenities'),
-  );
-const makeSelectAmenityAirConditioner = () =>
-  createSelector(selectBusinessEditGeneralInformationReduxDomain, state =>
-    state.get('amenityAirConditioner'),
-  );
-const makeSelectAmenityFitness = () =>
-  createSelector(selectBusinessEditGeneralInformationReduxDomain, state =>
-    state.get('amenityFitness'), 
-  );
-const makeSelectAmenitySpa = () =>
-  createSelector(selectBusinessEditGeneralInformationReduxDomain, state =>
-    state.get('amenitySpa'),
   );
 const makeSelectLocationLat = () =>
   createSelector(selectBusinessEditGeneralInformationReduxDomain, state =>
@@ -85,14 +68,9 @@ const makeSelectActivities = () =>
   createSelector(selectBusinessEditGeneralInformationReduxDomain, state =>
     state.get('activities'),
   );
-const makeSelectCoverPhoto = () =>
+const makeSelectCoverPhotos = () =>
   createSelector(selectBusinessEditGeneralInformationReduxDomain, state =>
-    state.get('coverPhoto'),
-  );
-
-  const makeSelectEmail = () =>
-  createSelector(selectBusinessEditGeneralInformationReduxDomain, state =>
-    state.get('email'),
+    state.get('coverPhotos'),
   );
 
 export default makeSelectBusinessEditGeneralInformationRedux;
@@ -100,17 +78,13 @@ export {
   selectBusinessEditGeneralInformationReduxDomain,
   makeSelectBusinessEditGeneralInformationRedux,
   makeSelectName,
-  makeSelectEmail,
   makeSelectActivities,
-  makeSelectCoverPhoto,
+  makeSelectCoverPhotos,
   makeSelectMood,
   makeSelectPropertyType,
   makeSelectStars,
   makeSelectLocation,
   makeSelectAmenities,
-  makeSelectAmenityAirConditioner,
-  makeSelectAmenityFitness,
-  makeSelectAmenitySpa,
   makeSelectLocationLat,
   makeSelectLocationLng,
   makeSelectOpinionStrong,

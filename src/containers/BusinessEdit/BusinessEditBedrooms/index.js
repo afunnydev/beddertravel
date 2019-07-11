@@ -16,7 +16,7 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import BedderValidator from 'bedder/bedderValidator';
 import calculateProgress from 'utils/calculateProgress';
 
-import RoomButtons from './RoomButtons';
+import RoomButtons from './RoomButtons.js';
 import Room from './Room';
 import ProgressTitle from '../ProgressTitle';
 
@@ -250,7 +250,7 @@ export class BusinessEditBedrooms extends React.Component {
                 </Button>
               )}
             </Grid>
-            <Grid xs={12}>
+            <Grid item xs={12}>
               {rooms && rooms.size > 0 && this.props.activeRoom >= 0 ? (
                 <Room 
                   width={this.props.width} 

@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
 import MUIPlacesAutocomplete, { geocodeBySuggestion } from 'mui-places-autocomplete';
 import { Validation } from 'react-validation-framework';
 
@@ -25,7 +23,7 @@ import {
   changeLocationLatAction,
   changeLocationLngAction,
 } from '../BusinessEditGeneralInformationRedux/actions';
-import { withConnect as withReduxConnect } from '../BusinessEditGeneralInformationRedux';
+import { withConnect } from '../BusinessEditGeneralInformationRedux';
 import BusinessEditGeneralInformationRedux from '../BusinessEditGeneralInformationRedux/Loadable';
 import Amenities from './Amenities';
 import Map from './Map';
@@ -257,7 +255,7 @@ export class BusinessEditGeneralInformation extends React.Component {
               <MUIPlacesAutocomplete
                 textFieldProps={{
                   fullWidth: true,
-                  value: this.props.location,
+                  value: this.props.location || "",
                   placeholder: 'Street, number, city, country...',
                   id: 'location',
                   error: this.props.validationErrors.location,
@@ -315,18 +313,4 @@ BusinessEditGeneralInformation.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
-}
-
-const withConnect = connect(
-  null,
-  mapDispatchToProps,
-);
-
-export default compose(
-  withConnect,
-  withReduxConnect,
-)(BusinessEditGeneralInformation);
+export default withConnect(BusinessEditGeneralInformation);

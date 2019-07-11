@@ -12,7 +12,6 @@ import {
   CHANGE_ROOMSIZE,
   CHANGE_ROOMSIZEMEASURE,
   CHANGE_ROOMEQUIPMENT,
-  CHANGE_ROOMPHOTOS,
   CHANGE_ROOMPRICE,
   CHANGE_ROOMCURRENCY,
   CHANGE_ROOMDISCOUNT,
@@ -24,12 +23,9 @@ import {
   SORTROOM,
   ADDPHOTO,
   REMOVEPHOTO,
-  SELECTPHOTO,
   PROCESS_MODEL,
   CHANGE_ROOM_MODEL_ID, CHANGE_ROOMDESCRIPTION,
 } from './constants';
-
-import { defaultEmptyPhotos, addPhoto, removePhoto } from 'components/Photos/helperReducer';
 
 export const newRoomState = fromJS({
   roomName: '',
@@ -43,7 +39,7 @@ export const newRoomState = fromJS({
   roomModelId: -1,
   roomSizeMeasure: '',
   roomEquipment: BedderConfig.getEquipment(),
-  roomPhotos: defaultEmptyPhotos,
+  roomPhotos: [],
   roomPrice: 0,
   roomCurrency: 'USD',
   roomDiscount: 0,
@@ -70,7 +66,7 @@ export const initialState = fromJS({
   roomModelId: -1,
   roomSizeMeasure: '',
   roomEquipment: BedderConfig.getEquipment(),
-  roomPhotos: defaultEmptyPhotos,
+  roomPhotos: [],
   roomPrice: 0,
   roomCurrency: 'USD',
   roomDiscount: 0,
@@ -78,9 +74,9 @@ export const initialState = fromJS({
   isNew: true,
 });
 
-// todo active room change -> refresh cropper
-
 function businessAddBedroomsReduxReducer(state = initialState, action) {
+  let roomPhotos = state.get('roomPhotos');
+
   switch (action.type) {
   case CHANGE_ROOMS:
     return state.set('rooms', action.rooms);
@@ -193,8 +189,6 @@ function businessAddBedroomsReduxReducer(state = initialState, action) {
           !roomEquipment.get(action.roomEquipment),
         ),
       );
-  case CHANGE_ROOMPHOTOS:
-    return state.set('roomPhotos', action.roomPhotos);
   case CHANGE_ROOMPRICE:
     return state.set('roomPrice', Math.round(action.roomPrice * 100));
   case CHANGE_ROOMCURRENCY:
@@ -275,12 +269,11 @@ function businessAddBedroomsReduxReducer(state = initialState, action) {
     alert('change this sortRoom');
     return state.set('sortRoom', action.sortRoom);
   case ADDPHOTO:
-    return addPhoto(action.addPhoto, state, ['roomPhotos']);
+    return state.set('roomPhotos', [ ...roomPhotos, action.roomPhoto]);
   case REMOVEPHOTO:
-    return removePhoto(action.removePhoto, state, ['roomPhotos']);
-  case SELECTPHOTO:
-    //just gonna use this to reset state on umount!!
-    return initialState;
+    if (!roomPhotos.length) return state;
+    roomPhotos.splice(action.roomPhoto, 1);
+    return state.set('roomPhotos', [ ...roomPhotos]);
   case PROCESS_MODEL:
     const processModel = action.processModel.result.business;
 
@@ -347,7 +340,7 @@ function businessAddBedroomsReduxReducer(state = initialState, action) {
     if (activeRoom) {
       return state
         .set('rooms', fromJS(rooms))
-        .set('roomPhotos', activeRoom.roomPhotos ? activeRoom.roomPhotos : '')
+        .set('roomPhotos', activeRoom.roomPhotos ? activeRoom.roomPhotos : [])
         .set('activeRoom', activeRoomNum)
         .set(
           'roomModelId',

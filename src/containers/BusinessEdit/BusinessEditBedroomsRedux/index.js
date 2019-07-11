@@ -3,17 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
-import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-
-import {
-  selectPhotoAction,
-} from './actions';
 
 import { mapStateToProps, mapDispatchToProps } from './mapProps';
 
 import reducer from './reducer';
-import saga from './saga';
 
 /* eslint-disable react/prefer-stateless-function */
 export class BusinessEditBedroomsRedux extends React.Component {
@@ -22,10 +16,6 @@ export class BusinessEditBedroomsRedux extends React.Component {
     this.state = {
       modelResultId: null,
     };
-  }
-
-  componentWillUnmount() {
-    this.props.dispatch(selectPhotoAction());
   }
 
   processModel() {
@@ -66,11 +56,9 @@ const withConnect = connect(
 );
 
 const withReducer = injectReducer({ key: 'businessEditBedroomsRedux', reducer });
-const withSaga = injectSaga({ key: 'businessEditBedroomsRedux', saga });
 
 export default compose(
   withReducer,
-  withSaga,
   withConnect,
 )(BusinessEditBedroomsRedux);
 

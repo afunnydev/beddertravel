@@ -1,9 +1,3 @@
-/*
- *
- * BusinessAddGeneralInformationRedux actions
- *
- */
-
 import {
   CHANGE_NAME,
   CHANGE_MOOD,
@@ -11,9 +5,6 @@ import {
   CHANGE_STARS,
   CHANGE_LOCATION,
   CHANGE_AMENITIES,
-  CHANGE_AMENITYAIRCONDITIONER,
-  CHANGE_AMENITYFITNESS,
-  CHANGE_AMENITYSPA,
   CHANGE_LOCATIONLAT,
   CHANGE_LOCATIONLNG,
   LOCATIONAPPLY,
@@ -23,14 +14,11 @@ import {
   CHANGE_HOWTOFIND,
   PROCESS_MODEL,
   CHANGE_ACTIVITIES,
-  CHANGE_COVER_PHOTO,
   ADD_COVER_PHOTO,
-  REMOVE_COVER_PHOTO,
-  CHANGE_EMAIL
+  REMOVE_COVER_PHOTO
 } from './constants';
 
 export function processModelAction(processModel) {
-  // console.log('action processModel', processModel)
   return {
     type: PROCESS_MODEL,
     processModel,
@@ -55,22 +43,10 @@ export function changeAroundAction(around) {
     around,
   };
 }
-export function changeEmailAction(email) {
-  return {
-    type: CHANGE_EMAIL,
-    email,
-  };
-}
 export function changeActivitiesAction(activities) {
   return {
     type: CHANGE_ACTIVITIES,
     activities,
-  };
-}
-export function changeCoverPhotoAction(coverPhoto) {
-  return {
-    type: CHANGE_COVER_PHOTO,
-    coverPhoto,
   };
 }
 export function addCoverPhotoAction(coverPhoto) {
@@ -119,21 +95,6 @@ export function changeLocationAction(location) {
   return {
     type: CHANGE_LOCATION,
     location,
-  };
-}
-export function changeAmenityAirConditionerAction() {
-  return {
-    type: CHANGE_AMENITYAIRCONDITIONER,
-  };
-}
-export function changeAmenityFitnessAction() {
-  return {
-    type: CHANGE_AMENITYFITNESS,
-  };
-}
-export function changeAmenitySpaAction() {
-  return {
-    type: CHANGE_AMENITYSPA,
   };
 }
 export function changeAmenitiesAction(amenities) {

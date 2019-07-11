@@ -11,7 +11,7 @@ import AppContext from 'containers/AppContext';
 import Auth from 'containers/Auth/Loadable';
 import HomePage from 'containers/HomePage/Loadable';
 import BusinessAddPage from 'containers/BusinessAdd/Loadable';
-import BusinessEditPage from 'containers/BusinessEdit/BusinessEditPage/Loadable';
+import BusinessEditPage from 'containers/BusinessEdit/Loadable';
 import ReviewAddPage from 'containers/ReviewAddPage/Loadable';
 import AboutPage from 'containers/AboutPage/Loadable';
 import PrivacyPolicyPage from 'containers/PrivacyPolicyPage/Loadable';
@@ -21,7 +21,7 @@ import BusinessViewPropConnector from 'containers/BusinessView/BusinessViewPropC
 import BookingsPropConnector from 'containers/Bookings/BookingsPropConnector/Loadable';
 import BookingPropConnector from 'containers/Booking/BookingPropConnector/Loadable';
 import ReservationsPropConnector from 'containers/Reservations/ReservationsPropConnector/Loadable';
-import UserProfilePropConnector from 'containers/UserProfile/UserProfilePropConnector/Loadable';
+import UserProfile from 'containers/UserProfile/Loadable';
 import GainsPropConnector from 'containers/GainsPage/GainsPropConnector/Loadable';
 import MyAdsPage from 'containers/MyAdsPage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
@@ -61,7 +61,7 @@ const PlatformPages = () => (
 
       <Route path="/earnings" component={GainsPropConnector} />
 
-      <Route path="/profile" component={UserProfilePropConnector} />
+      <Route path="/profile" component={UserProfile} />
 
       <Route path="/about" component={AboutPage} />
       <Route path="/privacy-policy" component={PrivacyPolicyPage} />

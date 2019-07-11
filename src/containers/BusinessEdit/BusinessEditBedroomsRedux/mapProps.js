@@ -10,7 +10,6 @@ import {
   changeRoomSizeAction,
   changeRoomSizeMeasureAction,
   changeRoomEquipmentAction,
-  changeRoomPhotosAction,
   changeRoomPriceAction,
   changeRoomCurrencyAction,
   changeRoomDiscountAction,
@@ -22,7 +21,6 @@ import {
   sortRoomAction,
   addPhotoAction,
   removePhotoAction,
-  selectPhotoAction,
   processModelAction,
   changeRoomModelIdAction, 
   changeRoomDescriptionAction,
@@ -88,10 +86,7 @@ function mapDispatchToProps(dispatch) {
     removePhoto: evt => {
       dispatch(removePhotoAction(evt));
     },
-    selectPhoto: evt => {
-      dispatch(selectPhotoAction(evt));
-    },
-    addRoom: evt => {
+    addRoom: () => {
       dispatch(addRoomAction('new'));
       dispatch(changeActiveRoomAction());
     },
@@ -139,9 +134,6 @@ function mapDispatchToProps(dispatch) {
     },
     onChangeRoomEquipment: evt => {
       dispatch(changeRoomEquipmentAction(evt));
-    },
-    onChangeRoomPhotos: evt => {
-      dispatch(changeRoomPhotosAction(evt.target.value));
     },
     onChangeRoomPrice: evt => {
       dispatch(changeRoomPriceAction(evt.target.value));

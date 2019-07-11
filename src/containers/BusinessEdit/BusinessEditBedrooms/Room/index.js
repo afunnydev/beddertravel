@@ -14,7 +14,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import CurrencySelector from 'components/CurrencySelector';
 
-import Photos from './Photos';
+import Photos from 'components/Photos';
 import Amenities from '../../BusinessEditGeneralInformation/Amenities';
 import { addPhotoAction, removePhotoAction } from '../../BusinessEditBedroomsRedux/actions';
 

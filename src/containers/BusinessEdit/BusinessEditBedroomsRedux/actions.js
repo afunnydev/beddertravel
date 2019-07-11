@@ -1,9 +1,3 @@
-/*
- *
- * BusinessAddBedroomsRedux actions
- *
- */
-
 import {
   CHANGE_ROOMS,
   CHANGE_ACTIVEROOM,
@@ -16,7 +10,6 @@ import {
   CHANGE_ROOMSIZE,
   CHANGE_ROOMSIZEMEASURE,
   CHANGE_ROOMEQUIPMENT,
-  CHANGE_ROOMPHOTOS,
   CHANGE_ROOMPRICE,
   CHANGE_ROOMCURRENCY,
   CHANGE_ROOMDISCOUNT,
@@ -28,7 +21,6 @@ import {
   SORTROOM,
   ADDPHOTO,
   REMOVEPHOTO,
-  SELECTPHOTO,
   PROCESS_MODEL,
   CHANGE_ROOM_MODEL_ID, 
   CHANGE_ROOMDESCRIPTION,
@@ -56,12 +48,6 @@ export function removePhotoAction(removePhoto) {
   return {
     type: REMOVEPHOTO,
     removePhoto,
-  };
-}
-export function selectPhotoAction(selectPhoto) {
-  return {
-    type: SELECTPHOTO,
-    selectPhoto,
   };
 }
 export function changeRoomsAction(rooms) {
@@ -134,12 +120,6 @@ export function changeRoomEquipmentAction(roomEquipment) {
   return {
     type: CHANGE_ROOMEQUIPMENT,
     roomEquipment,
-  };
-}
-export function changeRoomPhotosAction(roomPhotos) {
-  return {
-    type: CHANGE_ROOMPHOTOS,
-    roomPhotos,
   };
 }
 export function changeRoomPriceAction(roomPrice) {
