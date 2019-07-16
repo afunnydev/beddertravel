@@ -73,14 +73,13 @@ const client = new ApolloClient({
           }
         `;
         const query = cache.readFragment({ fragment, id });
-        // TODO: We should pass an id that is for sure not in local cache.
         const nbOfPhotos = query.coverPhotos ? query.coverPhotos.length : 0;
-        const newId = nbOfPhotos ? query.coverPhotos[nbOfPhotos - 1].id + 1 : 1;
+        // TODO: We should pass an id that is for sure not in local cache.
+        const newId = new Date().getTime();
         const newCoverPhoto = { id: newId, uuid, url, __typename: 'File' };
         const data = {
           coverPhotos: nbOfPhotos ? [ ...query.coverPhotos, newCoverPhoto] : [ newCoverPhoto ]
         };
-        console.log("NEW DATA", data);
         cache.writeData({ id, data });
         return newCoverPhoto;
       },
@@ -99,7 +98,7 @@ const client = new ApolloClient({
         const query = cache.readFragment({ fragment, id });
         // TODO: We should pass an id that is for sure not in local cache.
         const nbOfPhotos = query.photos ? query.photos.length : 0;
-        const newId = nbOfPhotos ? query.photos[nbOfPhotos - 1].id + 1 : 1;
+        const newId = new Date().getTime();
         const newPhoto = { id: newId, uuid, url, __typename: 'File' };
         const data = {
           photos: nbOfPhotos ? [ ...query.photos, newPhoto] : [ newPhoto ]
@@ -154,9 +153,7 @@ const client = new ApolloClient({
           }
         `;
         const query = cache.readFragment({ fragment, id });
-        // TODO: We should pass an id that is for sure not in local cache.
-        const nbOfUnits = query.units.length;
-        const newId = nbOfUnits ? query.units[nbOfUnits - 1].id + 20 : 1;
+        const newId = new Date().getTime();
         const newBusinessUnit = { 
           id: newId, 
           parentId: newId, 
