@@ -55,7 +55,7 @@ const client = new ApolloClient({
           }
         `;
         const query = cache.readFragment({ fragment, id });
-        console.log(query);
+        console.log('LOCAL QUERY FOR ROOM', query);
         return query;
       }
     },
@@ -150,22 +150,6 @@ const client = new ApolloClient({
             units {
               id
               name
-              parentId
-              numRooms
-              bedsKing
-              bedsQueen
-              bedsSimple
-              numPeople
-              equipment
-              photos {
-                id
-                uuid
-                url
-              }
-              rate
-              currency
-              isDeleted
-              isNew
             }
           }
         `;

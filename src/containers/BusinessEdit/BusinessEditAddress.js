@@ -35,11 +35,12 @@ const BusinessEditAddress = (props) => {
         if (status === 'OK') {
           if (results[0]) {
             const { formatted_address } = results[0];
-            onChange('address', formatted_address);            
+            onChange('address', formatted_address); 
           } 
         } else {
           console.log(`Geocoder failed with status: ${status}`);
         }
+        setFindingLocation(false);
       },
     );
   };
@@ -56,7 +57,7 @@ const BusinessEditAddress = (props) => {
     onChange('lon', longitude);
 
     setAddressFromLatLong(latitude, longitude);
-    setFindingLocation(false);
+    // No need to set the findingLocation to false, it's handled by setAddressFromLatLong and leave it there because it's weirdly asynchronous..
   };
 
   const getGeolocationErr = () => {
@@ -84,8 +85,7 @@ const BusinessEditAddress = (props) => {
 
   const mapApply = () => {
     setFindingLocation(true);
-    setAddressFromLatLong(props.lat, props.lon);
-    setFindingLocation(false);
+    setAddressFromLatLong(Number(props.lat), Number(props.lon));
   };
 
   return (

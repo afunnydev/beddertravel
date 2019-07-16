@@ -81,6 +81,7 @@ class BusinessEditPage extends React.Component {
             variables={{
               businessId: parseInt(this.props.match.params.id)
             }}
+            returnPartialData={true}
           >
             {({ data, loading, error, client }) => {
               if (error) return <p>Error</p>;

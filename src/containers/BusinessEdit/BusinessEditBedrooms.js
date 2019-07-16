@@ -21,7 +21,6 @@ const BusinessEditBedrooms = (props) => {
     props.roomNumRooms, 
     props.roomNumPeople, 
     props.roomBedsKing || props.roomBedsQueen || props.roomBedsSimple, 
-    props.roomPhotos && props.roomPhotos.get('byId') && props.roomPhotos.get('byId').get('1'), 
     props.roomPrice,
   ]);
   const vRefs = BedderValidator.makeRefs(BedderValidator.getBusinessEditRoomPage());
@@ -43,16 +42,26 @@ const BusinessEditBedrooms = (props) => {
               />
             </Grid>
             <Grid item xs={12}>
-              {activeRoomId ? (
-                <Room 
-                  activeRoomId={activeRoomId}
+              {props.units.map(unit => (
+                <Room
+                  key={unit.id}
+                  activeRoomId={unit.id}
                   validationErrors={validationErrors} 
                   vRefs={vRefs} 
                   client={props.client}
+                  visible={unit.id === activeRoomId}
                 />
-              ) : (
-                <Typography>Please select or create a room to start.</Typography>
-              )}
+              ))}
+              {/* {activeRoomId ? (
+              {/*   <Room  */}
+              {/*     activeRoomId={activeRoomId} */}
+              {/*     validationErrors={validationErrors}  */}
+              {/*     vRefs={vRefs}  */}
+              {/*     client={props.client} */}
+              {/*   /> */}
+              {/* ) : ( */}
+              {/*   <Typography>Please select or create a room to start.</Typography> */}
+              {/* )} */}
             </Grid>
           </Grid>
         </Grid>

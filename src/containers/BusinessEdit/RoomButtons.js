@@ -11,6 +11,7 @@ import Dialog from '@material-ui/core/Dialog';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 
+
 const styles = {
   btnRoot: {
     height: 56,
@@ -41,18 +42,37 @@ const RoomButtons = (props) => {
       mutation NEW_ROOM_MUTATION($businessId: Int!) {
         addNewRoom(businessId: $businessId) @client(always: true) {
           id
-          parentId
           name
+          parentId
+          numRooms
+          bedsKing
+          bedsQueen
+          bedsSimple
+          numPeople
+          equipment
+          photos {
+            id
+            uuid
+            url
+          }
+          rate
+          currency
+          isDeleted
+          isNew
         }
       }
     `;
-    const res = await props.client.mutate({
-      mutation: NEW_ROOM_MUTATION,
-      variables: {
-        businessId: props.id,
-      }
-    });
-    props.roomChosen(res.data.addNewRoom.id);
+    try {
+      const res = await props.client.mutate({
+        mutation: NEW_ROOM_MUTATION,
+        variables: {
+          businessId: props.id,
+        }
+      });
+      props.roomChosen(res.data.addNewRoom.id);
+    } catch (e) {
+      console.log("ERROR WHILE CREATING", e);
+    }
   };
 
   const removeRoom = async (roomId) => {
