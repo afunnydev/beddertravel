@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
+import { Validation } from 'react-validation-framework';
 
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -13,6 +14,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import BedderConfig from 'bedder/bedderConfig';
+import BedderValidator from 'bedder/bedderValidator';
 
 import CurrencySelector from 'components/CurrencySelector';
 import Photos from 'components/Photos';
@@ -59,23 +61,26 @@ const Room = (props) => {
   let amenities = BedderConfig.getAmenities();
 
   const onChange = (event) => props.client.writeData(
-    { id: `BusinessUnit:${props.activeRoomId}`, data: { [event.target.name]: event.target.value } }
+    { id: `BusinessUnit:${props.unitId}`, data: { [event.target.name]: event.target.value } }
   );
 
   const onChangeAmenities = (amenityKey) => {
     // Could be optimized if we weren't using a JSON string to carry the values.
     amenities[amenityKey] = !amenities[amenityKey];
     return props.client.writeData(
-      { id: `BusinessUnit:${props.activeRoomId}`, data: { equipment: JSON.stringify(amenities) } }
+      { id: `BusinessUnit:${props.unitId}`, data: { equipment: JSON.stringify(amenities) } }
     );
   };
 
+  const vs = BedderValidator.getValidators();
+
+  // There must be a better way to do this (like a slider or something), but for now it works well.
   if (!props.visible) return null;
   return(
     <Query
       query={BUSINESS_UNIT_QUERY}
       variables={{
-        businessUnitId: props.activeRoomId
+        businessUnitId: props.unitId
       }}
     >
       {({ data, loading, error }) => {
@@ -90,24 +95,28 @@ const Room = (props) => {
           <>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={4}>
-                <TextField
-                  fullWidth
-                  name="name"
-                  error={props.validationErrors.name}
-                  label="Name of the room"
-                  defaultValue={businessUnit.name}
-                  onBlur={onChange}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
+                <Validation
+                  group={`room-${props.unitId}`}
+                  componentTag="TextField"
+                  validators={[vs.notEmpty]}
+                >
+                  <TextField
+                    fullWidth
+                    name="name"
+                    label="Name of the room"
+                    defaultValue={businessUnit.name}
+                    onBlur={onChange}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </Validation>
               </Grid>
               <Grid item xs={12} sm={4}>
                 <Tooltip placement="left" title="If it's a shared bedroom, you can put the number of beds here.">
                   <TextField
                     fullWidth
                     select
-                    error={props.validationErrors.numRooms}
                     name="numRooms"
                     label="Number of the same room available"
                     value={businessUnit.numRooms}
@@ -132,7 +141,6 @@ const Room = (props) => {
                   fullWidth
                   select
                   name="numPeople"
-                  error={props.validationErrors.numPeople}
                   label="Maximum capacity of the room"
                   value={businessUnit.numPeople}
                   onChange={onChange}
@@ -158,7 +166,6 @@ const Room = (props) => {
                     fullWidth
                     select
                     name="bedsKing"
-                    error={props.validationErrors.beds}
                     value={businessUnit.bedsKing}
                     onChange={onChange}
                     InputProps={{
@@ -179,7 +186,6 @@ const Room = (props) => {
                     fullWidth
                     select
                     name="bedsQueen"
-                    error={props.validationErrors.beds}
                     value={businessUnit.bedsQueen}
                     onChange={onChange}
                     InputProps={{
@@ -200,7 +206,6 @@ const Room = (props) => {
                     fullWidth
                     select
                     name="bedsSimple"
-                    error={props.validationErrors.beds}
                     value={businessUnit.bedsSimple}
                     onChange={onChange}
                     InputProps={{
@@ -218,9 +223,6 @@ const Room = (props) => {
                     ))}
                   </TextField>
                 </FormControl>
-
-                {props.validationErrors.beds && 
-                  <InputLabel error style={{ marginTop: 10 }}>You need at least one (1) bed in this room.</InputLabel> }
               </Grid>
             </Grid>
             <Grid container spacing={3}>
@@ -229,38 +231,52 @@ const Room = (props) => {
                 <Amenities changeFn={onChangeAmenities} amenities={amenities} />
               </Grid>
               <Grid item xs={12} sm={4}>
-                <InputLabel shrink error={props.validationErrors.photos} style={{ marginBottom: 10 }}>Photos of the room*</InputLabel>
-                <Photos
-                  id={props.activeRoomId}
-                  client={props.client}
-                  photos={businessUnit.photos}
-                  addMutation="addFileToBusinessUnit"
-                  removeMutation="removeFileFromBusinessUnit"
-                />
+                <Validation
+                  group={`room-${props.unitId}`}
+                  valueProp="photos"
+                  onChangeCallback={null}
+                  componentTag="Photos"
+                  validators={[vs.arrayNotEmpty]}
+                >
+                  <Photos
+                    id={props.unitId}
+                    client={props.client}
+                    photos={businessUnit.photos}
+                    addMutation="addFileToBusinessUnit"
+                    removeMutation="removeFileFromBusinessUnit"
+                    label="Photos of the room*"
+                    errorText="You need at least 1 photo."
+                  />
+                </Validation>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  name="rate"
-                  label="Price per night"
-                  error={props.validationErrors.price}
-                  defaultValue={businessUnit.rate != 0 ? businessUnit.rate : 0}
-                  onBlur={onChange}
-                  type="number"
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <CurrencySelector currency={businessUnit.currency} name="currency" onChange={onChange}/>
-                      </InputAdornment>),
-                    classes: { root: props.classes.spacedInput },
-                  }}
-                  SelectProps={{
-                    classes: { root: props.classes.rightSelect },
-                  }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
+                <Validation
+                  group={`room-${props.unitId}`}
+                  componentTag="TextField"
+                  validators={[vs.greaterThanZero]}
+                >
+                  <TextField
+                    fullWidth
+                    name="rate"
+                    label="Price per night"
+                    defaultValue={businessUnit.rate != 0 ? businessUnit.rate : 0}
+                    onBlur={onChange}
+                    type="number"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <CurrencySelector currency={businessUnit.currency} name="currency" onChange={onChange}/>
+                        </InputAdornment>),
+                      classes: { root: props.classes.spacedInput },
+                    }}
+                    SelectProps={{
+                      classes: { root: props.classes.rightSelect },
+                    }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </Validation>
               </Grid>
             </Grid>
           </>
@@ -271,9 +287,9 @@ const Room = (props) => {
 };
 
 Room.propTypes = {
-  validationErrors: PropTypes.object,
-  activeRoomId: PropTypes.number,
-  client: PropTypes.object.isRequired
+  unitId: PropTypes.number,
+  client: PropTypes.object.isRequired,
+  visible: PropTypes.bool.isRequired
 };
 
 export default withStyles(styles)(Room);

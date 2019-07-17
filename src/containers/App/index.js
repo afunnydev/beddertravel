@@ -12,6 +12,7 @@ import Auth from 'containers/Auth/Loadable';
 import HomePage from 'containers/HomePage/Loadable';
 import BusinessAddPage from 'containers/BusinessAdd/Loadable';
 import BusinessEditPage from 'containers/BusinessEdit/Loadable';
+import BusinessSubmittedPage from 'containers/BusinessSubmitted/Loadable';
 import ReviewAddPage from 'containers/ReviewAddPage/Loadable';
 import AboutPage from 'containers/AboutPage/Loadable';
 import PrivacyPolicyPage from 'containers/PrivacyPolicyPage/Loadable';
@@ -29,6 +30,7 @@ import Admin from 'containers/Admin/Loadable';
 
 import MainLayout from 'components/MainLayout';
 import configureStore from 'utils/configureStore';
+import BedderValidator from 'bedder/bedderValidator';
 
 import GlobalStyle from './GlobalStyle';
 
@@ -41,6 +43,9 @@ const initialState = {};
 const store = configureStore(initialState);
 const history = createBrowserHistory();
 
+// This adds the Material-UI TextField Component and Photos to the list of validatable components of react-validation-framework. It should be triggered only once in the app.
+BedderValidator.addNewFieldForValidation();
+
 const PlatformPages = () => (
   <MainLayout>
     <Switch>
@@ -48,6 +53,7 @@ const PlatformPages = () => (
 
       <Route path="/businesses" component={MyAdsPage} />
       <Route path="/ownerAds" component={MyAdsPage} />
+      <Route path="/business/add/success" component={BusinessSubmittedPage} />
       <Route path="/business/add" component={BusinessAddPage} />
       <Route path="/business/view/:id" component={BusinessViewPropConnector} />
       <Route path="/business/:id" component={BusinessEditPage} />

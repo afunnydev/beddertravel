@@ -51,8 +51,6 @@ import {
   makeSelectResultCode,
 } from './selectors';
 
-BedderValidator.prepareTextField();
-
 const styles = () => ({
   white: {
     color: 'white',

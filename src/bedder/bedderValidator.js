@@ -21,12 +21,20 @@ class BedderValidator {
     return ret;
   }
 
-  prepareTextField() {
+  addNewFieldForValidation() {
     fieldValidatorCore.addSupport(
       'TextField',
       event => event[0].target.value,
       (callback, args) => callback(args[0], undefined, args[0].target.value),
-      'error'
+      'error',
+      'helperText'
+    );
+    fieldValidatorCore.addSupport(
+      'Photos',
+      null,
+      null,
+      'error',
+      null
     );
   }
 
@@ -36,6 +44,16 @@ class BedderValidator {
         validator: val => !validator.isEmpty(val),
         errorPropValue: true,
         errorMessage: 'This field cannot be empty.',
+      },
+      arrayNotEmpty: {
+        validator: val => val.length > 0,
+        errorPropValue: true,
+        errorMessage: 'You need at least 1.'
+      },
+      greaterThanZero: {
+        validator: val => val > 0,
+        errorPropValue: true,
+        errorMessage: 'This field should be greater than 0.'
       },
       isEmail: {
         validator: val => validator.isEmail(val),
@@ -56,7 +74,6 @@ class BedderValidator {
       roomNumRooms: {},
       roomDiscount: {},
       roomPrice: {},
-      // roomSize: {},
       roomNumPeople: {},
     };
   }
@@ -65,7 +82,6 @@ class BedderValidator {
     return {
       from: {},
       to: {},
-      // location: {},
     };
   }
 
@@ -80,15 +96,6 @@ class BedderValidator {
     return {
       subject: {},
       message: {},
-    };
-  }
-
-  getBusinessEditPage() {
-    return {
-      name: {},
-      email: {},
-      mood: {},
-      type: {},
     };
   }
 

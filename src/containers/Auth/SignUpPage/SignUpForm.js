@@ -17,8 +17,6 @@ import MessageError from 'components/MessageError';
 import client from 'utils/createClient';
 import BedderValidator from 'bedder/bedderValidator';
 
-BedderValidator.prepareTextField();
-
 const styles = {
   white: {
     color: 'white',

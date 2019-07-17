@@ -16,7 +16,6 @@ import Amenities from 'components/Amenities';
 import ProgressTitle from './ProgressTitle.js';
 import BusinessEditAddress from './BusinessEditAddress.js';
 
-BedderValidator.prepareTextField();
 const propertyTypes = BedderConfig.getFilterPropertyTypes();
 const propertyMoods = BedderConfig.getPropertyMoods();
 
@@ -46,10 +45,8 @@ const BusinessEditGeneralInformation = (props) => {
         <Grid container spacing={2}>
           <Grid item xs={12} sm={4}>
             <Validation
+              group="generalInformation"
               componentTag="TextField"
-              closures={{ name: props.name }}
-              ref={props.vRefs.name}
-              onChangeCallback="onChange"
               validators={[vs.notEmpty]}
             >
               <TextField
@@ -67,43 +64,55 @@ const BusinessEditGeneralInformation = (props) => {
           </Grid>
 
           <Grid item xs={12} sm={4}>
-            <TextField
-              fullWidth
-              select
-              name="mood"
-              label="Mood of this accomodation"
-              value={props.mood || propertyMoods[0].id}
-              onChange={onChange}
-              InputLabelProps={{
-                shrink: true,
-              }}
+            <Validation
+              group="generalInformation"
+              componentTag="TextField"
+              validators={[vs.notEmpty]}
             >
-              {propertyMoods.map(option => (
-                <MenuItem key={option.id} value={option.id}>
-                  {option.value}
-                </MenuItem>
-              ))}
-            </TextField>
+              <TextField
+                fullWidth
+                select
+                name="mood"
+                label="Mood of this accomodation"
+                value={props.mood || ''}
+                onChange={onChange}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              >
+                {propertyMoods.map(option => (
+                  <MenuItem key={option.id} value={option.id}>
+                    {option.value}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Validation>
           </Grid>
 
           <Grid item xs={12} sm={4}>
-            <TextField
-              fullWidth
-              select
-              name="propertyType"
-              label="Type of this accomodation"
-              value={props.propertyType || propertyTypes[0].id}
-              onChange={onChange}
-              InputLabelProps={{
-                shrink: true,
-              }}
+            <Validation
+              group="generalInformation"
+              componentTag="TextField"
+              validators={[vs.notEmpty]}
             >
-              {propertyTypes.map(option => (
-                <MenuItem key={option.id} value={option.id}>
-                  {option.value}
-                </MenuItem>
-              ))}
-            </TextField>
+              <TextField
+                fullWidth
+                select
+                name="propertyType"
+                label="Type of this accomodation"
+                value={props.propertyType || ''}
+                onChange={onChange}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              >
+                {propertyTypes.map(option => (
+                  <MenuItem key={option.id} value={option.id}>
+                    {option.value}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Validation>
           </Grid>
 
           <Grid item xs={12}>
@@ -131,7 +140,6 @@ BusinessEditGeneralInformation.propTypes = {
   propertyType: PropTypes.string,
   amenities: PropTypes.string,
   address: PropTypes.object,
-  vRefs: PropTypes.object.isRequired,
   client: PropTypes.object.isRequired,
 };
 

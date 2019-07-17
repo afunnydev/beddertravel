@@ -36,7 +36,6 @@ import {
 } from './SearchBarRedux/actions';
 import { submitAction } from '../HomePage/actions';
 
-BedderValidator.prepareTextField();
 const google = window.google;
 
 const styles = theme => ({

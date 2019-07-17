@@ -111,9 +111,6 @@ const DrawerMenu = ({ user, role, dispatch }) => {
 
           {/* <DrawerMenuItem to="/reservations" active={role == ROLE_OWNER ? true : false} onClick={dispatchRoleOwner}>Hotel / guided owner</DrawerMenuItem> */}
 
-          {/* <DrawerMenuSeparator /> */}
-          {/* <DrawerDialog user={user} btn={DrawerMenuItem} btntext="Manage my alerts"/> */}
-
           <DrawerMenuSeparator />
         </React.Fragment>
       )}

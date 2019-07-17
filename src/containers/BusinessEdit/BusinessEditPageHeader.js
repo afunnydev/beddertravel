@@ -37,7 +37,7 @@ const BusinessEditPageHeader = () => (
       <Hidden smDown>
         <BackButton />
       </Hidden>
-      <PageTitle>Edit business</PageTitle>
+      <PageTitle spaced>Edit business</PageTitle>
     </Grid>
   </HeaderContainer>
 );

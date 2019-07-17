@@ -37,7 +37,6 @@ import {
 
 import BedderValidator from 'bedder/bedderValidator';
 
-BedderValidator.prepareTextField();
 const google = window.google;
 
 const nums = [

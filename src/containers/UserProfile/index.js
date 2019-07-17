@@ -29,8 +29,6 @@ import saga from './saga';
 import { mapDispatchToProps, mapStateToProps } from './UserProfileRedux/mapProps';
 import reducer from './UserProfileRedux/reducer';
 
-BedderValidator.prepareTextField();
-
 const styles = theme => ({
   paperBg: {
     backgroundColor: theme.palette.primary.main,

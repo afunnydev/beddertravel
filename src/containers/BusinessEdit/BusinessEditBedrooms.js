@@ -11,20 +11,18 @@ import RoomButtons from './RoomButtons.js';
 import Room from './Room.js';
 import ProgressTitle from './ProgressTitle.js';
 
-BedderValidator.prepareTextField();
-
 const BusinessEditBedrooms = (props) => {
   const [activeRoomId, setActiveRoomId] = useState(null);
-  const [validationErrors, setValidationErrors] = useState(false);
-  const progress = calculateProgress([
-    props.roomName, 
-    props.roomNumRooms, 
-    props.roomNumPeople, 
-    props.roomBedsKing || props.roomBedsQueen || props.roomBedsSimple, 
-    props.roomPrice,
-  ]);
-  const vRefs = BedderValidator.makeRefs(BedderValidator.getBusinessEditRoomPage());
-
+  const progress = props.units && props.units.length
+    ? calculateProgress([
+      props.units[0].name, 
+      props.units[0].numRooms, 
+      props.units[0].numPeople, 
+      props.units[0].bedsKing || props.units[0].bedsQueen || props.units[0].bedsSimple, 
+      props.units[0].rate,
+      props.units[0].photos && props.units[0].photos.length
+    ])
+    : 0;
   return (
     <>
       <Grid container style={{ paddingTop: 50, paddingBottom: 30 }}>
@@ -46,9 +44,7 @@ const BusinessEditBedrooms = (props) => {
                 ? props.units.map(unit => (
                   <Room
                     key={unit.id}
-                    activeRoomId={unit.id}
-                    validationErrors={validationErrors} 
-                    vRefs={vRefs} 
+                    unitId={unit.id}
                     client={props.client}
                     visible={unit.id === activeRoomId}
                   />
@@ -71,6 +67,11 @@ const BusinessEditBedrooms = (props) => {
       </Grid>
     </>
   );
+};
+
+BusinessEditBedrooms.propTypes = {
+  client: PropTypes.object.isRequired,
+  units: PropTypes.array
 };
 
 export default BusinessEditBedrooms;

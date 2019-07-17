@@ -6,13 +6,15 @@ import gql from 'graphql-tag';
 import { withStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Badge from '@material-ui/core/Badge';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import InputLabel from '@material-ui/core/InputLabel';
 
 import AddIcon from '@material-ui/icons/LibraryAdd';
 import Clear from '@material-ui/icons/Clear';
 
 import photosStyles from './photosStyles';
 
-const Photos = ({ classes, photos, crop, shrink, id, client, addMutation, removeMutation }) => {
+const Photos = ({ classes, photos, crop, shrink, id, client, addMutation, removeMutation, label, error, errorText }) => {
   const openUploadcare = () => {
     uploadcare.openDialog(null, {
       crop,
@@ -35,7 +37,7 @@ const Photos = ({ classes, photos, crop, shrink, id, client, addMutation, remove
         }
       }
     `;
-    const res = await client.mutate({
+    await client.mutate({
       mutation: ADD_PHOTO_MUTATION,
       variables: {
         modelId: id,
@@ -43,7 +45,6 @@ const Photos = ({ classes, photos, crop, shrink, id, client, addMutation, remove
         url: fileInfo.cdnUrl,
       }
     });
-    console.log(res);
   };
 
   const removePhotoApollo = async (index) => {
@@ -52,18 +53,20 @@ const Photos = ({ classes, photos, crop, shrink, id, client, addMutation, remove
         ${removeMutation}(modelId: $modelId, index: $index) @client(always: true)
       }
     `;
-    const res = await client.mutate({
+    await client.mutate({
       mutation: REMOVE_PHOTO_MUTATION,
       variables: {
         modelId: id,
         index,
       }
     });
-    console.log(res);
   };
 
   return (
     <>
+      <InputLabel shrink style={{ marginBottom: 10 }} error={error}>
+        {label}
+      </InputLabel>
       {photos && photos.length
         ? photos.map((photo, i) => {
           const thumbImgStyle = {
@@ -101,28 +104,31 @@ const Photos = ({ classes, photos, crop, shrink, id, client, addMutation, remove
       >
         <AddIcon />
       </Button>
+      {error && <FormHelperText error style={{ marginTop: 15 }}>{errorText}</FormHelperText>}
     </>
   );
 };
 
 Photos.defaultProps = {
   shrink: '600x600 90%',
-  crop: '1:1'
+  crop: '1:1',
+  label: 'Photos',
+  errorText: 'You need at least 1 image.'
 };
 
 Photos.propTypes = {
   classes: PropTypes.object.isRequired,
   // photos is not required because a new user or business has undefined
-  photos: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.array
-  ]),
+  photos: PropTypes.array,
   addMutation: PropTypes.string.isRequired,
   removeMutation: PropTypes.string.isRequired,
   shrink: PropTypes.string,
   crop: PropTypes.string,
   id: PropTypes.number,
   client: PropTypes.object,
+  label: PropTypes.string,
+  error: PropTypes.bool,
+  errorText: PropTypes.string
 };
 
 export default withStyles(photosStyles)(Photos);

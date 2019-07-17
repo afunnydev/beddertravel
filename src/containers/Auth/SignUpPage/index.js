@@ -26,8 +26,6 @@ import Bedder from 'bedder/bedder';
 import ValidationForm from './ValidationForm';
 import SignUpForm from './SignUpForm';
 
-BedderValidator.prepareTextField();
-
 const FACEBOOK_SIGNUP_MUTATION = gql`
   mutation FACEBOOK_SIGNUP_MUTATION($payload: String!) {
     facebookSignup(payload: $payload) {

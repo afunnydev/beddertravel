@@ -22,8 +22,6 @@ import ErrorResult from 'components/ErrorResult';
 import ErrorNetwork from 'components/ErrorNetwork';
 import MessageResult from 'components/MessageResult';
 
-BedderValidator.prepareTextField();
-
 /* eslint-disable react/prefer-stateless-function */
 class AskQuestion extends React.Component {
   constructor(props) {
