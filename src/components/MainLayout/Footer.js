@@ -42,7 +42,7 @@ const style = {
     color: 'white',
     paddingTop: 20,
     paddingBottom: 40,
-    marginTop: 30,
+    height: 325
   },
   footerContent: {
     marginLeft: 'auto',
