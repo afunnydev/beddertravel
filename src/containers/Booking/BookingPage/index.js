@@ -26,7 +26,7 @@ import injectSaga from 'utils/injectSaga';
 import BedderConfig from 'bedder/bedderConfig';
 
 import SearchBar from 'containers/SearchBar/Loadable';
-import SupportTicket from 'components/SupportTicket/Loadable';
+import SupportTicket from 'components/SupportTicket';
 import AskQuestion from 'components/AskQuestion/Loadable';
 import TitleWithBackButton from 'components/TitleWithBackButton';
 

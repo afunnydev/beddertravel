@@ -6,7 +6,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
-import { ApolloProvider, Mutation } from 'react-apollo';
+import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import { withSnackbar } from 'notistack';
 
@@ -19,7 +19,6 @@ import StyledButton from 'components/StyledButton';
 import MessageError from 'components/MessageError';
 import ErrorResult from 'components/ErrorResult';
 
-import client from 'utils/createClient';
 import BedderValidator from 'bedder/bedderValidator';
 import Bedder from 'bedder/bedder';
 
@@ -88,7 +87,7 @@ export class SignUpPage extends React.Component {
     const { validationCode } = this.state;
 
     return (
-      <ApolloProvider client={client}>
+      <>
         <Helmet>
           <title>Sign up</title>
         </Helmet>
@@ -136,7 +135,7 @@ export class SignUpPage extends React.Component {
         {validationCode && <ValidationForm email={this.state.email} />}
 
         {!validationCode && this.state.withEmail && <SignUpForm nextStep={this.verificationStep} />}
-      </ApolloProvider>
+      </>
     );
   }
 }

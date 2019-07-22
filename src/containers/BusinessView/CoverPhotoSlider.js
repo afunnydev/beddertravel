@@ -53,9 +53,8 @@ const styles = {
   },
 };
 
-const CoverPhotoSlider = ({ photos, classes }) => {
+const CoverPhotoSlider = ({ photos, classes, openSupport }) => {
   const handleOnDragStart = e => e.preventDefault();
-  const openSupport = () => console.log('OPEN');
   const matches = useMediaQuery('(max-width: 960px)');
   return (
     // This div is only there to apply the class and custom styling. If you prefer another way, please do it.
@@ -82,7 +81,9 @@ const CoverPhotoSlider = ({ photos, classes }) => {
 };
 
 CoverPhotoSlider.propTypes = {
+  classes: PropTypes.object.isRequired,
   photos: PropTypes.array.isRequired,
+  openSupport: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(CoverPhotoSlider);

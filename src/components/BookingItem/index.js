@@ -12,6 +12,8 @@ import Divider from '@material-ui/core/Divider';
 import PersonIcon from '@material-ui/icons/Person';
 import Place from '@material-ui/icons/PlaceOutlined';
 
+import DefaultImage from 'assets/images/bedder-default-bg.png';
+
 import moment from 'moment';
 
 const styles = theme => ({
@@ -91,9 +93,9 @@ class BookingItem extends React.Component {
   render() {
     const { classes, booking } = this.props;
     const bu = booking.businessUnitParent ? booking.businessUnitParent : booking.businessUnit;
-    const image = bu.files.length > 0 ? bu.files[0].data : null;
+    const image = bu.photos && bu.photos.length > 0 ? bu.photos[0].url : DefaultImage;
     const isMobile = this.props.width == 'xs' || this.props.width == 'sm';
-    // console.log('BookingItem PROPS', this.props);
+
     return (
       <React.Fragment>
         <Card className={isMobile ? classes.cardMobile : classes.card}>
@@ -109,17 +111,18 @@ class BookingItem extends React.Component {
             {/* {[...Array(booking.business.stars)].map((v,i) => ( */}
             {/*   <StarRate key={i} className={classes.starRate} color="primary"/> */}
             {/* ))} */}
-            <Typography style={{margin: '0px 0px 5px'}} variant="headline">{booking.business.name}</Typography>
+            <Typography style={{margin: '0px 0px 5px'}} variant="h5">{booking.business.name}</Typography>
             <Typography style={{margin: '10px 0px', fontStyle: 'italic'}} color="primary">
               <Place/> {booking.business.address.address}
             </Typography>
             <Divider />
 
-            <Typography style={{margin: '5px 0px'}} variant="subheading">{moment(booking.from).format('MMM Do YYYY')} - {moment(booking.to).format('MMM Do YYYY')}</Typography>
+            <Typography style={{margin: '5px 0px'}} variant="subtitle1">{moment(booking.from).format('MMM Do YYYY')} - {moment(booking.to).format('MMM Do YYYY')}</Typography>
 
             <PersonIcon color="primary" className={classes.personIcon}/>
-            <span className={classes.middleText}>{booking.payload.numPeople}</span>
-            <Icon className={classes.bedIcon + " icon-bed"} />
+            {/* TODO: Show real number of person */}
+            <span className={classes.middleText}>2</span>
+            <Icon className={classes.bedIcon + ' icon-bed'} />
 
             <span className={classes.middleText}>
               {Number(booking.businessUnit.bedsKing)

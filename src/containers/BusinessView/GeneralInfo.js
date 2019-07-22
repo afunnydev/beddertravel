@@ -48,7 +48,7 @@ const styles = theme => ({
   }
 });
 
-const GeneralInfo = ({ id, name, address, openSupport, reviewsAvg, reviewsNum, amenities, classes }) => {
+const GeneralInfo = ({ id, name, address, reviewsAvg, reviewsNum, amenities, classes, openSupport }) => {
   const messages = BedderConfig.getReviewMessages();
   return (
     <Grid container justify="center">
@@ -130,8 +130,8 @@ GeneralInfo.propTypes = {
   reviewsNum: PropTypes.number.isRequired,
   reviewsAvg: PropTypes.number.isRequired,
   amenities: PropTypes.string.isRequired,
-  openSupport: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
+  openSupport: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(GeneralInfo);

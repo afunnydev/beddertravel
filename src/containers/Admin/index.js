@@ -1,6 +1,5 @@
 import React from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
-import { ApolloProvider } from 'react-apollo';
 
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
@@ -16,8 +15,6 @@ import AdminContent from 'containers/Admin/AdminContent/Loadable';
 import AdminBookings from 'containers/Admin/AdminBookings/Loadable';
 
 import BackButton from 'components/BackButton';
-
-import client from 'utils/createClient';
 
 const PartialGrid = styled(Grid)`
   max-width: 1000px;
@@ -81,16 +78,14 @@ const Admin = () => (
         <Typography variant="h4" align="center">Admin</Typography>
       </Grid>
       <Grid item xs={12}>
-        <ApolloProvider client={client}>
-          <Switch>
-            <Route path="/admin/users" component={AdminUsers} />
-            <Route path="/admin/user/:id" component={AdminUser} />
-            <Route path="/admin/businesses" component={AdminBusinesses} />
-            <Route path="/admin/content" component={AdminContent} />
-            <Route path="/admin/bookings" component={AdminBookings} />
-            <Route path="/admin" component={Routes} />
-          </Switch>
-        </ApolloProvider>
+        <Switch>
+          <Route path="/admin/users" component={AdminUsers} />
+          <Route path="/admin/user/:id" component={AdminUser} />
+          <Route path="/admin/businesses" component={AdminBusinesses} />
+          <Route path="/admin/content" component={AdminContent} />
+          <Route path="/admin/bookings" component={AdminBookings} />
+          <Route path="/admin" component={Routes} />
+        </Switch>
       </Grid>
     </PartialGrid>
   </React.Fragment>

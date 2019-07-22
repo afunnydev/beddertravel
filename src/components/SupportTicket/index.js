@@ -1,9 +1,9 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-
-import injectSaga from 'utils/injectSaga';
-import saga from './saga';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { Mutation } from 'react-apollo';
+import gql from 'graphql-tag';
+import { Validation, fieldValidatorCore } from 'react-validation-framework';
+import { withSnackbar } from 'notistack';
 
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -14,153 +14,115 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
 import BedderValidator from 'bedder/bedderValidator';
-import { Validation } from 'react-validation-framework';
 
-import SupportTicketPropainer, {withConnect as withConnectSupportTicket} from './SupportTicketPropainer';
-import ErrorResult from 'components/ErrorResult';
-import ErrorNetwork from 'components/ErrorNetwork';
-import MessageResult from 'components/MessageResult';
-
-/* eslint-disable react/prefer-stateless-function */
-class SupportTicket extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      refresh: false,
-      success: false,
-    };
-    this.vRefs = BedderValidator.makeRefs(BedderValidator.getSupportTicket());
-    this.sendST = this.sendST.bind(this);
-    this.close = this.close.bind(this);
-  }
-
-  sendST() {
-    // console.log('ST props', this.props);
-    if(BedderValidator.validate(this.vRefs)) {
-      this.props.onChangeType({
-        businessId: this.props.businessId,
-        ticketType: this.props.ticketType,
-      });
-      this.props.submit();
+const CREATE_TICKET_MUTATION = gql`
+  mutation CREATE_TICKET_MUTATION($subject: String!, $message: String!) {
+    createTicket(subject: $subject, message: $message) {
+      id
     }
   }
+`;
 
-  clean() {
-    this.props.onChangeSubjectVal(' ');
-    this.props.onChangeMessageVal(' ');
-    this.props.onChangeSubmitError(null);
-    this.props.onChangeSubmitResult(null);
-    this.props.onChangeType({});
-    // console.log('clean job', this.vRefs);
-  }
+const SupportTicket = ({ open, onClose, enqueueSnackbar }) => {
+  const [subject, setSubject] = useState('');
+  const [message, setMessage] = useState('');
+  const vs = BedderValidator.getValidators();
 
-  close() {
-    this.clean();
-    this.setState({refresh: !this.state.refresh, success: false});
-    this.props.closeFn();
-  }
-
-  componentDidUpdate(prevProps) {
-    if(prevProps.submitResult != this.props.submitResult) {
-      if(this.props.submitResult && this.props.submitResult.result && this.props.submitResult.result.id && this.props.submitResult.result.id > 0) {
-        this.clean();
-        this.setState({success: true});
-      }
+  const sendTicket = async (createTicket) => {
+    if (!fieldValidatorCore.checkGroup('supportTicket').isValid) {
+      return enqueueSnackbar('Please fill all the required fields.', { variant: 'error' });
     }
-  }
+    await createTicket();
+  };
 
-  render() {
-    const vs = BedderValidator.getValidators();
-    const backdropClick = !this.props.backdropClick;
+  const onCompleted = () => {
+    enqueueSnackbar('We received your inquiry. We will be in touch shortly.', { variant: 'success' });
+    onClose();
+  };
 
-    return (
-      <Dialog
-        disableBackdropClick={backdropClick}
-        disableEscapeKeyDown
-        maxWidth="xs"
-        open={this.props.isOpen}
-        onClose={this.props.closeFn}
-      >
-        <SupportTicketPropainer/>
-        <DialogTitle>
-          Report
-        </DialogTitle>
-        <DialogContent>
+  const onError = () => enqueueSnackbar('An error occured. Please try again.', { variant: 'error' });
 
-          <div style={{ margin: 10 }}>
-            <ErrorResult result={this.props.submitResult} />
-            <ErrorNetwork error={this.props.submitError} />
-          </div>
-          <Grid container>
-            <Grid item xs={12}>
-              Subject
-            </Grid>
-            <Grid item xs={12}>
-              <Validation
-                componentTag="TextField"
-                ref={this.vRefs.subject}
-                onChangeCallback="onChange"
-                validators={[vs.notEmpty]}
-              >
-                <TextField
-                  fullWidth
-                  name="subject"
-                  onChange={this.props.onChangeSubject}
-                  value={this.props.subject}
-                />
-              </Validation>
-            </Grid>
-            <Grid item xs={12} style={{ marginTop: 15 }}>
-              Message
-            </Grid>
-            <Grid item xs={12}>
-              <Validation
-                componentTag="TextField"
-                ref={this.vRefs.message}
-                onChangeCallback="onChange"
-                validators={[vs.notEmpty]}
-              >
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={3}
-                  name="message"
-                  onChange={this.props.onChangeMessage}
-                  value={this.props.message}
-                />
-              </Validation>
-            </Grid>
+  return(
+    <Dialog
+      disableEscapeKeyDown
+      maxWidth="xs"
+      open={open}
+      onClose={onClose}
+    >
+      <DialogTitle>Support</DialogTitle>
+      <DialogContent>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Validation
+              group="supportTicket"
+              componentTag="TextField"
+              onChangeCallback="onChange"
+              validators={[vs.notEmpty]}
+            >
+              <TextField
+                fullWidth
+                name="subject"
+                onChange={(e) => setSubject(e.target.value)}
+                value={subject}
+                label="Subject"
+                InputLabelProps={{
+                  shrink: true
+                }}
+              />
+            </Validation>
           </Grid>
-        </DialogContent>
-        <DialogActions>
-          {this.state.success && (
-            <MessageResult message="Message sent!" />
+
+          <Grid item xs={12}>
+            <Validation
+              group="supportTicket"
+              componentTag="TextField"
+              onChangeCallback="onChange"
+              validators={[vs.notEmpty]}
+            >
+              <TextField
+                fullWidth
+                multiline
+                rows={3}
+                name="message"
+                onChange={(e) => setMessage(e.target.value)}
+                value={message}
+                label="Message"
+                InputLabelProps={{
+                  shrink: true
+                }}
+              />
+            </Validation>
+          </Grid>
+        </Grid>
+      </DialogContent>
+      <DialogActions>
+        <Mutation
+          mutation={CREATE_TICKET_MUTATION}
+          variables={{
+            subject,
+            message,
+          }}
+          onCompleted={onCompleted}
+          onError={onError}
+        >
+          {( createTicket, { loading }) => (
+            <>
+              <Button disabled={loading} onClick={onClose} color="primary">Cancel</Button>
+              <Button disabled={loading} onClick={() => sendTicket(createTicket)} color="primary">
+                Send
+              </Button>
+            </>
           )}
-          <Button disabled={this.props.submitting} onClick={this.close} color="primary">
-            {this.state.success && ('OK')}
-            {!this.state.success && ('Cancel')}
-          </Button>
-          {this.state.success || (
-            <Button disabled={this.props.submitting} onClick={this.sendST} color="primary">
-              Send
-            </Button>
-          )}
-        </DialogActions>
-      </Dialog>
-    );
-  }
-}
-SupportTicket.defaultProps = {
-  backdropClick: false,
-  ticketType: 1
+        </Mutation>
+      </DialogActions>
+    </Dialog>
+  );
 };
 
-SupportTicket.propTypes = {};
+SupportTicket.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  enqueueSnackbar: PropTypes.func.isRequired,
+};
 
-const withSaga = injectSaga({ key: 'supportTicket', saga });
-const withConnect = connect(
-  null,
-  null,
-);
-
-export default compose(withConnect, withSaga, withConnectSupportTicket)(SupportTicket);
+export default withSnackbar(SupportTicket);

@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
 import Grid from '@material-ui/core/Grid';
+
+import BookingDialog from 'components/BookingDialog';
 import BusinessViewRoom from 'components/BusinessViewRoom';
 
 const BUSINESS_QUOTES_QUERY = gql`
@@ -42,6 +44,7 @@ const BOOKING_SEARCH_QUERY = gql`
 `;
 
 const Rooms = ({ businessId }) => { 
+  const [dialogOpen, setDialogOpen] = useState(false);
   return (
     <Grid container justify="center" spacing={3}>
       <Grid item xs={12} md={10} style={{ padding: 20 }}>
@@ -64,11 +67,16 @@ const Rooms = ({ businessId }) => {
                 if (loading) return <p>Loading Rooms...</p>;
                 if (!data || !data.businessQuotes || !data.businessQuotes.length) return <p>No Rooms available</p>;
                 return <>
+                  <BookingDialog
+                    open={dialogOpen} 
+                    setDialogOpen={setDialogOpen}
+                  />
                   {data.businessQuotes.map(businessUnit => {
                     if (businessUnit.available > 0) {
                       return <BusinessViewRoom
                         key={businessUnit.id}
                         client={client}
+                        setDialogOpen={setDialogOpen}
                         {...businessUnit}
                       />;
                     }

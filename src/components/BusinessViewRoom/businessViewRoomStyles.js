@@ -83,6 +83,14 @@ const businessViewRoomStyles = () => ({
       backgroundColor: 'white',
     }
   },
+  bedroomInfo: {
+    padding: '0 20px',
+    listStyleType: 'circle',
+    '& li': {
+      fontSize: '16px',
+      fontWeight: 300,
+    }
+  },
 });
 
 export default businessViewRoomStyles;

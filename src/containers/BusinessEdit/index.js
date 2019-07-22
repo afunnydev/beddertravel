@@ -1,11 +1,9 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { ApolloProvider, Query } from 'react-apollo';
+import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
 import Grid from '@material-ui/core/Grid';
-
-import apolloClient from 'utils/createClient';
 
 import BusinessEditPageHeader from './BusinessEditPageHeader.js';
 import BusinessEditGeneralInformation from './BusinessEditGeneralInformation.js';
@@ -64,7 +62,7 @@ const BUSINESS_QUERY = gql`
 `;
 
 const BusinessEditPage = ({ match }) => (
-  <ApolloProvider client={apolloClient}>
+  <>
     <Helmet>
       <title>Edit Accomodation</title>
     </Helmet>
@@ -107,7 +105,7 @@ const BusinessEditPage = ({ match }) => (
         }}
       </Query>
     </Grid>
-  </ApolloProvider>
+  </>
 );
 
 export default BusinessEditPage;

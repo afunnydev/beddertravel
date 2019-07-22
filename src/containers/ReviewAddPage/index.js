@@ -2,8 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { compose } from 'redux';
-import { ApolloProvider, Mutation } from 'react-apollo';
-import client from 'utils/createClient';
+import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import { withSnackbar } from 'notistack';
 
@@ -85,7 +84,7 @@ export class ReviewAddPage extends React.Component {
     const { classes } = this.props;
     const { ratingMoney, ratingStaff, ratingLocation, ratingCleanliness, ratingServices, reviewTitle, reviewDescription } = this.state;
     return (
-      <ApolloProvider client={client}>
+      <>
         <Helmet>
           <title>Review your stay</title>
         </Helmet>
@@ -199,7 +198,7 @@ export class ReviewAddPage extends React.Component {
             </Grid>
           </Grid>
         </Grid>
-      </ApolloProvider>
+      </>
     );
   }
 }

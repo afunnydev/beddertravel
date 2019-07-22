@@ -3,7 +3,7 @@ import React from 'react';
 import DrawerDialogPropainer from './DrawerDialogPropainer';
 import DrawerDialogSaga from './DrawerDialogSaga';
 
-import SupportTicket from 'components/SupportTicket/Loadable';
+import SupportTicket from 'components/SupportTicket';
 
 class DrawerDialogFeedback extends React.Component {
   constructor(props) {

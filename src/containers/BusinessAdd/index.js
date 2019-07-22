@@ -1,8 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { ApolloProvider } from 'react-apollo';
 import { compose } from 'redux';
-import client from 'utils/createClient';
 import { withRouter } from 'react-router-dom';
 
 import { Validation, fieldValidatorCore } from 'react-validation-framework';
@@ -110,7 +108,7 @@ export class BusinessAddPage extends React.Component {
     const vs = BedderValidator.getValidators();
     const user = Bedder.getUser();
     return (
-      <ApolloProvider client={client}>
+      <>
         <Helmet>
           <title>Create a new accomodation</title>
         </Helmet>
@@ -259,7 +257,7 @@ export class BusinessAddPage extends React.Component {
             </Grid>
           </Grid>
         </Grid>
-      </ApolloProvider>
+      </>
     );
   }
 }

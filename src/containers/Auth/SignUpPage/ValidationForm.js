@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ApolloProvider, Mutation } from 'react-apollo';
+import { Mutation } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
 import { withSnackbar } from 'notistack';
 import gql from 'graphql-tag';
@@ -16,8 +16,6 @@ import Bedder from 'bedder/bedder';
 
 import StyledButton from 'components/StyledButton';
 import MessageError from 'components/MessageError';
-
-import client from 'utils/createClient';
 
 const styles = {
   white: {
@@ -59,74 +57,72 @@ class ValidationForm extends React.Component {
     const { classes, email } = this.props;
     const { code } = this.state;
     return (
-      <ApolloProvider client={client}>
-        <Mutation
-          mutation={VALIDATE_ACCOUNT_MUTATION}
-          variables={{
-            email,
-            code,
-          }}
-        >
-          {(validateAccount, { loading, error }) => (
-            <form
-              onSubmit={async e => {
-                e.preventDefault();
-                if (!code) {
-                  this.setState({ valid: false });
-                  return false;
-                }
-                this.setState({ valid: true });
-                const user = await validateAccount();
+      <Mutation
+        mutation={VALIDATE_ACCOUNT_MUTATION}
+        variables={{
+          email,
+          code,
+        }}
+      >
+        {(validateAccount, { loading, error }) => (
+          <form
+            onSubmit={async e => {
+              e.preventDefault();
+              if (!code) {
+                this.setState({ valid: false });
+                return false;
+              }
+              this.setState({ valid: true });
+              const user = await validateAccount();
 
-                if (!user.data || !user.data.validateAccount || !user.data.validateAccount.token) return this.props.enqueueSnackbar('Are you sure this is your activation code? 🧐', { variant: 'error' });
-                
-                Bedder.setToken(user.data.validateAccount.token);
-                delete user.data.validateAccount.token;
-                Bedder.setUser({
-                  ...user.data.validateAccount,
-                });
-                Bedder.login(this.props.dispatch);
-                this.props.enqueueSnackbar('Your account is now activated! 🔆', { variant: 'success' });
-                return this.props.history.push('/home');
-              }}
-            >
-              <Typography className={classes.white} variant="subheading">
-                We sent an activation code to the provided email address.
-                Please, enter it below.
-              </Typography>
-              <div className={classes.fieldContainer}>
-                <TextField
-                  id="code"
-                  label="Enter activation code"
-                  onChange={this.saveToState}
-                  name="code"
-                  required
-                  InputProps={{
-                    classes: {
-                      root: classes.white,
-                      input: classes.white,
-                    },
-                  }}
-                  InputLabelProps={{
-                    classes: {
-                      root: classes.white,
-                    },
-                  }}
-                  fullWidth
-                />
-              </div>
-              {error && <MessageError error={error} />}
-              <StyledButton
-                type="submit"
-                disabled={loading}
+              if (!user.data || !user.data.validateAccount || !user.data.validateAccount.token) return this.props.enqueueSnackbar('Are you sure this is your activation code? 🧐', { variant: 'error' });
+              
+              Bedder.setToken(user.data.validateAccount.token);
+              delete user.data.validateAccount.token;
+              Bedder.setUser({
+                ...user.data.validateAccount,
+              });
+              Bedder.login(this.props.dispatch);
+              this.props.enqueueSnackbar('Your account is now activated! 🔆', { variant: 'success' });
+              return this.props.history.push('/home');
+            }}
+          >
+            <Typography className={classes.white} variant="subheading">
+              We sent an activation code to the provided email address.
+              Please, enter it below.
+            </Typography>
+            <div className={classes.fieldContainer}>
+              <TextField
+                id="code"
+                label="Enter activation code"
+                onChange={this.saveToState}
+                name="code"
+                required
+                InputProps={{
+                  classes: {
+                    root: classes.white,
+                    input: classes.white,
+                  },
+                }}
+                InputLabelProps={{
+                  classes: {
+                    root: classes.white,
+                  },
+                }}
                 fullWidth
-              >
-                {loading ? (<CircularProgress size={20} classes={{ circle: classes.white }} />) : 'Activate'}
-              </StyledButton>
-            </form>
-          )}
-        </Mutation>
-      </ApolloProvider>
+              />
+            </div>
+            {error && <MessageError error={error} />}
+            <StyledButton
+              type="submit"
+              disabled={loading}
+              fullWidth
+            >
+              {loading ? (<CircularProgress size={20} classes={{ circle: classes.white }} />) : 'Activate'}
+            </StyledButton>
+          </form>
+        )}
+      </Mutation>
     );
   }
 }

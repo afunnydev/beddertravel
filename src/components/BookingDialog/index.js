@@ -124,11 +124,6 @@ const BookingDialog = ({ open, setDialogOpen }) => (
 BookingDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   setDialogOpen: PropTypes.func.isRequired,
-  quote: PropTypes.number.isRequired,
-  deposit: PropTypes.number.isRequired,
-  toPayThere: PropTypes.number.isRequired,
-  acceptAutomatically: PropTypes.number.isRequired,
-  currency: PropTypes.string.isRequired,
 };
 
 export default BookingDialog;

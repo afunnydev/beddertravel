@@ -1,13 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-import { ApolloProvider, Query } from 'react-apollo';
+import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import { withRouter } from 'react-router-dom';
 
 import Grid from '@material-ui/core/Grid';
-
-import apolloClient from 'utils/createClient';
 
 // import SearchBar from 'containers/SearchBar/Loadable';
 
@@ -16,8 +14,7 @@ import GeneralInfo from './GeneralInfo';
 import GeneralInfoMore from './GeneralInfoMore';
 import Rooms from './Rooms';
 
-// import SupportTicket from 'components/SupportTicket/Loadable';
-// import AskQuestion from 'components/AskQuestion/Loadable';
+import SupportTicket from 'components/SupportTicket';
 
 const BUSINESS_VIEW_QUERY = gql`
   query BUSINESS_VIEW_QUERY($businessId: Int!) {
@@ -51,8 +48,12 @@ const BUSINESS_VIEW_QUERY = gql`
 `;
 
 const BusinessView = ({ match }) => {
+  const [supportTicketOpen, setSupportTicketOpen] = useState(false);
+  const openSupport = () => setSupportTicketOpen(true);
+  const closeSupport = () => setSupportTicketOpen(false);
+
   return (
-    <ApolloProvider client={apolloClient}>
+    <>
       <Helmet>
         <title>Edit Accomodation</title>
       </Helmet>
@@ -70,15 +71,25 @@ const BusinessView = ({ match }) => {
             if (!data || !data.business) return <p>No Business</p>;
             return <>
               {/* <div><SearchBar /></div> */}
-              <CoverPhotoSlider photos={data.business.coverPhotos} />
-              <GeneralInfo {...data.business} />
+              <SupportTicket open={supportTicketOpen} onClose={closeSupport} />
+              <CoverPhotoSlider 
+                photos={data.business.coverPhotos} 
+                openSupport={openSupport} 
+              />
+              <GeneralInfo 
+                {...data.business} 
+                openSupport={openSupport}
+              />
               <Rooms businessId={data.business.id} />
-              <GeneralInfoMore {...data.business} />
+              <GeneralInfoMore 
+                {...data.business} 
+                openSupport={openSupport}
+              />
             </>;
           }}
         </Query>
       </Grid>
-    </ApolloProvider>
+    </>
   );
 };
 

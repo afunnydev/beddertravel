@@ -52,7 +52,7 @@ export class BookingsPage extends React.Component {
         <PageTitle spaced>Reservations</PageTitle>
 
         {this.props.getBookingsSubmitting && (
-          <BedderLoadingIndicator center full />
+          <BedderLoadingIndicator full />
         )}
 
         {this.props.getBookingsSubmitting || (
@@ -65,7 +65,7 @@ export class BookingsPage extends React.Component {
 
             <Grid container justify="center" alignContent="center">
               <Grid item xs={12} md={8} lg={5} style={{padding: 20}}>
-                <Grid container justify="center" alignContent="center" spacing={24}>
+                <Grid container justify="center" alignContent="center" spacing={4}>
 
                   {this.props.getBookingsResult && this.props.getBookingsResult.result && this.props.getBookingsResult.result.map((v,i) => {
                     if (this.props.bookingsPassed && moment(v.to).isAfter(moment()) || this.props.bookingsUpcoming && moment(v.to).isBefore(moment())) {

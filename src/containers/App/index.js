@@ -5,6 +5,7 @@ import { Switch, Route, Redirect, Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { SnackbarProvider } from 'notistack';
 import { createBrowserHistory } from 'history';
+import { ApolloProvider } from 'react-apollo';
 
 import AppContext from 'containers/AppContext';
 
@@ -19,9 +20,9 @@ import PrivacyPolicyPage from 'containers/PrivacyPolicyPage/Loadable';
 import TermsPage from 'containers/TermsPage/Loadable';
 import FaqPage from 'containers/FaqPage/Loadable';
 import BusinessViewPage from 'containers/BusinessView/Loadable';
-// import BusinessViewPropConnector from 'containers/BusinessView/BusinessViewPropConnector/Loadable';
+import BookingPage from 'containers/Booking/Loadable';
 import BookingsPropConnector from 'containers/Bookings/BookingsPropConnector/Loadable';
-import BookingPropConnector from 'containers/Booking/BookingPropConnector/Loadable';
+// import BookingPropConnector from 'containers/Booking/BookingPropConnector/Loadable';
 import ReservationsPropConnector from 'containers/Reservations/ReservationsPropConnector/Loadable';
 import UserProfile from 'containers/UserProfile/Loadable';
 import GainsPropConnector from 'containers/GainsPage/GainsPropConnector/Loadable';
@@ -31,6 +32,7 @@ import Admin from 'containers/Admin/Loadable';
 
 import MainLayout from 'components/MainLayout';
 import configureStore from 'utils/configureStore';
+import client from 'utils/createClient';
 import BedderValidator from 'bedder/bedderValidator';
 
 import GlobalStyle from './GlobalStyle';
@@ -61,7 +63,7 @@ const PlatformPages = () => (
 
       <Route path="/review/add/:id" component={ReviewAddPage} />
 
-      <Route path="/booking/:id" component={BookingPropConnector} />
+      <Route path="/booking/:id" component={BookingPage} />
       <Route path="/bookings" component={BookingsPropConnector} />
 
       <Route path="/reservations" component={ReservationsPropConnector} />
@@ -83,29 +85,31 @@ const PlatformPages = () => (
 );
 
 const App = () => (
-  <Provider store={store}>
-    <Router history={history}>
-      <AppWrapper>
-        <AppContext>
-          <SnackbarProvider maxSnack={3}>
-            <React.Fragment>
-              <Helmet titleTemplate="%s - Bedder Travel" defaultTitle="Bedder Travel" >
-                <meta name="description" content="Bedder uses the power of user generated content to guide other travellers like you to the best places to stay." />
-                <meta name="robots" content="noindex,nofollow" />
-              </Helmet>
-              <GlobalStyle />
-              <Switch>
-                <Redirect exact path="/" to="/home" />
-                <Route path="/auth" component={Auth} />
-                <Route path="/" component={PlatformPages} />
-                <Route path="" component={NotFoundPage} />
-              </Switch>
-            </React.Fragment>
-          </SnackbarProvider>
-        </AppContext>
-      </AppWrapper>
-    </Router>
-  </Provider>
+  <ApolloProvider client={client}>
+    <Provider store={store}>
+      <Router history={history}>
+        <AppWrapper>
+          <AppContext>
+            <SnackbarProvider maxSnack={3}>
+              <React.Fragment>
+                <Helmet titleTemplate="%s - Bedder Travel" defaultTitle="Bedder Travel" >
+                  <meta name="description" content="Bedder uses the power of user generated content to guide other travellers like you to the best places to stay." />
+                  <meta name="robots" content="noindex,nofollow" />
+                </Helmet>
+                <GlobalStyle />
+                <Switch>
+                  <Redirect exact path="/" to="/home" />
+                  <Route path="/auth" component={Auth} />
+                  <Route path="/" component={PlatformPages} />
+                  <Route path="" component={NotFoundPage} />
+                </Switch>
+              </React.Fragment>
+            </SnackbarProvider>
+          </AppContext>
+        </AppWrapper>
+      </Router>
+    </Provider>
+  </ApolloProvider>
 );
 
 export default App;
