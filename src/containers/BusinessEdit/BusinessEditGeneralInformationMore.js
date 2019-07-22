@@ -93,6 +93,8 @@ const BusinessEditGeneralInformationMore = (props) => {
               client={props.client}
               addMutation="addFileToBusiness"
               removeMutation="removeFileFromBusiness"
+              crop="1920x705 minimum"
+              shrink="1920x705 90%"
               label="Cover Photos*"
               errorText="You need at least 1 cover photo."
             />

@@ -244,6 +244,8 @@ const Room = (props) => {
                     photos={businessUnit.photos}
                     addMutation="addFileToBusinessUnit"
                     removeMutation="removeFileFromBusinessUnit"
+                    crop="600x400 minimum"
+                    shrink="600x400 90%"
                     label="Photos of the room*"
                     errorText="You need at least 1 photo."
                   />

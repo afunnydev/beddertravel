@@ -183,7 +183,7 @@ export class AppContext extends React.Component {
       <ScrollToTop>
         <UserProvider value={this.props.user}>
           <RoleProvider value={this.props.role}>
-            <MuiThemeProvider  theme={theme}>
+            <MuiThemeProvider theme={theme}>
               {this.props.children}
             </MuiThemeProvider>
           </RoleProvider>

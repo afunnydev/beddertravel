@@ -22,6 +22,7 @@ const Photos = ({ classes, photos, crop, shrink, id, client, addMutation, remove
       imageShrink: shrink
     }).done((file) => {
       file.promise().done(async (fileInfo) => {
+        console.log("FILE INFO", fileInfo);
         await addPhotoApollo(fileInfo);
       });
     }).catch(err => {

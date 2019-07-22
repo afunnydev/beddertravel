@@ -51,16 +51,6 @@ const BusinessEditBedrooms = (props) => {
                 ))
                 : <Typography>Please select or create a room to start.</Typography>
               }
-              {/* {activeRoomId ? (
-              {/*   <Room  */}
-              {/*     activeRoomId={activeRoomId} */}
-              {/*     validationErrors={validationErrors}  */}
-              {/*     vRefs={vRefs}  */}
-              {/*     client={props.client} */}
-              {/*   /> */}
-              {/* ) : ( */}
-              {/*   <Typography>Please select or create a room to start.</Typography> */}
-              {/* )} */}
             </Grid>
           </Grid>
         </Grid>

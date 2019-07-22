@@ -32,7 +32,7 @@ class Pagination extends React.Component {
           <Button
             key={i}
             style={{margin: 5}}
-            variant={this.props.currentPage == page ? 'raised' : 'flat'}
+            variant="contained"
             color={this.props.currentPage == page ? 'primary' : 'default'}
             onClick={this.changePage(page)}
             >

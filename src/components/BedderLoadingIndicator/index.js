@@ -13,7 +13,7 @@ const style = {
 
 const LoadingContainer = styled.div`
   margin: auto;
-  margin-top: ${props => props.full ? '50px' : '20px'};
+  margin-top: ${props => props.full ? '50px' : '0px'};
   z-index: ${props => props.center ? 100 : 'inherit'};
   position: ${props => props.center ? 'fixed' : 'relative'};
   top: ${props => props.center ? '50%' : 'initial'};

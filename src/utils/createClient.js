@@ -27,6 +27,10 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
+const cache = new InMemoryCache();
+
+// TODO: Implement apollo-cache-persist to persist the cache to local storage..
+
 const client = new ApolloClient({
   resolvers: {
     Query: {
@@ -198,11 +202,37 @@ const client = new ApolloClient({
         cache.writeData({ id: businessKey, data: { units: query.units } });
         cache.data.delete(roomKey);
         return null;
-      }
+      },
+      businessUnitToBook: (_root, { businessUnitId }, { cache, getCacheKey }) => {
+        const id = getCacheKey({ __typename: 'BusinessUnit', id: businessUnitId });
+        const fragment = gql`
+          fragment importantInfo on BusinessUnit {
+            id
+            name
+          }
+        `;
+        const businessUnit = cache.readFragment({ fragment, id });
+        const data = { businessUnitToBook: businessUnit };
+        cache.writeData({ data });
+        return { message: 'Successfully added!', __typename: 'Message' };
+      },
     },
   },
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
+  cache: cache,
+});
+
+const today = new Date();
+const inThreeDays = new Date().addDays(3);
+
+cache.writeData({
+  data: {
+    bookingStartDate: localStorage.getItem('bookingStartDate') || today.toISOString(),
+    bookingEndDate: localStorage.getItem('bookingEndDate') || inThreeDays.toISOString(),
+    bookingNumBeds: localStorage.getItem('bookingNumBeds') || 1,
+    bookingNumPeople: localStorage.getItem('bookingNumPeople') || 2,
+    numRoomsToBook: 0,
+  },
 });
 
 export default client;

@@ -152,7 +152,7 @@ const styles = theme => ({
 });
 
 const StyledResultMessage = props => (
-  <Typography align="center" variant="subheading">
+  <Typography align="center" variant="subtitle1">
     {props.children}
   </Typography>
 );

@@ -18,7 +18,8 @@ import AboutPage from 'containers/AboutPage/Loadable';
 import PrivacyPolicyPage from 'containers/PrivacyPolicyPage/Loadable';
 import TermsPage from 'containers/TermsPage/Loadable';
 import FaqPage from 'containers/FaqPage/Loadable';
-import BusinessViewPropConnector from 'containers/BusinessView/BusinessViewPropConnector/Loadable';
+import BusinessViewPage from 'containers/BusinessView/Loadable';
+// import BusinessViewPropConnector from 'containers/BusinessView/BusinessViewPropConnector/Loadable';
 import BookingsPropConnector from 'containers/Bookings/BookingsPropConnector/Loadable';
 import BookingPropConnector from 'containers/Booking/BookingPropConnector/Loadable';
 import ReservationsPropConnector from 'containers/Reservations/ReservationsPropConnector/Loadable';
@@ -55,7 +56,7 @@ const PlatformPages = () => (
       <Route path="/ownerAds" component={MyAdsPage} />
       <Route path="/business/add/success" component={BusinessSubmittedPage} />
       <Route path="/business/add" component={BusinessAddPage} />
-      <Route path="/business/view/:id" component={BusinessViewPropConnector} />
+      <Route path="/business/view/:id" component={BusinessViewPage} />
       <Route path="/business/:id" component={BusinessEditPage} />
 
       <Route path="/review/add/:id" component={ReviewAddPage} />

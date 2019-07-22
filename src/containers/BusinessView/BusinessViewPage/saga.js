@@ -73,7 +73,7 @@ export function* makeGetBusiness(action) {
   const numPeople = yield select(makeSelectNumPeople());
   const numBeds = yield select(makeSelectNumBed());
 
-  const requestURL = `${BedderConfig.getApiUrl()}/business/${modelId}?from=${encodeURIComponent(from.toISOString())}&to=${encodeURIComponent(to.toISOString())}&numBeds=${numBeds}&numPeople=${numPeople}&XDEBUG_SESSION_START=phpstorm`;
+  const requestURL = `${BedderConfig.getApiUrl()}/business/${modelId}/quotes?from=${encodeURIComponent(from.toISOString())}&to=${encodeURIComponent(to.toISOString())}&numBeds=${numBeds}&numPeople=${numPeople}&XDEBUG_SESSION_START=phpstorm`;
 
   try {
     const res = yield call(request, requestURL, {
