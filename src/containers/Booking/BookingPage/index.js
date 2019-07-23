@@ -25,7 +25,7 @@ import { Button } from '@material-ui/core';
 import injectSaga from 'utils/injectSaga';
 import BedderConfig from 'bedder/bedderConfig';
 
-import SearchBar from 'containers/SearchBar/Loadable';
+import SearchBar from 'components/SearchBar/Loadable';
 import SupportTicket from 'components/SupportTicket/Loadable';
 import AskQuestion from 'components/AskQuestion/Loadable';
 import TitleWithBackButton from 'components/TitleWithBackButton';

@@ -15,7 +15,7 @@ import BedderConfig from 'bedder/bedderConfig';
 import Bedder from 'bedder/bedder';
 
 import injectSaga from 'utils/injectSaga';
-import SearchBar from 'containers/SearchBar/Loadable';
+import SearchBar from 'components/SearchBar/Loadable';
 import SupportTicket from 'components/SupportTicket/Loadable';
 import AskQuestion from 'components/AskQuestion/Loadable';
 

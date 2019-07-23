@@ -46,7 +46,7 @@ import {
   makeSelectBHostUser,
 } from './selectors'; //{ makeSelectBusinessViewPropainerOne,
 import { createStructuredSelector } from 'reselect';
-import { makeSelectFrom, makeSelectNumPeople, makeSelectTo } from 'containers/SearchBar/SearchBarRedux/selectors';
+import { makeSelectFrom, makeSelectNumPeople, makeSelectTo } from 'components/SearchBar/SearchBarRedux/selectors';
 
 const mapStateToProps = createStructuredSelector({
   //businessviewpropainerone: makeSelectBusinessViewPropainerOne(),

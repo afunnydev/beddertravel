@@ -28,7 +28,7 @@ import {
   makeSelectLocation,
   makeSelectNumBed,
   makeSelectNumPeople,
-} from 'containers/SearchBar/SearchBarRedux/selectors';
+} from 'components/SearchBar/SearchBarRedux/selectors';
 
 import {
   makeSelectSubmitResult,
@@ -85,7 +85,7 @@ import BgImage from './desktop_ban.jpg';
 import ErrorNetwork from '../../components/ErrorNetwork';
 import ErrorResult from '../../components/ErrorResult';
 import Pagination from '../../components/Pagination';
-import SearchBar from '../../containers/SearchBar/Loadable';
+import SearchBar from '../../components/SearchBar/Loadable';
 
 
 const styles = theme => ({

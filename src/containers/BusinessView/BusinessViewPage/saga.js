@@ -20,7 +20,7 @@ import {
   makeSelectNumBed,
   makeSelectNumPeople,
   makeSelectTo,
-} from 'containers/SearchBar/SearchBarRedux/selectors';
+} from 'components/SearchBar/SearchBarRedux/selectors';
 import { changeBookErrorAction, changeBookResultAction } from '../BusinessViewProps/BusinessViewPropainerTwo/actions';
 
 export function* makeBooking(action) {
