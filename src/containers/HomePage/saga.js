@@ -26,7 +26,7 @@ import {
   makeSelectFrom,
   makeSelectLon,
   makeSelectLat,
-} from '../SearchBar/SearchBarRedux/selectors';
+} from '../../components/SearchBar/SearchBarRedux/selectors';
 
 export function* makeSearch(action) {
   // console.log('search action', action)

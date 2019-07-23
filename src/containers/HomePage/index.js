@@ -28,7 +28,7 @@ import {
   makeSelectLocation,
   makeSelectNumBed,
   makeSelectNumPeople,
-} from 'components/SearchBar/SearchBarRedux/selectors';
+} from '../../components/SearchBar/SearchBarRedux/selectors';
 
 import {
   makeSelectSubmitResult,
