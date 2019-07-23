@@ -130,7 +130,6 @@ export const theme = createMuiTheme({
 
 class SearchBar extends React.Component {
 
-
   constructor(props) {
     super(props);
     this.state = {
@@ -178,7 +177,6 @@ class SearchBar extends React.Component {
         break;
     }
   }
-
 
   validate() {
     let isValid = true;
@@ -326,7 +324,6 @@ class SearchBar extends React.Component {
     const errorMessage = this.state.locationSelected ? (this.state.isValid ? '' : 'Please, correct the form') : 'Please, select location from dropdown';
 
     return (
-      // <Hidden smDown>
       <React.Fragment>
 
         <SearchBarRedux />
@@ -335,22 +332,22 @@ class SearchBar extends React.Component {
           <Paper className={classes.searchPaper} elevation={0}>
             <Grid container>
 
+              {/* 
+                Search Form
+              */}
               {this.props.displayButtonOnly || (
                 <React.Fragment>
 
                   {/* 
-                                    Location Selector
-                                */}
+                    Location Selector
+                  */}
                   {this.props.hideLocation || (
                     <Grid item xs={12} md={3}>
                       <div className={classes.gridColumn}>
                         <Paper className={classes.searchPaperItem}>
                           <MUIPlacesAutocomplete
-                            // renderTarget={RenderMUIInput}
-                            // error={this.state.locationError}
                             textFieldProps={{
                               fullWidth: true,
-
                               value: this.props.locationText,
                               id: 'location',
                               onChange: this.props.onChangeLocation,
@@ -362,15 +359,11 @@ class SearchBar extends React.Component {
                                     position="start"
                                     className={classes.adornment}
                                   >
-                                    {/* <Search /> */}
-                                    {/* <span className={classes.primaryColor}> */}
                                     <span className="icon-search" />
-                                    {/* </span> */}
                                   </InputAdornment>
                                 ),
                                 endAdornment: (
                                   <InputAdornment
-                                    // component={IconButton}
                                     onClick={this.getGeolocationF}
                                     position="end"
                                     className={classes.adornmentEnd}
@@ -390,14 +383,14 @@ class SearchBar extends React.Component {
 
 
                   {/* 
-                                    Date Picker
-                                */}
+                    Date Picker
+                  */}
                   <Grid item xs={12} md={4}>
                     <Grid container>
 
                       {/* 
-                                            From
-                                        */}
+                        From
+                      */}
                       <Grid item xs={6}>
                         <div className={classes.gridColumn}>
                           <Paper className={classes.searchPaperItem}>
@@ -432,8 +425,8 @@ class SearchBar extends React.Component {
                       </Grid>
 
                       {/* 
-                                            To
-                                        */}
+                        To
+                      */}
                       <Grid item xs={6}>
                         <div className={classes.gridColumn}>
                           <Paper className={classes.searchPaperItem}>
@@ -470,15 +463,15 @@ class SearchBar extends React.Component {
                   </Grid>
 
                   {/* 
-                                    Guest & Bed Selectors
-                                */}
+                    Guest & Bed Selectors
+                  */}
                   <Grid item xs={12} md={3}>
 
                     <Grid container>
 
                       {/* 
-                                            Guest Selector
-                                        */}
+                        Guest Selector
+                      */}
                       <Grid item xs={6}>
                         <div className={classes.gridColumn}>
                           <Paper className={classes.searchPaperItem}>
@@ -514,8 +507,8 @@ class SearchBar extends React.Component {
                       </Grid>
 
                       {/* 
-                                            Bed Selector
-                                        */}
+                        Bed Selector
+                      */}
                       <Grid item xs={6}>
                         <div className={classes.gridColumn}>
                           <Paper className={classes.searchPaperItem}>
@@ -532,17 +525,11 @@ class SearchBar extends React.Component {
                                     position="start"
                                     className={classes.adornment}
                                   >
-                                    {/* <LocalHotelIcon /> */}
                                     <span className={classes.primaryColor}>
                                       <span className="icon-bed" />
                                     </span>
                                   </InputAdornment>
                                 ),
-                              }}
-                              SelectProps={{
-                                MenuProps: {
-                                  // className: classes.menu,
-                                },
                               }}
                             >
                               {BED_ARRAY.map(option => (
@@ -558,6 +545,9 @@ class SearchBar extends React.Component {
 
                   </Grid>
 
+                  {/* 
+                    Find Button (Only displaying when `displayFormOnly` is false)
+                  */}
                   {this.props.displayFormOnly || (
                     <Grid item xs={12} md={2}>
                       <div className={classes.gridColumn} align="right">
@@ -578,6 +568,9 @@ class SearchBar extends React.Component {
                 </React.Fragment>
               )}
 
+              {/* 
+                Find Button (Only displaying when `displayButtonOnly` is true)
+              */}
               {this.props.displayButtonOnly && (
                 <Grid item xs={12} md={2}>
                   <div className={classes.gridColumn} align="right">
@@ -595,14 +588,13 @@ class SearchBar extends React.Component {
                 </Grid>
               )}
 
-
             </Grid>
           </Paper>
         </Paper>
 
         {/* 
-                    Error Message
-                */}
+          Error Message
+        */}
         <Typography color="error" style={this.props.isHome ? { height: '1em' } : {}}>{errorMessage}</Typography>
 
 
