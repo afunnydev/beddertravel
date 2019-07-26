@@ -1,7 +1,7 @@
 class BedderConfig {
   constructor() {
-    // this.apiUrl = 'https://api.beddertravel.com/app.php/api/v1';
-    this.apiUrl = 'http://localhost:8000/app.php/api/v1';
+    this.apiUrl = 'https://api.beddertravel.com/app.php/api/v1';
+    // this.apiUrl = 'http://localhost:8000/app.php/api/v1';
   }
 
   getApiUrl() {
