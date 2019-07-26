@@ -17,7 +17,7 @@ const styles = {
     marginBottom: 40,
     position: 'relative',
     '& .alice-carousel__wrapper': {
-      boxShadow: '0px 3px 3px rgba(0,0,0,0.24)',
+      boxShadow: '0px 3px 3px rgba(0,0,0,0.35)',
     },
     '& .alice-carousel__dots': {
       margin: '-40px 0 0',
@@ -38,8 +38,9 @@ const styles = {
   },
   roundedCornerSlider: {
     '& .alice-carousel__wrapper': {
-      borderRadius: '10px',
-    },
+      borderRadius: '6px',
+      overflowX: 'hidden'
+    }
   },
   mobileButton: {
     minWidth: '50px',
@@ -53,12 +54,12 @@ const styles = {
   },
 };
 
-const CoverPhotoSlider = ({ photos, classes, openSupport }) => {
+const CoverPhotoSlider = ({ photos, classes, openSupport, roundedCorners }) => {
   const handleOnDragStart = e => e.preventDefault();
   const matches = useMediaQuery('(max-width: 960px)');
   return (
     // This div is only there to apply the class and custom styling. If you prefer another way, please do it.
-    <div className={`${classes.dotsOn} ${matches ? classes.roundedCornerSlider : ''}`}>
+    <div className={`${classes.dotsOn} ${roundedCorners && !matches ? classes.roundedCornerSlider : ''}`}>
       <AliceCarousel
         buttonsDisabled 
         mouseDragEnabled
@@ -80,10 +81,15 @@ const CoverPhotoSlider = ({ photos, classes, openSupport }) => {
   );
 };
 
+CoverPhotoSlider.defaultProps = {
+  roundedCorners: false,
+};
+
 CoverPhotoSlider.propTypes = {
   classes: PropTypes.object.isRequired,
   photos: PropTypes.array.isRequired,
   openSupport: PropTypes.func.isRequired,
+  roundedCorners: PropTypes.bool,
 };
 
 export default withStyles(styles)(CoverPhotoSlider);

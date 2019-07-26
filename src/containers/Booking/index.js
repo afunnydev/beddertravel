@@ -1,48 +1,55 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
-// import moment from 'moment';
-// import { connect } from 'react-redux';
-// import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-// import { compose } from 'redux';
-// import styled from 'styled-components';
-// import { EmailShareButton } from 'react-share';
-// 
-// import Paper from '@material-ui/core/Paper';
-// import Grid from '@material-ui/core/Grid';
-// import Hidden from '@material-ui/core/Hidden';
-// import Divider from '@material-ui/core/Divider';
-// import withMobileDialog from '@material-ui/core/withMobileDialog';
-// import { withStyles } from '@material-ui/core/styles';
-// import Typography from '@material-ui/core/Typography';
-// 
-// import Place from '@material-ui/icons/PlaceOutlined';
-// import Security from '@material-ui/icons/Security';
-// import ErrorOutline from '@material-ui/icons/ErrorOutline';
-// import ShareOutlined from '@material-ui/icons/ShareOutlined';
-// import { Button } from '@material-ui/core';
-// 
-// import injectSaga from 'utils/injectSaga';
-// import BedderConfig from 'bedder/bedderConfig';
-// 
-// import SearchBar from 'containers/SearchBar/Loadable';
-// import SupportTicket from 'components/SupportTicket';
-// import AskQuestion from 'components/AskQuestion/Loadable';
-// import TitleWithBackButton from 'components/TitleWithBackButton';
-// 
-// import saga from './saga';
+
+import Grid from '@material-ui/core/Grid';
+import Hidden from '@material-ui/core/Hidden';
+
+import ReviewButton from './ReviewButton';
+import ShareButton from './ShareButton';
+
+import PageHeader from 'components/PageHeader';
+import CoverPhotoSlider from 'components/CoverPhotoSlider';
+import SupportTicket from 'components/SupportTicket';
+import BusinessGeneralInfo from 'components/BusinessGeneralInfo';
+import PaperWithText from 'components/PaperWithText';
+import BusinessBadges from 'components/BusinessBadges';
+
+import SearchBar from 'containers/SearchBar/Loadable';
 
 const BOOKING_QUERY = gql`
   query BOOKING_QUERY($bookingId: Int!) {
     booking(bookingId: $bookingId) {
       id
+      from
+      to
+      amount
+      business {
+        id
+        name
+        reviewsNum
+        reviewsAvg
+        howToFind
+        address {
+          address
+        }
+        coverPhotos {
+          id
+          uuid
+          url
+        }
+      }
     }
   }
 `;
 
-const Booking = (props) => {
+const Booking = () => {
+  const [supportTicketOpen, setSupportTicketOpen] = useState(false);
+  const openSupport = () => setSupportTicketOpen(true);
+  const closeSupport = () => setSupportTicketOpen(false);
+
   return (
     <>
       <Helmet>
@@ -55,9 +62,62 @@ const Booking = (props) => {
         }}
       >
         {({ data, error, loading }) => {
+          if (error) return <p>Error</p>;
+          if (loading) return <p>Loading...</p>;
+          if (!data || !data.booking) return <p>No Booking</p>;
           console.log(data);
+          const { booking } = data;
+          const fromDate = new Date(booking.from);
+          const toDate = new Date(booking.to);
+          const totalCost = booking.amount / 100;
+          const deposit = (totalCost - 1) * 0.15 + 1;
+          const payable = totalCost - deposit;
           return (
-            <div>Coming Soon</div>
+            <>
+              <SupportTicket open={supportTicketOpen} onClose={closeSupport} />
+              <Hidden smDown>
+                <SearchBar />
+              </Hidden>
+              <Grid container justify="center">
+                <Grid item xs={12} md={10} lg={8}>
+                  <PageHeader title="Reservation" />
+                  <CoverPhotoSlider
+                    openSupport={openSupport}
+                    photos={booking.business ? booking.business.coverPhotos : []}
+                    roundedCorners={true}
+                  />
+                  <BusinessGeneralInfo
+                    {...booking.business}
+                    openSupport={openSupport}
+                  />
+                  <Grid container style={{ marginTop: 20 }} spacing={2}>
+                    <Grid item xs={12} sm={8}>
+                      {toDate < Date.now() && <ReviewButton bookingId={booking.id} />}
+                      
+                      <PaperWithText
+                        texts={[
+                          {title: 'How to find this accomodation', text: booking.business.howToFind},
+                          {title: 'Dates', text: `${fromDate.toDateString()} to ${toDate.toDateString()}`},
+                          {title: 'Cost details', text: `Total cost: ${totalCost} USD`},
+                          {text: `Deposit: ${deposit.toFixed(2)} USD`},
+                          {text: `Payable at the accomodation: ${payable.toFixed(2)} USD`}
+                        ]}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                      <BusinessBadges openSupport={openSupport} small />
+                      <ShareButton
+                        name={booking.business.name}
+                        location={booking.business.address.address}
+                        payable={3}
+                        to={toDate.toDateString()}
+                        from={fromDate.toDateString()}
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </>
           );
         }}
       </Query>
@@ -70,351 +130,3 @@ Booking.propTypes = {
 };
 
 export default Booking;
-
-// 
-// const HeaderImage = styled.div`
-//   width: 100%;
-//   min-height: 350px;
-//   background-image: url(${props => props.img});
-//   background-size: cover;
-//   background-position: center;
-//   margin-bottom: 15px;
-//   border-radius: 4px;
-// `;
-// 
-// const StyledPaper = styled(Paper)`
-//   padding: 10px;
-// `;
-// 
-// const StyledBlockPaper = styled(StyledPaper)`
-//   height: 135px;
-//   text-align: center;
-// `;
-// 
-// const styles = theme => ({
-//   paperBg: {
-//     backgroundColor: theme.palette.primary.main,
-//     color: theme.palette.primary.contrastText,
-//     fontSize: '14pt',
-//     fontWeight: 'bold',
-//     padding: '5px 0px',
-//   },
-// });
-// /* eslint-disable react/prefer-stateless-function */
-// export class BookingPage extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       supportOpen: false,
-//       reportOpen: false,
-//     };
-// 
-//     this.openSupport = this.openSupport.bind(this);
-//     this.closeSupport = this.closeSupport.bind(this);
-//     this.openReport = this.openReport.bind(this);
-//     this.closeReport = this.closeReport.bind(this);
-//   }
-// 
-//   openSupport() {
-//     this.setState({ supportOpen: true });
-//   }
-// 
-//   closeSupport() {
-//     this.setState({ supportOpen: false });
-//   }
-// 
-//   openReport() {
-//     this.setState({ reportOpen: true });
-//   }
-// 
-//   closeReport() {
-//     this.setState({ reportOpen: false });
-//   }
-// 
-//   changeModelId(id = null) {
-// 
-//     if (
-//       this.props.match
-//       && this.props.match.params
-//       && this.props.match.params.id
-//       && this.props.match.params.id.length > 0
-//     ) {
-//       // this.props.dispatch(changeModelIdAction(this.props.match.params.id));
-//       // let id = Object.assign({}, this.props.match.params.id);
-//       // let id = parseInt(this.props.match.params.id);
-//       // console.log('this.props.modelId about to changeModelIdThunk id=', id)
-//       // this.props.onChangeModelIdThunk(this.props.match.params.id);
-//       // this.props.onChangeModelId(this.props.match.params.id);
-//       // this.props.submitGet(this.props.match.params.id);
-//       this.props.onChangeModelId(this.props.match.params.id);
-//       this.props.submitGet();
-//     }
-// 
-//     if (id > 0) {
-//       // this.props.onChangeModelId(this.props.match.params.id);
-//       // this.props.submitModel(this.props.match.params.id);
-//     }
-//   }
-// 
-//   componentDidUpdate(prevProps) {
-//     // console.log('BookingPage did update', prevProps);
-//     if (prevProps.getResultModel != this.props.getResultModel
-//       && this.props.getResultModel.result
-//       && this.props.getResultModel.result.id
-//       && this.props.getResultModel.result.id > 0) {
-//       this.props.processModel();
-//     } else {
-//       // console.log('TABARNACK');
-//       // console.log(this.props.getResultModel);
-//     }
-//     //
-//     // if(prevProps.bookResult != this.props.bookResult
-//     //   && this.props.bookResult.result
-//     //   && this.props.bookResult.result.id
-//     //   && this.props.bookResult.result.id > 0) {
-//     //   // this.props.processModel();
-//     // }
-//     //
-//     // if(prevProps.bookError != this.props.bookError
-//     //   && this.props.bookError.result
-//     //   && this.props.bookError.result.id
-//     //   && this.props.bookError.result.id > 0) {
-//     //   // this.props.processModel();
-//     // }
-//   }
-// 
-//   componentDidMount() {
-//     this.changeModelId();
-//   }
-// 
-//   render() {
-//     const { classes } = this.props;
-//     const isMobile = this.props.width == 'xs' || this.props.width == 'sm';
-//     const messages = BedderConfig.getReviewMessages();
-//     const amount = this.props.getResultModel && this.props.getResultModel.result ? parseFloat(this.props.getResultModel.result.amount).toFixed(2) : 0.00;
-//     const deposit = (amount * 0.15).toFixed(2);
-//     return (
-//       <div>
-//         <Helmet>
-//           <title>Booking</title>
-//         </Helmet>
-//         <SearchBar />
-// 
-//         <Hidden mdUp>
-//           <Grid container style={{ position: 'relative', height: 65, top: -85 }}>
-//             <Grid item xs={9}></Grid>
-//             <Grid item xs={3} style={{ padding: 5 }}>
-//               <div style={{ maxWidth: 100, height: '100%' }}>
-//                 <Button onClick={this.openSupport} style={{ width: '100%', marginBottom: 0, height: '100%' }} color="primary" variant="contained">
-//                   {/* <Chat/> */}
-//                   <span className="icon-chat"></span>
-//                 </Button>
-//               </div>
-//             </Grid>
-//           </Grid>
-//         </Hidden>
-// 
-//         <AskQuestion
-//           closeFn={this.closeSupport}
-//           isOpen={this.state.supportOpen}
-//           businessId={this.props.modelId}
-//         />
-// 
-//         <SupportTicket
-//           isQuestion={false}
-//           closeFn={this.closeReport}
-//           isOpen={this.state.reportOpen}
-//           businessId={this.props.modelId}
-//         />
-// 
-//         <Grid container justify="center" alignContent="center" style={isMobile ? { marginTop: -85 } : {}}>
-//           <Grid item xs={12} md={10} lg={8} style={{ padding: 20 }}>
-//             <Grid container justify="center" alignContent="center" spacing={3}>
-//               <Hidden mdUp>
-//                 <Grid item xs={12}>
-//                 </Grid>
-//               </Hidden>
-//               
-//               <TitleWithBackButton title="Reservation" />
-// 
-//               <Grid item xs={12}>
-//                 <Paper>
-//                   <HeaderImage img={this.props.bPhotoActive} />
-//                 </Paper>
-//               </Grid>
-// 
-//               <Grid item sm={8} xs={8} align="center">
-//                 <StyledBlockPaper>
-//                   <Typography style={{ margin: '5px 0px' }} noWrap variant="h5">{this.props.bName}</Typography>
-//                   <Divider />
-//                   <Typography noWrap style={{ margin: '10px 0px', fontStyle: 'italic' }} color="primary">
-//                     <Place />
-//                     {' '}
-//                     {this.props.bLocation}
-//                   </Typography>
-//                 </StyledBlockPaper>
-//               </Grid>
-//               <Hidden smDown>
-//                 <Grid item xs={2}>
-//                   <StyledBlockPaper>
-//                     <Grid container style={{ height: '100%' }}>
-//                       <Grid item xs={12}>
-//                         <Typography align="center" style={{ marginBottom: 10, fontSize: '0.8em' }}>You can ask any question to the hotel owner</Typography>
-//                       </Grid>
-//                       <Grid item xs={12}>
-//                         <Button onClick={this.openSupport} style={{ width: '100%', marginBottom: 0, height: '100%' }} color="primary" variant="contained">
-//                           {/* <Chat/> */}
-//                           <span className="icon-chat"></span>
-//                         </Button>
-//                       </Grid>
-//                     </Grid>
-//                   </StyledBlockPaper>
-//                 </Grid>
-//               </Hidden>
-//               <Grid item xs={4} md={2}>
-//                 <StyledBlockPaper>
-//                   <Grid container style={{ height: '100%' }}>
-//                     <Grid item xs={12}>
-//                       <Paper className={classes.paperBg}>{this.props.bReviewScore > 0 ? this.props.bReviewScore : '-'}</Paper>
-//                     </Grid>
-//                     <Grid item xs={12}>
-//                       <Typography style={{ marginTop: 10, fontSize: '0.8em' }}>
-//                         Based on {this.props.bReviewsCount} review{this.props.bReviewsCount > 1 ? 's' : ''}
-//                       </Typography>
-//                     </Grid>
-//                     <Grid item xs={12}>
-//                       <Typography color="primary" variant="h5">{this.props.bReviewScore > 0 ? messages[Math.round(this.props.bReviewScore)] : 'New'}</Typography>
-//                     </Grid>
-//                   </Grid>
-//                 </StyledBlockPaper>
-//               </Grid>
-// 
-//               <Grid item xs={12} sm={8}>
-// 
-//                 {this.props.getResultModel && this.props.getResultModel.result &&
-//                 <React.Fragment>
-//                   {moment(this.props.getResultModel.result.to).diff(Date.now()) < 0 && <Grid item xs={12}>
-//                     <Button
-//                       component={Link}
-//                       to={`/review/add/${this.props.modelId}`}
-//                       variant="contained"
-//                       fullWidth
-//                       color="primary"
-//                       style={{
-//                         fontSize: '12pt', lineHeight: 1.5, marginBottom: 15, height: 43,
-//                       }}
-//                     >
-//                       Leave a review
-//                     </Button>
-//                   </Grid>}
-// 
-//                   <StyledPaper style={{ marginBottom: 25 }}>
-//                     <Typography variant="h6" style={{ marginBottom: 7, marginTop: 7 }}>Directions</Typography>
-//                     <Typography variant="body1" style={{ marginTop: 0 }}>
-//                       {this.props.getResultModel.result.business.howToFind}
-//                     </Typography>
-//                   </StyledPaper>
-// 
-//                   <StyledPaper>
-// 
-//                     <Typography variant="h6" style={{ marginBottom: 7 }}>Dates</Typography>
-//                     <Typography variant="body2">
-//                       {moment(this.props.getResultModel.result.from).format('MMMM Do YYYY')} to {moment(this.props.getResultModel.result.to).format('MMMM Do YYYY')}
-//                     </Typography>
-//                     {this.props.getResultModel.result.payload && 
-//                       <React.Fragment>
-//                         <Typography variant="h6" style={{ marginBottom: 7, marginTop: 7 }}>Informations</Typography>
-//                         <Typography variant="body2">
-//                           This reservation is for {this.props.getResultModel.result.payload.numPeople} person{this.props.getResultModel.result.payload.numPeople > 1 ? 's' : ''}.
-//                         </Typography>
-//                         <Typography variant="body2">
-//                           You booked {this.props.getResultModel.result.payload.numRooms} room{this.props.getResultModel.result.payload.numRooms > 1 ? 's' : ''}.
-//                         </Typography>
-//                       </React.Fragment>}
-//                     <Typography variant="h6" style={{ marginBottom: 7, marginTop: 7 }}>Costs Details</Typography>
-//                     <Typography variant="body1" style={{ marginTop: 0 }}>
-//                       Total cost: {amount} USD<br />
-//                       Deposit: {deposit} USD<br />
-//                       Payable at {this.props.bName}: {(amount - deposit).toFixed(2)} USD
-//                     </Typography>
-//                   </StyledPaper>
-//                 </React.Fragment>}
-//               </Grid>
-// 
-//               <Grid item xs={12} sm={4}>
-//                 {this.props.bReviewsCount > 5 && <StyledPaper style={{ height: 43 }}>
-//                   <Grid container>
-//                     <Grid item xs={11}>
-//                       <Typography variant="subtitle1" style={{ fontStyle: 'italic', fontSize: '12pt', lineHeight: 1.5 }}>This establishment is safe</Typography>
-//                     </Grid>
-//                     <Grid item xs={1}>
-//                       <Security color="primary" />
-//                     </Grid>
-//                   </Grid>
-//                 </StyledPaper>}
-// 
-//                 <StyledPaper style={{ marginTop: 15, height: 43 }}>
-//                   <Grid container>
-//                     <Grid item xs={11}>
-//                       <Typography variant="subtitle1" style={{ fontStyle: 'italic', fontSize: '12pt', lineHeight: 1.5 }}>Report this establishment</Typography>
-//                     </Grid>
-//                     <Grid item xs={1}>
-//                       <ErrorOutline color="primary" />
-//                     </Grid>
-//                   </Grid>
-//                 </StyledPaper>
-// 
-//                 <StyledPaper style={{ marginTop: 15, height: 43 }}>
-//                   <Grid container>
-//                     <Grid item xs={11}>
-//                       <Typography variant="subtitle1" style={{ fontStyle: 'italic', fontSize: '12pt', lineHeight: 1.5 }}>
-//                         Share your reservation
-//                       </Typography>
-//                     </Grid>
-//                     <Grid item xs={1}>
-//                       <EmailShareButton
-//                         subject={`My reservation at ${this.props.bName} on Bedder Travel.`}
-//                         body={
-//                           `Accomodation: ${this.props.bName}, ${this.props.bLocation}
-//                           Dates: ${this.props.getResultModel && this.props.getResultModel.result && moment(this.props.getResultModel.result.from).format('MMMM Do YYYY')} to ${this.props.getResultModel && this.props.getResultModel.result && moment(this.props.getResultModel.result.to).format('MMMM Do YYYY')}
-//                           Pay at accomodation: ${(amount - deposit).toFixed(2)} USD`
-//                         }
-//                       >
-//                         <ShareOutlined color="primary" />
-//                       </EmailShareButton>
-//                     </Grid>
-//                   </Grid>
-//                 </StyledPaper>
-//               </Grid>
-//             </Grid>
-//           </Grid>
-//         </Grid>
-//       </div>
-//     );
-//   }
-// }
-// 
-// BookingPage.propTypes = {
-//   dispatch: PropTypes.func.isRequired,
-// };
-// 
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     dispatch,
-//   };
-// }
-// 
-// const withConnect = connect(
-//   null,
-//   mapDispatchToProps,
-// );
-// const withSaga = injectSaga({ key: 'businessViewPage', saga });
-// 
-// export default compose(
-//   withSaga,
-//   withConnect,
-//   withStyles(styles),
-//   withMobileDialog(),
-// )(BookingPage);
-// 
-// export { withConnect };

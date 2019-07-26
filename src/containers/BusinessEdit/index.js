@@ -5,7 +5,8 @@ import gql from 'graphql-tag';
 
 import Grid from '@material-ui/core/Grid';
 
-import BusinessEditPageHeader from './BusinessEditPageHeader.js';
+import PageHeader from 'components/PageHeader';
+
 import BusinessEditGeneralInformation from './BusinessEditGeneralInformation.js';
 import BusinessEditBedrooms from './BusinessEditBedrooms.js';
 import BusinessEditGeneralInformationMore from './BusinessEditGeneralInformationMore.js';
@@ -67,7 +68,7 @@ const BusinessEditPage = ({ match }) => (
       <title>Edit Accomodation</title>
     </Helmet>
     <Grid container style={{ padding: '0px 15px' }}>
-      <BusinessEditPageHeader />
+      <PageHeader spaced title="Edit business" />
       <Query
         query={BUSINESS_QUERY}
         variables={{

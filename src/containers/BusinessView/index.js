@@ -7,14 +7,14 @@ import { withRouter } from 'react-router-dom';
 
 import Grid from '@material-ui/core/Grid';
 
-// import SearchBar from 'containers/SearchBar/Loadable';
-
-import CoverPhotoSlider from './CoverPhotoSlider';
-import GeneralInfo from './GeneralInfo';
-import GeneralInfoMore from './GeneralInfoMore';
 import Rooms from './Rooms';
 
+import SearchBar from 'containers/SearchBar/Loadable';
+import BusinessGeneralInfo from 'components/BusinessGeneralInfo';
+import CoverPhotoSlider from 'components/CoverPhotoSlider';
 import SupportTicket from 'components/SupportTicket';
+import BusinessBadges from 'components/BusinessBadges';
+import PaperWithText from 'components/PaperWithText';
 
 const BUSINESS_VIEW_QUERY = gql`
   query BUSINESS_VIEW_QUERY($businessId: Int!) {
@@ -69,22 +69,35 @@ const BusinessView = ({ match }) => {
             if (error) return <p>Error</p>;
             if (loading) return <p>Loading...</p>;
             if (!data || !data.business) return <p>No Business</p>;
+            const { id, coverPhotos, activities, opinionStrong, opinionWeak, howToFind } = data.business;
             return <>
-              {/* <div><SearchBar /></div> */}
+              <div><SearchBar /></div>
               <SupportTicket open={supportTicketOpen} onClose={closeSupport} />
               <CoverPhotoSlider 
-                photos={data.business.coverPhotos} 
+                photos={coverPhotos} 
                 openSupport={openSupport} 
+                roundedCorners={true}
               />
-              <GeneralInfo 
-                {...data.business} 
-                openSupport={openSupport}
-              />
-              <Rooms businessId={data.business.id} />
-              <GeneralInfoMore 
-                {...data.business} 
-                openSupport={openSupport}
-              />
+              <Grid container justify="center">
+                <Grid item xs={12} md={10} style={{ padding: 20 }}>
+                  <BusinessGeneralInfo 
+                    {...data.business} 
+                    openSupport={openSupport}
+                    showReviews={true}
+                  />
+                  <Rooms businessId={id} />
+                  <PaperWithText 
+                    texts={[
+                      {title: 'Description of the accommodation', text: activities },
+                      {title: 'Highlights of the accommodation', text: opinionStrong},
+                      {title: 'Weaknesses of the accommodation', text: opinionWeak},
+                      {title: 'Directions to the accommodation', text: howToFind},
+                    ]}
+                    spaced={true}
+                  />
+                  <BusinessBadges openSupport={openSupport} />
+                </Grid>
+              </Grid>
             </>;
           }}
         </Query>

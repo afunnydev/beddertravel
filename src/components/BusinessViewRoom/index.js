@@ -127,6 +127,7 @@ const BusinessViewRoom = ({ classes, id, name, photos, available, quote, bedsSim
                     });
                     setDialogOpen(true);
                   }}
+                  smallScreen={matches}
                 >
                   {numRoomsToBook <= 0
                     ? 'Add a room'

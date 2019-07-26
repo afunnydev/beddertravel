@@ -2,6 +2,7 @@ const businessViewRoomStyles = () => ({
   card: {
     display: 'flex',
     margin: '15px 0px',
+    boxShadow: '1px 3px 3px rgba(0,0,0,0.4)'
   },
   cardMobile: {
     flexDirection: 'column',
