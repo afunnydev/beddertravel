@@ -15,7 +15,6 @@ import Footer from './Footer';
 import BottomMenuBar from './BottomMenuBar';
 
 const MainContainer = styled.div`
-  padding-bottom: 56px;
   min-height: calc(100vh - 300px);
   margin-top: ${props => props.width === 'xs' ? '56px' : '64px'};
   @media (max-width:  863px) {

@@ -11,7 +11,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { Button } from '@material-ui/core';
 
-import SearchBar from 'containers/SearchBar/Loadable';
+import SearchBar from 'components/SearchBar/Loadable';
 import BookingItem from 'components/BookingItem';
 import BedderLoadingIndicator from 'components/BedderLoadingIndicator';
 import PageTitle from 'components/styles/PageTitle';

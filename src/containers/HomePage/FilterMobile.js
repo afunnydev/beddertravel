@@ -17,13 +17,11 @@ import SortBy from './SortBy';
 
 const styles = theme => ({
   container: {
-    // marginLeft: 15,
-    padding: '6px 15px',
+    padding: '0 35px',
     backgroundColor: 'transparent',
   },
   iconLocation: {
     fontSize: 16,
-    marginTop: -2,
   },
   mapButton: {
     margin: 'auto',

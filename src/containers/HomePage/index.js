@@ -28,7 +28,7 @@ import {
   makeSelectLocation,
   makeSelectNumBed,
   makeSelectNumPeople,
-} from 'containers/SearchBar/SearchBarRedux/selectors';
+} from '../../components/SearchBar/SearchBarRedux/selectors';
 
 import {
   makeSelectSubmitResult,
@@ -85,13 +85,12 @@ import BgImage from './desktop_ban.jpg';
 import ErrorNetwork from '../../components/ErrorNetwork';
 import ErrorResult from '../../components/ErrorResult';
 import Pagination from '../../components/Pagination';
-import SearchBar from '../../containers/SearchBar/Loadable';
-import SearchBarMobile from '../../containers/SearchBarMobile/Loadable';
-import SearchBarMobileCompact from '../../containers/SearchBarMobileCompact/Loadable';
+import SearchBar from '../../components/SearchBar/Loadable';
+
 
 const styles = theme => ({
   headerImageContainer: {
-    height: 570,
+    height: 'calc(100vh - 300px)',
     backgroundImage: `url(${BgImage})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
@@ -340,8 +339,14 @@ export class HomePage extends React.Component {
             {this.state.isFiltersCollapsed || (
               <Hidden mdUp>
                 <React.Fragment>
-                  <SearchBarMobileCompact submitting={this.props.submitting} />
 
+                  <SearchBar submitting={this.props.submitting} displayFormOnly/>
+
+
+                  {/* 
+                    There is a bug with the slider in the filters,
+                    at load time, the slider has a -2% left margin
+                  */}
                   <FilterMobile
                     mapViewToggle={this.mapViewToggle}
                     isMapView={this.props.isMapView}
@@ -366,21 +371,13 @@ export class HomePage extends React.Component {
                     onChangeSortBy={this.props.onChangeSortBy}
                   />
 
-                  <Grid
-                    container
-                    item
-                    xs={12}
-                    style={{
-                      margin: '0px 15px',
-                      marginTop: 15,
-                    }}
-                    onClick={this.showResults}
-                  >
-                    <SearchBarMobileCompact
-                      submitting={this.props.submitting}
-                      onlyButton
-                    />
+                  <Grid container>
+                    <Grid item xs={12} onClick={this.showResults}>
+                      <SearchBar submitting={this.props.submitting} displayButtonOnly/>
+                    </Grid>
                   </Grid>
+
+
                 </React.Fragment>
               </Hidden>
             )}
@@ -456,7 +453,7 @@ export class HomePage extends React.Component {
                         We have exclusivity among the thousands of hotels
                       </Typography> */}
 
-                      <SearchBarMobile
+                      <SearchBar
                         submitting={this.props.submitting}
                         searchCallback={this.searchCallback}
                       />
