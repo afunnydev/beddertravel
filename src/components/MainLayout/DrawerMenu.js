@@ -1,12 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-
-import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import Hidden from '@material-ui/core/Hidden';
 
@@ -23,6 +19,7 @@ import WithUserContext, {
 } from 'containers/AppContext/context';
 
 import DrawerDialogFeedback from './DrawerDialogFeedback';
+import DrawerMenuItem from './DrawerMenuItem';
 
 import Footer from './Footer';
 
@@ -45,41 +42,6 @@ const DrawerMenuWrapper = props => (
   </List>
 );
 
-const DrawerMenuSeparator = () => <Divider />;
-
-const DrawerMenuItemTo = props => (
-  <ListItem
-    button
-    component={Link}
-    to={props.to ? props.to : false}
-    style={styles.button}
-  >
-    <ListItemText
-      primary={props.children}
-      primaryTypographyProps={{ variant: 'body1' }}
-      style={props.active ? styles.activeText : null}
-    />
-  </ListItem>
-);
-
-const DrawerMenuItem = props => (
-  <ListItem
-    button
-    component={props.to ? Link : null}
-    to={props.to ? props.to : null}
-    style={styles.button}
-    onClick={props.onClick}
-  >
-    <ListItemText
-      primary={props.children}
-      primaryTypographyProps={{
-        variant: 'body1',
-        style: props.active ? styles.activeText : null,
-      }}
-    />
-  </ListItem>
-);
-
 const DrawerMenu = ({ user, role, dispatch }) => {
   const dispatchRoleExplorer = () => { dispatch(changeRoleAction(ROLE_EXPLORER)); };
   const dispatchRoleTraveler = () => { dispatch(changeRoleAction(ROLE_TRAVELER)); };
@@ -91,18 +53,18 @@ const DrawerMenu = ({ user, role, dispatch }) => {
         <React.Fragment>
           {role !== ROLE_TRAVELER ? (
             <React.Fragment>
-              <DrawerMenuItemTo to="/businesses">My Businesses</DrawerMenuItemTo>
-              <DrawerMenuItemTo to="/earnings">My Earnings</DrawerMenuItemTo>
+              <DrawerMenuItem to="/businesses">My Businesses</DrawerMenuItem>
+              <DrawerMenuItem to="/earnings">My Earnings</DrawerMenuItem>
               <DrawerMenuItem to="/home" onClick={dispatchRoleTraveler}>
                 Traveler&#39;s account
               </DrawerMenuItem>
             </React.Fragment>
           ) : (
             <React.Fragment>
-              <DrawerMenuItemTo to="/home">
+              <DrawerMenuItem to="/home">
                 Search Accomodations
-              </DrawerMenuItemTo>
-              <DrawerMenuItemTo to="/bookings">My Bookings</DrawerMenuItemTo>
+              </DrawerMenuItem>
+              <DrawerMenuItem to="/bookings">My Bookings</DrawerMenuItem>
               <DrawerMenuItem to="/businesses" onClick={dispatchRoleExplorer}>
                 Explorer&#39;s account
               </DrawerMenuItem>
@@ -111,7 +73,7 @@ const DrawerMenu = ({ user, role, dispatch }) => {
 
           {/* <DrawerMenuItem to="/reservations" active={role == ROLE_OWNER ? true : false} onClick={dispatchRoleOwner}>Hotel / guided owner</DrawerMenuItem> */}
 
-          <DrawerMenuSeparator />
+          <Divider />
         </React.Fragment>
       )}
 
@@ -125,17 +87,17 @@ const DrawerMenu = ({ user, role, dispatch }) => {
       {/*   </ListItemSecondaryAction> */}
       {/* </ListItem> */}
 
-      <DrawerMenuSeparator />
+      <Divider />
       {!user &&
-        <DrawerMenuItemTo to="/home">Search Accomodations</DrawerMenuItemTo>}
-      <DrawerMenuItemTo to="/about">About Bedder</DrawerMenuItemTo>
-      <DrawerDialogFeedback btn={DrawerMenuItem} btntext="Feedback" />
+        <DrawerMenuItem to="/home">Search Accomodations</DrawerMenuItem>}
+      <DrawerMenuItem to="/about">About Bedder</DrawerMenuItem>
+      <DrawerDialogFeedback component={DrawerMenuItem} text="Feedback" />
       {user && (
         <React.Fragment>
-          <DrawerMenuItemTo to="/profile">My Settings</DrawerMenuItemTo>
+          <DrawerMenuItem to="/profile">My Settings</DrawerMenuItem>
 
-          <DrawerMenuSeparator />
-          <DrawerMenuItemTo to="/auth/signOut">Log out</DrawerMenuItemTo>
+          <Divider />
+          <DrawerMenuItem to="/auth/signOut">Log out</DrawerMenuItem>
         </React.Fragment>
       )}
 

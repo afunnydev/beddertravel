@@ -1,6 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import styled from 'styled-components';
+import { Query, withApollo } from 'react-apollo';
+import gql from 'graphql-tag';
 
 import withWidth from '@material-ui/core/withWidth';
 import Icon from '@material-ui/core/Icon';
@@ -22,58 +25,60 @@ const MainContainer = styled.div`
   }
 `;
 
-class MainLayout extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      navDrawerOpen: false,
-    };
+const UTILS_DATA_QUERY = gql`
+  {
+    menuOpen @client
   }
+`;
 
-  handleChangeRequestNavDrawer = () => {
-    this.setState({
-      navDrawerOpen: !this.state.navDrawerOpen,
-    });
-  }
+const MainLayout = ({ role, width, client, children}) => {
+  const toggleMenu = (state) => client.writeData({ data: { menuOpen: state } });
 
-  render() {
-    const { navDrawerOpen } = this.state;
+  return (
+    <Query query={UTILS_DATA_QUERY}>
+      {({ data: { menuOpen } }) => (
+        <>
+          <Header
+            userRole={role}
+            toggleMenu={() => toggleMenu(!menuOpen)}
+          />
 
-    return (
-      <React.Fragment>
-        <Header
-          userRole={this.props.role}
-          handleChangeRequestNavDrawer={this.handleChangeRequestNavDrawer}
-        />
+          <LeftDrawer
+            closeFn={toggleMenu}
+            navDrawerOpen={menuOpen}
+            userRole={role}
+            menus={[
+              {
+                text: 'DashBoard',
+                icon: <Icon className="fa fa-list" />,
+                link: '/dashboard',
+              },
+            ]}
+            username="User Admin"
+          />
 
-        <LeftDrawer
-          closeFn={this.handleChangeRequestNavDrawer}
-          navDrawerOpen={navDrawerOpen}
-          userRole={this.props.role}
-          menus={[
-            {
-              text: 'DashBoard',
-              icon: <Icon className="fa fa-list" />,
-              link: '/dashboard',
-            },
-          ]}
-          username="User Admin"
-        />
+          <MainContainer width={width}>{children}</MainContainer>
 
-        <MainContainer width={this.props.width}>{this.props.children}</MainContainer>
+          <BottomMenuBar userRole={role} />
 
-        <BottomMenuBar userRole={this.props.role} />
+          <Hidden smDown>
+            <Footer />
+          </Hidden>
+        </>
+      )}
+    </Query>
+  );
+};
 
-        <Hidden smDown>
-          <Footer />
-        </Hidden>
-      </React.Fragment>
-    );
-  }
-}
+MainLayout.propTypes = {
+  role: PropTypes.string.isRequired,
+  width: PropTypes.string.isRequired,
+  client: PropTypes.object.isRequired,
+};
 
 export default compose(
   WithRoleContext,
   withMobileDialog(),
-  withWidth()
+  withWidth(),
+  withApollo,
 )(MainLayout);

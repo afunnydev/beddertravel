@@ -53,6 +53,8 @@ const SubmitButtons = ({ id, client, status, enqueueSnackbar, history }) => {
           // Currently, this is not validating if the room as at least 1 bed.
           if (!fieldValidatorCore.checkGroup(`room-${business.units[i].id}`).isValid) return enqueueSnackbar(`Please make sure you filled all the required fields for room "${business.units[i].name}" before submitting your business to go live.`, { variant: 'error' });
         }
+      } else {
+        return enqueueSnackbar("You need at least one room before submitting your business to go live.", { variant: 'error' });
       }
     }
 

@@ -170,18 +170,14 @@ class SearchBar extends React.Component {
       return false;
     }
 
-    if (this.props.searchCallback) {
-      this.props.searchCallback();
-    }
-
     switch (this.props.location.pathname) {
-      case '/home':
-        this.props.dispatch(submitAction());
-        break;
-      default:
-        this.props.history.push('/home');
-        setTimeout(this.dispatchSubmit, 700);
-        break;
+    case '/home':
+      this.props.dispatch(submitAction());
+      break;
+    default:
+      this.props.history.push('/home');
+      setTimeout(this.dispatchSubmit, 700);
+      break;
     }
   }
 
@@ -598,7 +594,7 @@ class SearchBar extends React.Component {
                           root: classes.findButton,
                         }}>
                         Find!
-                                        </Button>
+                      </Button>
                     </Typography>
                   </div>
                 </Grid>

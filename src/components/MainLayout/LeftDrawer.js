@@ -21,7 +21,7 @@ const LeftDrawer = (props) => {
     <Drawer
       PaperProps={{ style: styles.drawerPaper }}
       BackdropProps={{ style: styles.drawerBackdrop }}
-      onClose={closeFn}
+      onClose={() => closeFn(false)}
       open={navDrawerOpen}
     >
       <DrawerHeader userRole={userRole} />

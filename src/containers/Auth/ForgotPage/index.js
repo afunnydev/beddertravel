@@ -1,9 +1,3 @@
-/**
- *
- * ForgotPage
- *
- */
-
 import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
@@ -13,8 +7,7 @@ import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
-// import Logo from '../Logo';
-import StyledButton from 'components/StyledButton';
+import StyledButton from 'components/styles/StyledButton';
 
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';

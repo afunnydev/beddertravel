@@ -15,7 +15,7 @@ import { withStyles } from '@material-ui/core';
 import EmailIcon from '@material-ui/icons/Email';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import StyledButton from 'components/StyledButton';
+import StyledButton from 'components/styles/StyledButton';
 import MessageError from 'components/MessageError';
 import ErrorResult from 'components/ErrorResult';
 

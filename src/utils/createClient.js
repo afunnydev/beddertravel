@@ -232,6 +232,7 @@ cache.writeData({
     bookingNumBeds: localStorage.getItem('bookingNumBeds') || 1,
     bookingNumPeople: localStorage.getItem('bookingNumPeople') || 2,
     numRoomsToBook: 0,
+    menuOpen: false,
   },
 });
 

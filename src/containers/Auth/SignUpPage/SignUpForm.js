@@ -11,14 +11,18 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import StyledButton from 'components/StyledButton';
+import WhiteLink from 'components/styles/WhiteLink';
+import StyledButton from 'components/styles/StyledButton';
 import MessageError from 'components/MessageError';
 
 import BedderValidator from 'bedder/bedderValidator';
 
 const styles = {
   white: {
-    color: 'white',
+    color: 'white'
+  },
+  title: {
+    marginBottom: 20
   },
   fieldContainer: {
     marginBottom: '10px',
@@ -107,7 +111,7 @@ class SignUpForm extends React.Component {
               return nextStep(res.data.signUp.email);
             }}
           >
-            <Typography variant="subtitle1" className={classes.white} style={{ marginBottom: 20 }}>
+            <Typography variant="h5" classes={{ root: `${classes.white} ${classes.title}`}}>
               Sign up
             </Typography>
             <div className={classes.fieldContainer}>
@@ -274,6 +278,7 @@ class SignUpForm extends React.Component {
             >
               {loading ? (<CircularProgress size={20} classes={{ circle: classes.white }} />) : 'Activate'}
             </StyledButton>
+            <WhiteLink to="/auth/signIn">Already have an account?</WhiteLink>
           </form>
         )}
       </Mutation>

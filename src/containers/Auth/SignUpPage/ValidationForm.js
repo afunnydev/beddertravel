@@ -14,7 +14,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Bedder from 'bedder/bedder';
 
-import StyledButton from 'components/StyledButton';
+import StyledButton from 'components/styles/StyledButton';
 import MessageError from 'components/MessageError';
 
 const styles = {

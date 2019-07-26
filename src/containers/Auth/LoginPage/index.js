@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
 import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { Link } from 'react-router-dom';
 import { Validation } from 'react-validation-framework';
 
 import TextField from '@material-ui/core/TextField';
@@ -19,13 +17,12 @@ import Bedder from 'bedder/bedder';
 
 import injectReducer from 'utils/injectReducer';
 
-import StyledButton from 'components/StyledButton';
+import WhiteLink from 'components/styles/WhiteLink';
+import StyledButton from 'components/styles/StyledButton';
 import MessageError from 'components/MessageError';
 
 import BedderValidator from 'bedder/bedderValidator';
 import BedderConfig from 'bedder/bedderConfig';
-
-import ErrorNetwork from 'components/ErrorNetwork';
 
 import {
   changePassword,
@@ -43,33 +40,17 @@ import {
   makeSelectError,
 } from './selectors';
 
-const styles = () => ({
+const styles = {
   white: {
     color: 'white',
+  },
+  title: {
+    marginBottom: 20
   },
   fieldContainer: {
     marginBottom: '10px',
   },
-});
-
-const WhiteText = styled.div`
-  color: #fff;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  font-weight: 300;
-`;
-
-const WhiteA = styled.div`
-  text-decoration: underline;
-  color: #fff;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  display: block;
-  font-size: 12pt;
-  & > a {
-    color: #fff;
-  }
-`;
+};
 
 /* eslint-disable react/prefer-stateless-function */
 export class LoginPage extends React.Component {
@@ -102,7 +83,9 @@ export class LoginPage extends React.Component {
         <Helmet>
           <title>Login</title>
         </Helmet>
-        <WhiteText>Sign In</WhiteText>
+        <Typography variant="h5" classes={{ root: `${classes.white} ${classes.title}`}}>
+          Sign in
+        </Typography>
         <form>
           <div className={classes.fieldContainer}>
             <Validation
@@ -123,6 +106,7 @@ export class LoginPage extends React.Component {
                   },
                 }}
                 InputLabelProps={{
+                  shrink: true,
                   classes: {
                     root: classes.white,
                   },
@@ -152,6 +136,7 @@ export class LoginPage extends React.Component {
                   },
                 }}
                 InputLabelProps={{
+                  shrink: true,
                   className: classes.white,
                 }}
                 fullWidth
@@ -172,10 +157,9 @@ export class LoginPage extends React.Component {
           >
             {this.props.submitting ? <CircularProgress size={20} classes={{ circle: classes.white }} /> : 'Sign In'}
           </StyledButton>
-
-          <WhiteA>
-            <Link to="/auth/forgot">Forgot your password?</Link>
-          </WhiteA>
+          
+          <WhiteLink to="/auth/forgot">Forgot your password?</WhiteLink>
+          <WhiteLink to="/auth/signUp">Don&#39;t have an account?</WhiteLink>
         </form>
       </React.Fragment>
     );

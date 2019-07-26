@@ -3,13 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
-import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
 import { mapStateToProps, mapDispatchToProps } from './mapProps';
 
 import reducer from './reducer';
-import saga from './saga';
 
 /* eslint-disable react/prefer-stateless-function */
 export class SearchBarRedux extends React.Component {
@@ -30,11 +28,9 @@ const withConnect = connect(
 );
 
 const withReducer = injectReducer({ key: 'searchBar', reducer });
-const withSaga = injectSaga({ key: 'searchBar', saga });
 
 export default compose(
   withReducer,
-  withSaga,
   withConnect,
 )(SearchBarRedux);
 

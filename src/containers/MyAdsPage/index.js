@@ -53,7 +53,7 @@ class MyAdsPage extends React.Component {
             <Grid container alignItems="center" justify="center" style={{padding: '0px 15px'}}>
               <Grid item xs={12} sm={8} md={6} lg={4}>
                 <React.Fragment>
-                  <NbAccomodation>{draftBusinesses.length} draft</NbAccomodation>
+                  <NbAccomodation>{draftBusinesses.length} draft{draftBusinesses.length > 1 ? 's' : ''}</NbAccomodation>
                   {draftBusinesses.map(business => (
                     <BusinessItem key={business.id} business={business} />
                   ))}

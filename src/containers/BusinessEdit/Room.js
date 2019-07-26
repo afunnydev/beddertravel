@@ -64,6 +64,10 @@ const Room = (props) => {
     { id: `BusinessUnit:${props.unitId}`, data: { [event.target.name]: event.target.value } }
   );
 
+  const onChangeCurrency = (newCurrency) => props.client.writeData(
+    { id: `BusinessUnit:${props.unitId}`, data: { currency: newCurrency } }
+  );
+
   const onChangeAmenities = (amenityKey) => {
     // Could be optimized if we weren't using a JSON string to carry the values.
     amenities[amenityKey] = !amenities[amenityKey];
@@ -267,7 +271,10 @@ const Room = (props) => {
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
-                          <CurrencySelector currency={businessUnit.currency} name="currency" onChange={onChange}/>
+                          <CurrencySelector 
+                            currency={businessUnit.currency} 
+                            onChange={onChangeCurrency}
+                          />
                         </InputAdornment>),
                       classes: { root: props.classes.spacedInput },
                     }}

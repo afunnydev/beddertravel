@@ -34,6 +34,11 @@ const overrides = {
       paddingLeft: 2,
     },
   },
+  MuiInputBase: {
+    input: {
+      backgroundColor: 'transparent',
+    }
+  },
   MuiInputLabel: {
     root: {
       fontWeight: 500,

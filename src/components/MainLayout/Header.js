@@ -26,7 +26,7 @@ const StyledWhiteLogoWrapper = styled.div`
 
 const Header = (props) => {
   const {
-    handleChangeRequestNavDrawer,
+    toggleMenu,
     userRole,
     location,
   } = props;
@@ -95,7 +95,7 @@ const Header = (props) => {
             <Grid item xs={3} sm={5} style={{ paddingLeft: 10 }}>
               <IconButton
                 style={style.menuButton}
-                onClick={handleChangeRequestNavDrawer}
+                onClick={toggleMenu}
                 disableRipple
               >
                 <MenuIcon style={{ marginRight: 10 }} />
@@ -126,7 +126,7 @@ const Header = (props) => {
 };
 
 Header.propTypes = {
-  handleChangeRequestNavDrawer: PropTypes.func.isRequired,
+  toggleMenu: PropTypes.func.isRequired,
   userRole: PropTypes.string.isRequired,
   location: PropTypes.object.isRequired,
 };

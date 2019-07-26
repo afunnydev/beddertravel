@@ -59,8 +59,8 @@ const CheckoutButton = ({ user, enqueueSnackbar, history, deposit, businessUnitI
           email={user && user.email}
           token={async stripeRes => await onToken(stripeRes, checkout)}
           image={DefaultImage}
-          name={name}
-          description="Reservation"
+          name="Bedder Travel"
+          description={name}
           // TODO: Add more info to checkout.
           // billingAddress={true}
           // zipCode={true}

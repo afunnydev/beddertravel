@@ -1,47 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
-import DrawerDialogPropainer from './DrawerDialogPropainer';
-import DrawerDialogSaga from './DrawerDialogSaga';
-
+import DrawerMenuItem from './DrawerMenuItem';
 import SupportTicket from 'components/SupportTicket';
 
-class DrawerDialogFeedback extends React.Component {
-  constructor(props) {
-    super(props);
+const DrawerDialogFeedback = ({ text }) => {
+  const [supportTicketOpen, setSupportTicketOpen] = useState(false);
+  const closeSupport = () => setSupportTicketOpen(false);
+  const openSupport = () => setSupportTicketOpen(true);
+  return (
+    <>
+      <DrawerMenuItem onClick={openSupport}>{text}</DrawerMenuItem>
+      <SupportTicket
+        open={supportTicketOpen}
+        onClose={closeSupport}
+      />
+    </>
+  );
+};
 
-    this.state = {
-      open: false,
-    };
+DrawerDialogFeedback.propTypes = {
+  text: PropTypes.string.isRequired,
+};
 
-  }
-
-  handleClickOpen = () => {
-    this.setState({ open: true });
-  };
-
-  handleClose = () => {
-    this.setState({ open: false, settings: Object.assign({}, this.state.actualSettings) });
-  };
-
-  render() {
-    const { fullScreen, classes } = this.props;
-    const MenuItemBtn = this.props.btn;
-    return (
-      <DrawerDialogPropainer>
-        <DrawerDialogSaga />
-        <MenuItemBtn onClick={this.handleClickOpen}>{this.props.btntext}</MenuItemBtn>
-        <SupportTicket
-          isQuestion={false}
-          closeFn={this.handleClose}
-          isOpen={this.state.open}
-          backdropClick={true}
-          ticketType={2}
-          // businessId={this.props.modelId}
-        />
-      </DrawerDialogPropainer>
-    );
-  }
-}
-
-// export default withMobileDialog()(DrawerDialog);
 export default DrawerDialogFeedback;

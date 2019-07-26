@@ -32,7 +32,7 @@ import {
   CHANGE_SORT_BY,
 } from './constants';
 
-const defaultFilterPrice = [5, 299];
+const defaultFilterPrice = [0, 299];
 const defaultFilterTypes = BedderConfig.getFilterPropertyTypes();
 // console.log('defaultFilterPrice',defaultFilterPrice);
 export const initialState = fromJS({
