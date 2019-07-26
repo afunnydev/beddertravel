@@ -42,13 +42,13 @@ const styles = theme => ({
     padding: '20px',
   },
   searchPaperItem: {
-    padding: '12px 20px',
+    padding: '12px',
   },
   searchPaperWrapper: {
     padding: '20px',
   },
   adornment: {
-    marginRight: 12,
+    marginRight: 8,
   },
   adornmentEnd: {
     cursor: 'pointer',
@@ -74,7 +74,16 @@ const styles = theme => ({
   },
 
   /*
-   * From Mobile
+   * md to lg
+   */
+  '@media (max-width: 1259px)': {
+    caretAdjustment: {
+      paddingRight: 16,
+    },
+  },
+
+  /*
+   * xs to md
    */
   '@media (max-width: 959px)': {
     gridColumn: {
@@ -474,6 +483,9 @@ class SearchBar extends React.Component {
                         <div className={classes.gridColumn}>
                           <Paper className={classes.searchPaperItem}>
                             <TextField
+                              SelectProps={{
+                                classes: { select: this.props.classes.caretAdjustment },
+                              }}
                               id="numPeople"
                               value={this.props.numPeople}
                               select
@@ -511,6 +523,9 @@ class SearchBar extends React.Component {
                         <div className={classes.gridColumn}>
                           <Paper className={classes.searchPaperItem}>
                             <TextField
+                              SelectProps={{
+                                classes: { select: this.props.classes.caretAdjustment },
+                              }}
                               id="numBed"
                               value={this.props.numBed}
                               select
@@ -531,7 +546,10 @@ class SearchBar extends React.Component {
                               }}
                             >
                               {BED_ARRAY.map(option => (
-                                <MenuItem key={option} value={option}>
+                                <MenuItem 
+                                  key={option} 
+                                  value={option}
+                                >
                                   {option}
                                 </MenuItem>
                               ))}
