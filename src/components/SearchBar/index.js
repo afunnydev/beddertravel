@@ -47,11 +47,8 @@ const styles = theme => ({
   searchPaperWrapper: {
     padding: '20px',
   },
-  searchPaper: {
-    // height: 45,
-  },
   adornment: {
-    marginRight: 5,
+    marginRight: 12,
   },
   adornmentEnd: {
     cursor: 'pointer',
@@ -79,16 +76,17 @@ const styles = theme => ({
   /*
    * From Mobile
    */
-  '@media (max-width: 960px)': {
+  '@media (max-width: 959px)': {
     gridColumn: {
-      padding: '10px 15px',
+      padding: '10px 8px',
+      textAlign: 'left'
     },
     gridColumnLeft: {
-      padding: '10px 15px',
+      padding: '10px 8px',
       paddingRight: 7.5,
     },
     gridColumnRight: {
-      padding: '10px 15px',
+      padding: '10px 8px',
       paddingLeft: 7.5,
     },
     searchPaperWrapper: {
@@ -98,7 +96,7 @@ const styles = theme => ({
     searchPaper: {
       background: 'transparent',
       boxShadow: 'none',
-    }
+    },
   }
 
 });
@@ -385,7 +383,7 @@ class SearchBar extends React.Component {
                   {/* 
                     Date Picker
                   */}
-                  <Grid item xs={12} md={4}>
+                  <Grid item xs={12} md={5}>
                     <Grid container>
 
                       {/* 
@@ -549,7 +547,7 @@ class SearchBar extends React.Component {
                     Find Button (Only displaying when `displayFormOnly` is false)
                   */}
                   {this.props.displayFormOnly || (
-                    <Grid item xs={12} md={2}>
+                    <Grid item xs={12} md={1}>
                       <div className={classes.gridColumn} align="right">
                         <Typography noWrap>
                           <Button
@@ -572,7 +570,7 @@ class SearchBar extends React.Component {
                 Find Button (Only displaying when `displayButtonOnly` is true)
               */}
               {this.props.displayButtonOnly && (
-                <Grid item xs={12} md={2}>
+                <Grid item xs={12} md={1}>
                   <div className={classes.gridColumn} align="right">
                     <Typography noWrap>
                       <Button
