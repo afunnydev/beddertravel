@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Helmet } from 'react-helmet';
+import { withRouter } from 'react-router-dom';
 
 import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
@@ -16,8 +17,7 @@ import SupportTicket from 'components/SupportTicket';
 import BusinessGeneralInfo from 'components/BusinessGeneralInfo';
 import PaperWithText from 'components/PaperWithText';
 import BusinessBadges from 'components/BusinessBadges';
-
-import SearchBar from 'containers/SearchBar/Loadable';
+import SearchBar from 'components/SearchBar/Loadable';
 
 const BOOKING_QUERY = gql`
   query BOOKING_QUERY($bookingId: Int!) {
@@ -45,7 +45,7 @@ const BOOKING_QUERY = gql`
   }
 `;
 
-const Booking = () => {
+const Booking = ({ match }) => {
   const [supportTicketOpen, setSupportTicketOpen] = useState(false);
   const openSupport = () => setSupportTicketOpen(true);
   const closeSupport = () => setSupportTicketOpen(false);
@@ -58,14 +58,13 @@ const Booking = () => {
       <Query
         query={BOOKING_QUERY}
         variables={{
-          bookingId: 7
+          bookingId: parseInt(match.params.id)
         }}
       >
         {({ data, error, loading }) => {
           if (error) return <p>Error</p>;
           if (loading) return <p>Loading...</p>;
           if (!data || !data.booking) return <p>No Booking</p>;
-          console.log(data);
           const { booking } = data;
           const fromDate = new Date(booking.from);
           const toDate = new Date(booking.to);
@@ -126,7 +125,7 @@ const Booking = () => {
 };
 
 Booking.propTypes = {
-
+  match: PropTypes.object.isRequired,
 };
 
-export default Booking;
+export default withRouter(Booking);

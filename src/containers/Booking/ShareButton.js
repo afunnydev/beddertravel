@@ -13,7 +13,16 @@ const ShareButton = ({ name, location, payable, to, from}) => (
   <StyledPaper spaced>
     <Grid container>
       <Grid item xs={11}>
-        <BadgePaperText variant="subtitle1" smallFont={true}>Share your reservation</BadgePaperText>
+        <EmailShareButton
+          subject={`My reservation at ${name} on Bedder Travel.`}
+          body={
+            `Accomodation: ${name}, ${location}
+            Dates: ${from} to ${to}
+            Pay at accomodation: ${payable.toFixed(2)} USD`
+          }
+        >
+          <BadgePaperText variant="subtitle1" smallFont={true}>Share your reservation</BadgePaperText>
+        </EmailShareButton>
       </Grid>
       <Grid item xs={1}>
         <EmailShareButton

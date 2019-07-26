@@ -6,10 +6,11 @@ import gql from 'graphql-tag';
 import { withRouter } from 'react-router-dom';
 
 import Grid from '@material-ui/core/Grid';
+import Hidden from '@material-ui/core/Hidden';
 
 import Rooms from './Rooms';
 
-import SearchBar from 'containers/SearchBar/Loadable';
+import SearchBar from 'components/SearchBar/Loadable';
 import BusinessGeneralInfo from 'components/BusinessGeneralInfo';
 import CoverPhotoSlider from 'components/CoverPhotoSlider';
 import SupportTicket from 'components/SupportTicket';
@@ -71,7 +72,7 @@ const BusinessView = ({ match }) => {
             if (!data || !data.business) return <p>No Business</p>;
             const { id, coverPhotos, activities, opinionStrong, opinionWeak, howToFind } = data.business;
             return <>
-              <div><SearchBar /></div>
+              <Hidden smDown><div style={{ width: '100%' }}><SearchBar /></div></Hidden>
               <SupportTicket open={supportTicketOpen} onClose={closeSupport} />
               <CoverPhotoSlider 
                 photos={coverPhotos} 
