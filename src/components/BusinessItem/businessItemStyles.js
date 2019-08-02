@@ -10,19 +10,18 @@ const businessItemStyles = () => ({
     paddingTop: '56.25%', // 16:9
   },
   cardContent: {
-    padding: '10px 15px',
+    padding: '20px',
     '&:last-child': {
-      paddingBottom: '10px',
+      paddingBottom: '20px',
     },
   },
   locationText: {
-    fontSize: 12,
+    fontSize: 16,
+    fontStyle: 'italic',
     marginTop: 7,
   },
   iconLocation: {
-    fontSize: 18,
-    marginTop: -1.5,
-    marginLeft: -4,
+    marginRight: 5
   },
   ratingButton: {
     minWidth: 'auto',
@@ -35,17 +34,24 @@ const businessItemStyles = () => ({
     marginTop: 5,
   },
   priceText: {
-    marginTop: 20,
     fontWeight: 'bold',
     '& span': {
       color: '#000',
       fontWeight: 'normal',
-      marginLeft: 5,
+      marginLeft: 4,
     }
+  },
+  totalText: {
+    marginTop: 2,
+    fontSize: 12,
   },
   businessName: {
     fontSize: 24,
     lineHeight: '28px',
+  },
+  chip: {
+    margin: 2,
+    fontSize: 10,
   },
 });
 

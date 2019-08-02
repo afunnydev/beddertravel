@@ -89,12 +89,12 @@ class FilterBy extends React.Component {
         <Grid container>
           <Grid item xs={6}>
             <Typography variant="body1">
-              {this.state.filterPrice[0]} CAD
+              {this.state.filterPrice[0]} USD
             </Typography>
           </Grid>
           <Grid item xs={6} style={{ textAlign: 'right' }}>
             <Typography variant="body1">
-              {this.state.filterPrice[1]} CAD+
+              {this.state.filterPrice[1]} USD+
             </Typography>
           </Grid>
         </Grid>
@@ -102,9 +102,8 @@ class FilterBy extends React.Component {
           <Slider
             onChange={this.onChange}
             onChangeComplete={this.onChangeComplete}
-            min={5}
+            min={0}
             max={300}
-            // onChangeComplete={this.props.onChangeFilterPrice}
             range
           />
         </div>

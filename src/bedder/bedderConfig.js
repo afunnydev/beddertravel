@@ -15,8 +15,8 @@ class BedderConfig {
 
   getFilterPropertyTypes() {
     return [
-      { id: '1', value: 'Hostel', isActive: true },
-      { id: '0', value: 'Hotel', isActive: true },
+      { id: '0', value: 'Hostel', isActive: true },
+      { id: '1', value: 'Hotel', isActive: true },
       { id: '2', value: 'Camping', isActive: true },
       { id: '3', value: 'Homestays (B & B)', isActive: true },
       { id: '4', value: 'Apartment', isActive: true },
@@ -29,13 +29,13 @@ class BedderConfig {
 
   getPropertyMoods() {
     return [
-      { id: '6', value: 'Feel like home' },
-      { id: '0', value: 'Relaxation' },
+      { id: '0', value: 'Feel like home' },
       { id: '1', value: 'Family' },
       { id: '2', value: 'Party' },
       { id: '3', value: 'Cute' },
       { id: '4', value: 'Discovery' },
       { id: '5', value: 'Meet new people' },
+      { id: '6', value: 'Relaxation' },
     ];
   }
 

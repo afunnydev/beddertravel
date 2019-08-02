@@ -41,11 +41,7 @@ const SearchResults = props => {
     <React.Fragment>
       <GridList
         style={isMobile ? { marginLeft: '0px !important' } : { margin: 0 }}
-        cols={
-          props.isMapView || props.width === 'xs' || props.width === 'sm'
-            ? 1
-            : 2
-        }
+        cols={props.isMapView || props.width === 'xs' ? 1 : 2}
         cellHeight="auto"
         spacing={20}
         classes={{ root: gridListStyle }}

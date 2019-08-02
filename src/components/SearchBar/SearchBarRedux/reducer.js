@@ -15,7 +15,7 @@ import {
 export const initialState = fromJS({
   locationText: 'Montréal',
   from: new Date(),
-  to: new Date().addDays(3),
+  to: null,
   numPeople: 2,
   numBed: 1,
   lat: 45.52,

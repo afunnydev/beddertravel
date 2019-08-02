@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -8,15 +9,19 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
+import Chip from '@material-ui/core/Chip';
 
-import LocationOnIcon from '@material-ui/icons/LocationOn';
+import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 
 import businessItemStyles from './businessItemStyles';
 import DefaultImage from 'assets/images/bedder-default-bg.png';
+import BedderConfig from 'bedder/bedderConfig';
 
 const BusinessItem = (props) => {
-  const { classes, value } = props;
+  const { classes, value, days } = props;
   const { rate } = value.businessUnit;
+  const amenities = JSON.parse(value.business.amenities);
+  const propertyTypes = BedderConfig.getFilterPropertyTypes();
   return (
     <React.Fragment>
       <Card
@@ -34,7 +39,7 @@ const BusinessItem = (props) => {
           }
           title={value.business.name}
         />
-        <CardContent className={classes.cardContent}>
+        <CardContent classes={{ root: classes.cardContent }}>
           <Grid container>
             <Grid item xs={9}>
               <Typography variant="h4" className={classes.businessName}>
@@ -45,7 +50,7 @@ const BusinessItem = (props) => {
                 noWrap
                 className={classes.locationText}
               >
-                <LocationOnIcon className={classes.iconLocation} />
+                <span className={`icon-map ${classes.iconLocation}`} />
                 {value.business.address.address}
               </Typography>
             </Grid>
@@ -65,15 +70,32 @@ const BusinessItem = (props) => {
                 </Typography>
               </div>
             </Grid>
-            <Grid item xs={12}>
-              <Typography
-                align="right"
-                color="primary"
-                variant="body2"
-                className={classes.priceText}
-              >
-                {Math.round(rate)} USD <span>per night</span>
-              </Typography>
+            <Grid item xs={12} style={{ marginTop: 20 }}>
+              <Grid container spacing={2}>
+                <Grid item xs={6} sm={12} lg={8}>
+                  <Chip label={propertyTypes[parseInt(value.business.propertyType)].value} variant="outlined" className={classes.chip} />
+                  {amenities['wifi'] && <Chip label="Wifi" variant="outlined" className={classes.chip} />}
+                  {amenities['free_breakfast'] && <Chip label="Free Breakfast" variant="outlined" className={classes.chip} />}
+                  {amenities['swimming_pool'] && <Chip label="Swimming Pool" variant="outlined" className={classes.chip} />}
+                </Grid>
+                <Grid item xs={6} sm={12} lg={4}>
+                  <Typography
+                    align="right"
+                    color="primary"
+                    variant="body2"
+                    className={classes.priceText}
+                  >
+                    ${Math.round(rate)} USD<span>/ night</span>
+                  </Typography>
+                  <Typography
+                    align="right"
+                    variant="body2"
+                    className={classes.totalText}
+                  >
+                    ${Math.round(rate) * (days - 1)} USD in total
+                  </Typography>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
         </CardContent>
@@ -82,6 +104,10 @@ const BusinessItem = (props) => {
   );
 };
 
-BusinessItem.propTypes = {};
+BusinessItem.propTypes = {
+  classes: PropTypes.object.isRequired,
+  value: PropTypes.object.isRequired,
+  days: PropTypes.number.isRequired,
+};
 
 export default withStyles(businessItemStyles)(BusinessItem);

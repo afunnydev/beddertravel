@@ -1,16 +1,16 @@
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-
-
 import MUIPlacesAutocomplete, { geocodeBySuggestion } from 'mui-places-autocomplete';
 import { withRouter } from 'react-router-dom';
-
-
 import { compose } from 'redux';
-import { withConnect as withReduxProps } from './SearchBarRedux';
-import SearchBarRedux from './SearchBarRedux/Loadable';
+import { connect } from 'react-redux';
+import { withApollo } from 'react-apollo';
+import { withSnackbar } from 'notistack';
+
+import { mapStateToProps, mapDispatchToProps } from './SearchBarRedux/mapProps';
+import reducer from './SearchBarRedux/reducer';
 import {
   changeLatAction,
   changeLocationAction,
@@ -23,7 +23,7 @@ import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import { createMuiTheme, withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import PersonIcon from '@material-ui/icons/Person';
 import MyLocation from '@material-ui/icons/MyLocation';
@@ -31,16 +31,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-
+import injectReducer from 'utils/injectReducer';
 import { GUESTS_ARRAY, BED_ARRAY } from 'utils/constants';
 
-
-const momentNow = new Date().setHours(0, 0, 0, 0);
-const google = window.google;
 const styles = theme => ({
-  searchPaperWrapperHome: {
-    padding: '20px',
-  },
   searchPaperItem: {
     padding: '12px',
   },
@@ -107,174 +101,58 @@ const styles = theme => ({
       boxShadow: 'none',
     },
   }
-
-});
-export const theme = createMuiTheme({
-  palette: {
-    primary: {
-      light: '#c26c6a',
-      main: '#8f3f3f',
-      dark: '#5d1219',
-      contrastText: '#fff',
-    },
-    secondary: {
-      light: '#7b6ac0',
-      main: '#4b3f8f',
-      dark: '#191861',
-      contrastText: '#fff',
-    },
-  },
-  typography: {
-    fontFamily: ['Ubuntu'].join(','),
-  },
-  rootSelect: {
-    paddingLeft: 5,
-    margin: 100,
-    display: 'block',
-  },
 });
 
+const SearchBar = (props) => {
+  const momentNow = new Date().setHours(0, 0, 0, 0);
+  const google = window.google;
 
-class SearchBar extends React.Component {
+  const setFromDate = (date) => props.onChangeFromVal(date);
+  const setToDate = (date) => props.onChangeToVal(date);
+  const dispatchSubmit = () => props.dispatch(submitAction());
+  const validate = () => {
+    if (props.location && props.location.length <= 0) return false;
+    if (!props.from || props.from < momentNow) return false;
+    if (!props.to || props.to <= props.from) return false;
+    return true;
+  };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      latitude: null,
-      longitude: null,
-      accuracy: null,
-      locationError: false,
-      toError: false,
-      fromError: false,
-      isValid: true,
-      location: '',
-      errorMsg: '',
-      locationSelected: true,
-    };
-    this.suggestionSelected = this.suggestionSelected.bind(this);
-    this.getGeolocation = this.getGeolocation.bind(this);
-    this.getGeolocationF = this.getGeolocationF.bind(this);
-    this.submit = this.submit.bind(this);
-    this.searchTermsChange = this.searchTermsChange.bind(this);
-    this.dispatchSubmit = this.dispatchSubmit.bind(this);
-
-    this.changeTimeout = null;
-  }
-
-  dispatchSubmit() {
-    this.props.dispatch(submitAction());
-  }
-
-  submit() {
-    if (!this.validate()) {
-      return false;
+  const submit = () => {
+    if (!validate()) {
+      return props.enqueueSnackbar('You need at least 1 night in your search. Please correct your dates.', { variant: 'error' });
     }
 
-    switch (this.props.location.pathname) {
+    switch (props.location.pathname) {
     case '/home':
-      this.props.dispatch(submitAction());
+      props.dispatch(submitAction());
       break;
     default:
-      this.props.history.push('/home');
-      setTimeout(this.dispatchSubmit, 700);
+      props.history.push('/home');
+      setTimeout(dispatchSubmit, 700);
       break;
     }
-  }
 
-  validate() {
-    let isValid = true;
-    // console.log('validate?');
+    const bookingData = { 
+      bookingStartDate: props.from.toUTCString(),
+      bookingEndDate: props.to.toUTCString(),
+      bookingNumBeds: props.numBed,
+      bookingNumPeople: props.numPeople,
+    };
 
-    if (this.props.location.length <= 0 || this.state.locationSelected == false) {
-      this.setState({ 'locationError': true });
-      isValid = false;
-    } else {
-      this.setState({ 'locationError': false });
-      // isValid = true;
+    // We are connecting what happened in the redux store to the apollo client
+    props.client.writeData({data: bookingData });
+    // These values are saved in local storage to be reused if the users reloads. 
+    // TODO: Currently, they are not used in the SearchBar components, but they should be.
+    for (let property in bookingData) {
+      localStorage.setItem(property, bookingData[property]);
     }
+  };
 
-    if (!this.props.from || this.props.from < momentNow) {
-      this.setState({ 'fromError': true });
-      isValid = false;
-    } else {
-      this.setState({ 'fromError': false });
-      // isValid = true;
-    }
+  const getGeolocationF = () => navigator.geolocation.getCurrentPosition(getGeolocation);
 
-    if (!this.props.to || this.props.to <= this.props.from) {
-      this.setState({ 'toError': true });
-      isValid = false;
-    } else {
-      this.setState({ 'toError': false });
-      // isValid = true;
-    }
-
-    this.setState({ isValid });
-
-    return isValid;
-  }
-
-  searchTermsChange() {
-    if (this.props.changeCallback) {
-      this.props.changeCallback();
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.locationText != this.props.locationText && this.state.locationSelected == true) {
-      this.setState({ locationSelected: false });
-    }
-
-    if (prevProps.doSeach != this.props.doSearch && this.props.doSearch === true) {
-      this.submit();
-      this.props.didSearch();
-    }
-
-    if (
-      prevProps.location != this.props.location
-      || prevProps.from != this.props.from
-      || prevProps.to != this.props.to
-      || prevProps.numBed != this.props.numBed
-      || prevProps.numPeople != this.props.numPeople
-    ) {
-      clearTimeout(this.changeTimeout);
-      this.changeTimeout = setTimeout(this.searchTermsChange, 2000);
-    }
-
-    if (prevProps.from != this.props.from
-      || prevProps.to != this.props.to
-      || prevProps.locationText != this.props.locationText) {
-      this.validate();
-    }
-
-    if (prevState.location != this.state.location) {
-      this.props.onChangeLocationByHand(this.state.location);
-      this.props.onChangeLat(this.state.latitude);
-      this.props.onChangeLon(this.state.longitude);
-    }
-
-    if (prevProps.from != this.props.from) {
-      if (this.props.from && (this.props.from >= this.props.to)) {
-        const fromDate = this.props.from;
-        this.props.onChangeToVal(fromDate.addDays(3));
-      }
-    }
-  }
-
-  getFrom = (date) => this.props.onChangeFromVal(date);
-  getTo = (date) => this.props.onChangeToVal(date);
-
-  getGeolocationF() {
-    navigator.geolocation.getCurrentPosition(this.getGeolocation);
-  }
-
-  getGeolocation(location) {
+  const getGeolocation = (location) => {
     const { latitude, longitude, accuracy } = location.coords;
-    this.setState({
-      latitude,
-      longitude,
-      accuracy,
-    });
+    // TODO: We are not using accuracy here, but we shoud.
 
     const geocoder = new google.maps.Geocoder();
     geocoder.geocode(
@@ -284,20 +162,21 @@ class SearchBar extends React.Component {
       (results, status) => {
         if (status === 'OK') {
           if (results[0]) {
-            this.setState({ location: results[0].formatted_address, locationSelected: true });
-            this.validate();
-          } else {
-            this.setState({ location: '', locationSelected: false });
-          }
+            props.dispatch(changeLocationAction(results[0].formatted_address));
+            props.dispatch(changeLatAction(results[0].geometry.location.lat()));
+            props.dispatch(changeLonAction(results[0].geometry.location.lng()));
+          } 
         } else {
           console.log(`Geocoder failed due to: ${status}`);
+          return props.enqueueSnackbar('An error occured while locating you. Please enter the location manually.', { variant: 'error' });
+          
         }
       },
     );
-  }
+  };
 
-  suggestionSelected(suggestion) {
-    this.props.dispatch(changeLocationAction(suggestion.description));
+  const suggestionSelected = (suggestion) => {
+    props.dispatch(changeLocationAction(suggestion.description));
     geocodeBySuggestion(suggestion)
       .then((results) => {
         if (results.length < 1) {
@@ -305,318 +184,325 @@ class SearchBar extends React.Component {
         }
 
         const { geometry } = results[0];
-
-        this.props.dispatch(changeLatAction(geometry.location.lat()));
-        this.props.dispatch(changeLonAction(geometry.location.lng()));
-
-        this.setState({
-          lat: geometry.location.lat(),
-          lon: geometry.location.lng(),
-          locationSelected: true,
-        });
-
-        this.validate();
+        props.dispatch(changeLatAction(geometry.location.lat()));
+        props.dispatch(changeLonAction(geometry.location.lng()));
       })
       .catch((err) => {
         console.log('geocode err.message', err.message);
       });
-  }
+  };
 
-  render() {
-    const { classes } = this.props;
-    const errorMessage = this.state.locationSelected ? (this.state.isValid ? '' : 'Please, correct the form') : 'Please, select location from dropdown';
+  return (
+    <Paper className={props.classes.searchPaperWrapper} square>
+      <Paper className={props.classes.searchPaper} elevation={0}>
+        <Grid container>
 
-    return (
-      <React.Fragment>
-
-        <SearchBarRedux />
-
-        <Paper className={this.props.isHome ? classes.searchPaperWrapperHome : classes.searchPaperWrapper} square>
-          <Paper className={classes.searchPaper} elevation={0}>
-            <Grid container>
+          {/* 
+            Search Form
+          */}
+          {!props.displayButtonOnly 
+            ? <React.Fragment>
 
               {/* 
-                Search Form
+                Location Selector
               */}
-              {this.props.displayButtonOnly || (
-                <React.Fragment>
+              {props.hideLocation || (
+                <Grid item xs={12} md={3}>
+                  <div className={props.classes.gridColumn}>
+                    <Paper className={props.classes.searchPaperItem}>
+                      <MUIPlacesAutocomplete
+                        textFieldProps={{
+                          fullWidth: true,
+                          value: props.locationText,
+                          id: 'location',
+                          onChange: props.onChangeLocation,
+                          InputProps: {
+                            disableUnderline: true,
+                            startAdornment: (
+                              <InputAdornment
+                                position="start"
+                                className={props.classes.adornment}
+                              >
+                                <span className="icon-search" />
+                              </InputAdornment>
+                            ),
+                            endAdornment: (
+                              <InputAdornment
+                                onClick={getGeolocationF}
+                                position="end"
+                                className={props.classes.adornmentEnd}
+                              >
+                                <MyLocation color="primary" />
+                              </InputAdornment>
+                            ),
+                          },
+                        }}
+                        onSuggestionSelected={suggestionSelected}
+                        renderTarget={() => <div className={props.classes.renderDiv} />}
+                      />
+                    </Paper>
+                  </div>
+                </Grid>
+              )}
+
+
+              {/* 
+                Date Picker
+              */}
+              <Grid item xs={12} md={5}>
+                <Grid container>
 
                   {/* 
-                    Location Selector
+                    From
                   */}
-                  {this.props.hideLocation || (
-                    <Grid item xs={12} md={3}>
-                      <div className={classes.gridColumn}>
-                        <Paper className={classes.searchPaperItem}>
-                          <MUIPlacesAutocomplete
-                            textFieldProps={{
-                              fullWidth: true,
-                              value: this.props.locationText,
-                              id: 'location',
-                              onChange: this.props.onChangeLocation,
-                              InputProps: {
-                                style: this.state.locationError ? { color: 'red' } : {},
-                                disableUnderline: true,
-                                startAdornment: (
-                                  <InputAdornment
-                                    position="start"
-                                    className={classes.adornment}
-                                  >
-                                    <span className="icon-search" />
-                                  </InputAdornment>
-                                ),
-                                endAdornment: (
-                                  <InputAdornment
-                                    onClick={this.getGeolocationF}
-                                    position="end"
-                                    className={classes.adornmentEnd}
-                                  >
-                                    <MyLocation color="primary" />
-                                  </InputAdornment>
-                                ),
-                              },
-                            }}
-                            onSuggestionSelected={this.suggestionSelected}
-                            renderTarget={() => <div className={classes.renderDiv} />}
-                          />
-                        </Paper>
-                      </div>
-                    </Grid>
-                  )}
-
-
-                  {/* 
-                    Date Picker
-                  */}
-                  <Grid item xs={12} md={5}>
-                    <Grid container>
-
-                      {/* 
-                        From
-                      */}
-                      <Grid item xs={6}>
-                        <div className={classes.gridColumn}>
-                          <Paper className={classes.searchPaperItem}>
-                            <DatePicker
-                              id="from"
-                              selected={this.props.from}
-                              fullWidth
-                              onChange={this.getFrom}
-                              customInput={
-                                <TextField
-                                  fullWidth
-                                  error
-                                  InputProps={{
-                                    style: this.state.fromError ? { color: 'red' } : {},
-                                    disableUnderline: true,
-                                    startAdornment: (
-                                      <InputAdornment
-                                        position="start"
-                                        className={classes.adornment}
-                                      >
-                                        <span className={classes.primaryColor}>
-                                          <span className="icon-go" />
-                                        </span>
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                />
-                              }
-                            />
-                          </Paper>
-                        </div>
-                      </Grid>
-
-                      {/* 
-                        To
-                      */}
-                      <Grid item xs={6}>
-                        <div className={classes.gridColumn}>
-                          <Paper className={classes.searchPaperItem}>
-                            <DatePicker
-                              id="to"
-                              selected={this.props.to}
-                              fullWidth
-                              onChange={this.getTo}
-                              customInput={
-                                <TextField
-                                  fullWidth
-                                  InputProps={{
-                                    style: this.state.toError ? { color: 'red' } : {},
-                                    disableUnderline: true,
-                                    startAdornment: (
-                                      <InputAdornment
-                                        position="start"
-                                        className={classes.adornment}
-                                      >
-                                        <span className={classes.primaryColor}>
-                                          <span className="icon-back" />
-                                        </span>
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                />
-                              }
-                            />
-                          </Paper>
-                        </div>
-                      </Grid>
-
-                    </Grid>
-                  </Grid>
-
-                  {/* 
-                    Guest & Bed Selectors
-                  */}
-                  <Grid item xs={12} md={3}>
-
-                    <Grid container>
-
-                      {/* 
-                        Guest Selector
-                      */}
-                      <Grid item xs={6}>
-                        <div className={classes.gridColumn}>
-                          <Paper className={classes.searchPaperItem}>
+                  <Grid item xs={6}>
+                    <div className={props.classes.gridColumn}>
+                      <Paper className={props.classes.searchPaperItem}>
+                        <DatePicker
+                          id="from"
+                          selected={props.from}
+                          fullWidth
+                          onChange={setFromDate}
+                          minDate={momentNow}
+                          customInput={
                             <TextField
-                              SelectProps={{
-                                classes: { select: this.props.classes.caretAdjustment },
-                              }}
-                              id="numPeople"
-                              value={this.props.numPeople}
-                              select
                               fullWidth
-                              onChange={this.props.onChangeNumPeople}
+                              error
                               InputProps={{
                                 disableUnderline: true,
                                 startAdornment: (
                                   <InputAdornment
                                     position="start"
-                                    className={classes.adornment}
+                                    className={props.classes.adornment}
                                   >
-                                    <PersonIcon className={classes.primaryColor} />
-                                  </InputAdornment>
-                                ),
-                              }}
-                            >
-                              {GUESTS_ARRAY.map(option => (
-                                <MenuItem
-                                  key={option}
-                                  value={option}
-                                >
-                                  {option}
-                                </MenuItem>
-                              ))}
-                            </TextField>
-                          </Paper>
-                        </div>
-                      </Grid>
-
-                      {/* 
-                        Bed Selector
-                      */}
-                      <Grid item xs={6}>
-                        <div className={classes.gridColumn}>
-                          <Paper className={classes.searchPaperItem}>
-                            <TextField
-                              SelectProps={{
-                                classes: { select: this.props.classes.caretAdjustment },
-                              }}
-                              id="numBed"
-                              value={this.props.numBed}
-                              select
-                              fullWidth
-                              onChange={this.props.onChangeNumBed}
-                              InputProps={{
-                                disableUnderline: true,
-                                startAdornment: (
-                                  <InputAdornment
-                                    position="start"
-                                    className={classes.adornment}
-                                  >
-                                    <span className={classes.primaryColor}>
-                                      <span className="icon-bed" />
+                                    <span className={props.classes.primaryColor}>
+                                      <span className="icon-go" />
                                     </span>
                                   </InputAdornment>
                                 ),
                               }}
-                            >
-                              {BED_ARRAY.map(option => (
-                                <MenuItem 
-                                  key={option} 
-                                  value={option}
-                                >
-                                  {option}
-                                </MenuItem>
-                              ))}
-                            </TextField>
-                          </Paper>
-                        </div>
-                      </Grid>
-                    </Grid>
-
+                            />
+                          }
+                        />
+                      </Paper>
+                    </div>
                   </Grid>
 
                   {/* 
-                    Find Button (Only displaying when `displayFormOnly` is false)
+                    To
                   */}
-                  {this.props.displayFormOnly || (
-                    <Grid item xs={12} md={1}>
-                      <div className={classes.gridColumn} align="right">
-                        <Typography noWrap>
-                          <Button
-                            fullWidth
-                            onClick={this.submit}
-                            classes={{
-                              root: classes.findButton,
-                            }}>
-                            {this.props.submitting ? (<CircularProgress size={20} classes={{ circle: classes.white }} />) : 'Find'}
-                          </Button>
-                        </Typography>
-                      </div>
-                    </Grid>
-                  )}
+                  <Grid item xs={6}>
+                    <div className={props.classes.gridColumn}>
+                      <Paper className={props.classes.searchPaperItem}>
+                        <DatePicker
+                          id="to"
+                          selected={props.to}
+                          fullWidth
+                          onChange={setToDate}
+                          minDate={props.from}
+                          customInput={
+                            <TextField
+                              fullWidth
+                              InputProps={{
+                                disableUnderline: true,
+                                placeholder: 'dd/mm/yyyy',
+                                startAdornment: (
+                                  <InputAdornment
+                                    position="start"
+                                    className={props.classes.adornment}
+                                  >
+                                    <span className={props.classes.primaryColor}>
+                                      <span className="icon-back" />
+                                    </span>
+                                  </InputAdornment>
+                                ),
+                              }}
+                            />
+                          }
+                        />
+                      </Paper>
+                    </div>
+                  </Grid>
 
-                </React.Fragment>
-              )}
+                </Grid>
+              </Grid>
 
               {/* 
-                Find Button (Only displaying when `displayButtonOnly` is true)
+                Guest & Bed Selectors
               */}
-              {this.props.displayButtonOnly && (
+              <Grid item xs={12} md={3}>
+
+                <Grid container>
+
+                  {/* 
+                    Guest Selector
+                  */}
+                  <Grid item xs={6}>
+                    <div className={props.classes.gridColumn}>
+                      <Paper className={props.classes.searchPaperItem}>
+                        <TextField
+                          SelectProps={{
+                            classes: { select: props.classes.caretAdjustment },
+                          }}
+                          id="numPeople"
+                          value={props.numPeople}
+                          select
+                          fullWidth
+                          onChange={props.onChangeNumPeople}
+                          InputProps={{
+                            disableUnderline: true,
+                            startAdornment: (
+                              <InputAdornment
+                                position="start"
+                                className={props.classes.adornment}
+                              >
+                                <PersonIcon className={props.classes.primaryColor} />
+                              </InputAdornment>
+                            ),
+                          }}
+                        >
+                          {GUESTS_ARRAY.map(option => (
+                            <MenuItem
+                              key={option}
+                              value={option}
+                            >
+                              {option}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </Paper>
+                    </div>
+                  </Grid>
+
+                  {/* 
+                    Bed Selector
+                  */}
+                  <Grid item xs={6}>
+                    <div className={props.classes.gridColumn}>
+                      <Paper className={props.classes.searchPaperItem}>
+                        <TextField
+                          SelectProps={{
+                            classes: { select: props.classes.caretAdjustment },
+                          }}
+                          id="numBed"
+                          value={props.numBed}
+                          select
+                          fullWidth
+                          onChange={props.onChangeNumBed}
+                          InputProps={{
+                            disableUnderline: true,
+                            startAdornment: (
+                              <InputAdornment
+                                position="start"
+                                className={props.classes.adornment}
+                              >
+                                <span className={props.classes.primaryColor}>
+                                  <span className="icon-bed" />
+                                </span>
+                              </InputAdornment>
+                            ),
+                          }}
+                        >
+                          {BED_ARRAY.map(option => (
+                            <MenuItem 
+                              key={option} 
+                              value={option}
+                            >
+                              {option}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </Paper>
+                    </div>
+                  </Grid>
+                </Grid>
+
+              </Grid>
+
+              {/* 
+                Find Button (Only displaying when `displayFormOnly` is false)
+              */}
+              {props.displayFormOnly || (
                 <Grid item xs={12} md={1}>
-                  <div className={classes.gridColumn} align="right">
+                  <div className={props.classes.gridColumn} align="right">
                     <Typography noWrap>
                       <Button
                         fullWidth
-                        onClick={this.submit}
+                        onClick={submit}
                         classes={{
-                          root: classes.findButton,
+                          root: props.classes.findButton,
                         }}>
-                        Find!
+                        {props.submitting ? (<CircularProgress size={20} classes={{ circle: props.classes.white }} />) : 'Find'}
                       </Button>
                     </Typography>
                   </div>
                 </Grid>
               )}
 
+            </React.Fragment>
+            : <Grid item xs={12} md={1}>
+              <div className={props.classes.gridColumn} align="right">
+                <Typography noWrap>
+                  <Button
+                    fullWidth
+                    onClick={submit}
+                    classes={{
+                      root: props.classes.findButton,
+                    }}>
+                    Find!
+                  </Button>
+                </Typography>
+              </div>
             </Grid>
-          </Paper>
-        </Paper>
+          }
+        </Grid>
+      </Paper>
+    </Paper>
+  );
+};
 
-        {/* 
-          Error Message
-        */}
-        <Typography color="error" style={this.props.isHome ? { height: '1em' } : {}}>{errorMessage}</Typography>
+SearchBar.defaultProps = {
+  displayFormOnly: false,
+  displayButtonOnly: false,
+  hideLocation: false,
+};
 
+SearchBar.propTypes = {
+  // Received from Redux
+  from: PropTypes.object,
+  onChangeFromVal: PropTypes.func.isRequired,
+  to: PropTypes.object,
+  onChangeToVal: PropTypes.func.isRequired,
+  numBed: PropTypes.number.isRequired,
+  onChangeNumBed: PropTypes.func.isRequired,
+  numPeople: PropTypes.number.isRequired,
+  onChangeNumPeople: PropTypes.func.isRequired,
+  locationText: PropTypes.string.isRequired,
+  onChangeLocation: PropTypes.func.isRequired,
+  // Passed manually
+  submitting: PropTypes.bool,
+  displayFormOnly: PropTypes.bool,
+  displayButtonOnly: PropTypes.bool,
+  hideLocation: PropTypes.bool,
+  // Passed from HOC
+  client: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
+  enqueueSnackbar: PropTypes.func.isRequired,
+};
 
-        {/* </Hidden> */}
-      </React.Fragment>
-    );
-  }
-}
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
+const withReducer = injectReducer({ key: 'searchBar', reducer });
 
 export default compose(
-  withReduxProps,
+  withConnect,
+  withReducer,
   withRouter,
-)(withStyles(styles)(SearchBar));
+  withStyles(styles),
+  withApollo,
+  withSnackbar,
+)(SearchBar);
