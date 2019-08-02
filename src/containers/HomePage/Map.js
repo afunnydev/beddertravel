@@ -5,10 +5,6 @@
  */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
-
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 
 import {
   GoogleMap,
@@ -20,14 +16,13 @@ import {
 
 import { compose } from 'redux';
 
-import { compose as rerecompose, withStateHandlers } from 'recompose';
-
 
 class Map extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = { markerStatus: [] };
+    this.isOpen = false;
 
     this.processResult = this.processResult.bind(this);
   }
@@ -43,7 +38,6 @@ class Map extends React.Component {
   }
 
   processResult() {
-    // var parsedResult = [];
 
     if (
       this.props.result &&
@@ -57,12 +51,15 @@ class Map extends React.Component {
           mStatus[i] = false;
           this.setState({ markerStatus: mStatus });
         }
-        // parsedResult.push({lat: v.business.address.lat, lng: v.business.address.lon});
       });
     }
   }
 
+  onMapMarkerClick() {
+  }
+
   render() {
+
     return (
       <React.Fragment>
         <GoogleMap
@@ -74,17 +71,30 @@ class Map extends React.Component {
             this.props.result.result &&
             this.props.result.result.length > 0 &&
             this.props.result.result.map((v, i) => (              
-              <OverlayView 
+              <OverlayView
                 key={i}
                 value={v}
                 position={{
                   lat: parseFloat(v.business.address.lat),
                   lng: parseFloat(v.business.address.lon),
                 }}
+                onClick={this.props.onToggleOpen}
                 mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
                 getPixelPositionOffset={(width, height) => ({ x: -(width / 2), y: -(height) })}
-                >
-                  <div style={{ backgroundColor: 'yellow' }}>We're here</div>
+              >
+                <div 
+                style={{ 
+                  backgroundColor: 'white',
+                  color: '#8F3F3F',
+                  padding: '4px 10px',
+                  borderRadius: '3px',
+                  fontFamily: 'Ubuntu',
+                  fontSize: '12px', 
+                  fontWeight: '700',
+                }}
+                onClick={this.onMapMarkerClick}>
+                  {v.businessUnit.rate}$
+                </div>
               </OverlayView>
             ))}
         </GoogleMap>
