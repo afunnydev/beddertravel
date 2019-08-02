@@ -1,9 +1,9 @@
 import Bedder from './bedder';
+import { backendDevEndpoint, backendProdEndpoint } from 'utils/constants';
 
 class BedderSetting {
   constructor() {
-    // this.apiUrl = 'https://api.beddertravel.com/app.php/api/v1';
-    this.apiUrl = 'http://localhost:8000/app.php/api/v1';
+    this.apiUrl = process.env.NODE_ENV === 'development' ? backendDevEndpoint : backendProdEndpoint;
 
     this.default = {
       receiveByEmail: 1,

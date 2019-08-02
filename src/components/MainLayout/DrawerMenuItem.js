@@ -8,6 +8,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 const DrawerMenuItem = ({ to, onClick, children, client }) => {
   const adjustedOnClick = () => {
+    // If the routes changes, we should close the menu.
     if (to) client.writeData({ data: { menuOpen: false }});
     if (onClick) return onClick();
   };

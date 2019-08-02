@@ -308,7 +308,6 @@ export class HomePage extends React.Component {
       <React.Fragment>
         <Helmet>
           <title>Find your next accomodation</title>
-          <meta name="description" content="Description of HomePage" />
         </Helmet>
         <Grid
           container
