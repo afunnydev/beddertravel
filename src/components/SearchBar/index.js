@@ -107,7 +107,7 @@ const SearchBar = (props) => {
   const momentNow = new Date().setHours(0, 0, 0, 0);
   const google = window.google;
 
-  const setFromDate = (date) => props.onChangeFromVal(date);
+  const setFromDate = (date) => console.log(date) || props.onChangeFromVal(date);
   const setToDate = (date) => props.onChangeToVal(date);
   const dispatchSubmit = () => props.dispatch(submitAction());
   const validate = () => {
@@ -218,6 +218,7 @@ const SearchBar = (props) => {
                           onChange: props.onChangeLocation,
                           InputProps: {
                             disableUnderline: true,
+                            placeholder: 'Anywhere',
                             startAdornment: (
                               <InputAdornment
                                 position="start"
@@ -270,6 +271,7 @@ const SearchBar = (props) => {
                               error
                               InputProps={{
                                 disableUnderline: true,
+                                placeholder: 'dd/mm/yyyy',
                                 startAdornment: (
                                   <InputAdornment
                                     position="start"

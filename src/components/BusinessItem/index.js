@@ -10,8 +10,9 @@ import Typography from '@material-ui/core/Typography';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Chip from '@material-ui/core/Chip';
+import Tooltip from '@material-ui/core/Tooltip';
 
-import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
+import HelpOutline from '@material-ui/icons/HelpOutline';
 
 import businessItemStyles from './businessItemStyles';
 import DefaultImage from 'assets/images/bedder-default-bg.png';
@@ -19,9 +20,10 @@ import BedderConfig from 'bedder/bedderConfig';
 
 const BusinessItem = (props) => {
   const { classes, value, days } = props;
-  const { rate } = value.businessUnit;
+  const { fullRate } = value.businessUnit;
   const amenities = JSON.parse(value.business.amenities);
   const propertyTypes = BedderConfig.getFilterPropertyTypes();
+  const roomPrice = fullRate / 100;
   return (
     <React.Fragment>
       <Card
@@ -72,28 +74,30 @@ const BusinessItem = (props) => {
             </Grid>
             <Grid item xs={12} style={{ marginTop: 20 }}>
               <Grid container spacing={2}>
-                <Grid item xs={6} sm={12} lg={8}>
+                <Grid item xs={6} sm={12} lg={7}>
                   <Chip label={propertyTypes[parseInt(value.business.propertyType)].value} variant="outlined" className={classes.chip} />
                   {amenities['wifi'] && <Chip label="Wifi" variant="outlined" className={classes.chip} />}
                   {amenities['free_breakfast'] && <Chip label="Free Breakfast" variant="outlined" className={classes.chip} />}
                   {amenities['swimming_pool'] && <Chip label="Swimming Pool" variant="outlined" className={classes.chip} />}
                 </Grid>
-                <Grid item xs={6} sm={12} lg={4}>
+                <Grid item xs={6} sm={12} lg={5}>
                   <Typography
                     align="right"
                     color="primary"
                     variant="body2"
                     className={classes.priceText}
                   >
-                    ${Math.round(rate)} USD<span>/ night</span>
+                    ${Math.round(roomPrice)} USD<span>/ night</span>
                   </Typography>
-                  <Typography
-                    align="right"
-                    variant="body2"
-                    className={classes.totalText}
-                  >
-                    ${Math.round(rate) * (days - 1)} USD in total
-                  </Typography>
+                  <Tooltip title={`Total for ${days} night${days > 1 ? 's' : ''}, including the 1 USD booking fee.`} placement="bottom">
+                    <Typography
+                      align="right"
+                      variant="body2"
+                      className={classes.totalText}
+                    >
+                      ${Math.round(roomPrice * days) + 1} USD in total<HelpOutline className={classes.helpIcon} />
+                    </Typography>
+                  </Tooltip>
                 </Grid>
               </Grid>
             </Grid>

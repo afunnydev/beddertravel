@@ -88,7 +88,7 @@ const BusinessViewRoom = ({ classes, id, name, photos, available, quote, bedsSim
                   classes={{ root: classes.price }}
                   variant="body1"
                 >
-                  {quote / 100} USD
+                  {(quote / 100).toFixed(2)} USD
                 </Typography>
               </Grid>
               <Grid item xs={6}>

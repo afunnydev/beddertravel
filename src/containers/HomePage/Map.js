@@ -16,6 +16,8 @@ import {
 
 import { compose } from 'redux';
 
+import mapStyle from 'utils/mapStyle';
+
 
 class Map extends React.Component {
   constructor(props) {
@@ -55,17 +57,20 @@ class Map extends React.Component {
     }
   }
 
-  onMapMarkerClick() {
-  }
+  onMapMarkerClick() {}
 
   render() {
-
     return (
       <React.Fragment>
         <GoogleMap
-          style={this.props.style || {}}
-          defaultZoom={8}
+          defaultZoom={12}
           defaultCenter={this.props.defaultCenter}
+          defaultMapTypeId='roadmap'
+          defaultOptions={{ 
+            styles: mapStyle,
+            mapTypeControl: false,
+            streetViewControl: false,
+          }}
         >
           { this.props.result &&
             this.props.result.result &&
@@ -83,16 +88,17 @@ class Map extends React.Component {
                 getPixelPositionOffset={(width, height) => ({ x: -(width / 2), y: -(height) })}
               >
                 <div 
-                style={{ 
-                  backgroundColor: 'white',
-                  color: '#8F3F3F',
-                  padding: '4px 10px',
-                  borderRadius: '3px',
-                  fontFamily: 'Ubuntu',
-                  fontSize: '12px', 
-                  fontWeight: '700',
-                }}
-                onClick={this.onMapMarkerClick}>
+                  style={{ 
+                    backgroundColor: 'white',
+                    color: '#8F3F3F',
+                    padding: '4px 10px',
+                    borderRadius: '3px',
+                    fontFamily: 'Ubuntu',
+                    fontSize: '12px', 
+                    fontWeight: '700',
+                  }}
+                  onClick={this.onMapMarkerClick}
+                >
                   {v.businessUnit.rate}$
                 </div>
               </OverlayView>

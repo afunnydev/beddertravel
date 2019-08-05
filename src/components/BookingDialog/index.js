@@ -15,6 +15,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
 import CheckoutButton from 'components/CheckoutButton';
+import formatDate from 'utils/formatDate';
 
 const Heading = styled.p`
   font-weight: 700;
@@ -74,7 +75,7 @@ const BookingDialog = ({ open, setDialogOpen }) => (
                 <Grid item xs={12} sm={6}>
                   <Heading>Date</Heading>
                   <Typography variant="body1">
-                    {bookingFrom.toLocaleDateString()} to {bookingTo.toLocaleDateString()}
+                    {formatDate(bookingFrom)} to {formatDate(bookingTo)}
                   </Typography>
                   <Typography variant="body2" style={{ marginTop: 7 }}>
                     This reservation is for {bookingNumPeople} person{bookingNumPeople > 1 ? 's' : ''}.
@@ -83,15 +84,15 @@ const BookingDialog = ({ open, setDialogOpen }) => (
                 <Grid item xs={12} sm={6}>
                   <Heading>Total cost of the reservation</Heading>
                   <Typography variant="body1">
-                    {quote * numRoomsToBook / 100} USD
+                    {(quote * numRoomsToBook / 100).toFixed(2)} USD
                   </Typography>
                   <Heading>Total to pay now</Heading>
                   <Typography variant="body1">
-                    {deposit * numRoomsToBook / 100} USD
+                    {(deposit * numRoomsToBook / 100).toFixed(2)} USD
                   </Typography>
                   <Heading>Payable at the accomodation</Heading>
                   <Typography variant="body1">
-                    {toPayThere * numRoomsToBook} {currency}
+                    {(toPayThere * numRoomsToBook).toFixed(2)} {currency}
                   </Typography>
                 </Grid>
                 <Grid item xs={12}>
