@@ -53,6 +53,11 @@ const businessItemStyles = () => ({
     margin: 2,
     fontSize: 10,
   },
+  helpIcon: {
+    fontSize: 15,
+    marginLeft: 5,
+    opacity: '0.5',
+  }
 });
 
 export default businessItemStyles;

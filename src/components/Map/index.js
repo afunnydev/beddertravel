@@ -5,7 +5,7 @@ import { GoogleMap, Marker, withGoogleMap } from 'react-google-maps';
 import Button from '@material-ui/core/Button';
 
 import markerImg from 'assets/images/map-marker.png';
-import mapStyle from './mapStyle';
+import mapStyle from 'utils/mapStyle';
 
 const google = window.google;
 

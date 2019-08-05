@@ -1,8 +1,8 @@
-// import { take, call, put, select } from 'redux-saga/effects';
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import Bedder from 'bedder/bedder';
 import BedderConfig from 'bedder/bedderConfig';
 import request from 'utils/request';
+import formatDate from 'utils/formatDate';
 
 import { SUBMIT } from './constants';
 import { changeSubmitResultAction, changeSubmitErrorAction } from './actions';
@@ -63,8 +63,8 @@ export function* makeSearch(action) {
         location,
         lat,
         lon,
-        from,
-        to,
+        from: formatDate(from),
+        to: formatDate(to),
         minPersons: numPeople,
         numBed,
         pageNum,

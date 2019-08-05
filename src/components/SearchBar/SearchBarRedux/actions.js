@@ -1,17 +1,11 @@
-/*
- *
- * SearchBarRedux actions
- *
- */
-
 import {
   CHANGE_LOCATION,
   CHANGE_FROM,
   CHANGE_TO,
   CHANGE_NUMPEOPLE,
   CHANGE_NUMBED,
-  SUGGESTIONSELECTED,
-  HANDLESUBMIT, CHANGE_LAT, CHANGE_LON,
+  CHANGE_LAT, 
+  CHANGE_LON,
 } from './constants';
 
 export function changeLatAction(lat) {
@@ -54,17 +48,5 @@ export function changeNumBedAction(numBed) {
   return {
     type: CHANGE_NUMBED,
     numBed,
-  };
-}
-export function suggestionSelectedAction(suggestionSelected) {
-  return {
-    type: SUGGESTIONSELECTED,
-    suggestionSelected,
-  };
-}
-export function handleSubmitAction(handleSubmit) {
-  return {
-    type: HANDLESUBMIT,
-    handleSubmit,
   };
 }
