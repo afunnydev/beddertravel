@@ -68,7 +68,7 @@ const DrawerHeader = ({ user, userRole }) => {
 
             { user
               ? <Typography variant="subtitle1">Hello, {user.name}</Typography>
-              : <Typography variant="subtitle1"><Link to="/auth">Sign Up</Link>  or <Link to="/auth">Sign In</Link></Typography>
+              : <Typography variant="subtitle1"><Link to="/auth/signUp">Sign Up</Link>  or <Link to="/auth/signIn">Sign In</Link></Typography>
             }
 
           </Grid>
