@@ -81,7 +81,22 @@ export class SignUpPage extends React.Component {
     return this.props.history.push('/home');
   }
 
-  verificationStep = (email) => this.setState({ hasValidationID: true, email });
+  verificationStep = (email) => {
+    this.setState({ 
+      hasValidationID: true, 
+      validationID: 10293109238129038, 
+      // This value needs to be connected to the datalayer. 
+      // The verificationID generated for the account should be assigned here as well as in the URL sent in the validaiton email.
+      
+      /* TODO: 
+      * [] Once this value is set up dynamically via the data layer, we can update the signUp form to redirect to the optional 
+      * url /auth/signUp/:validationID?
+      */
+     
+      email });
+  
+    console.log(this.state);
+  };
 
   render() {
     const { classes } = this.props;
