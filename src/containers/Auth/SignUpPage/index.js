@@ -57,7 +57,8 @@ export class SignUpPage extends React.Component {
     super(props, context);
     this.state = {
       withEmail: false,
-      validationCode: false,
+      hasValidationID: props.match.params.validationID ? true : false,
+      validationID: props.match.params.validationID,
       email: '',
     };
     this.vRefs = BedderValidator.makeRefs(BedderValidator.getSignupPage());
@@ -80,18 +81,18 @@ export class SignUpPage extends React.Component {
     return this.props.history.push('/home');
   }
 
-  verificationStep = (email) => this.setState({ validationCode: true, email });
+  verificationStep = (email) => this.setState({ hasValidationID: true, email });
 
   render() {
     const { classes } = this.props;
-    const { validationCode } = this.state;
+    const { hasValidationID } = this.state;
 
     return (
       <>
         <Helmet>
           <title>Sign up</title>
         </Helmet>
-        {!this.state.withEmail &&
+        {!this.state.withEmail && !hasValidationID &&
           <Mutation
             mutation={FACEBOOK_SIGNUP_MUTATION}
           >
@@ -132,9 +133,9 @@ export class SignUpPage extends React.Component {
           <ErrorResult error="Sign Up before continue" />
         )}
 
-        {validationCode && <ValidationForm email={this.state.email} />}
+        {hasValidationID && <ValidationForm email={this.state.email} />}
 
-        {!validationCode && this.state.withEmail && <SignUpForm nextStep={this.verificationStep} />}
+        {!hasValidationID && this.state.withEmail && <SignUpForm nextStep={this.verificationStep} />}
       </>
     );
   }

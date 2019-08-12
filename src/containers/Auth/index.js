@@ -34,7 +34,7 @@ const Auth = () => (
         <Switch>
           <Route path="/auth/signIn" component={LoginPage} />
           <Route path="/auth/forgot" component={ForgotPage} />
-          <Route path="/auth/signUp" component={SignUpPage} />
+          <Route path="/auth/signUp/:validationID?" component={SignUpPage} />
           <Route path="/auth/signOut" component={SignOutAndRedirect} />
           <Route path="/auth" component={AuthPage} />
         </Switch>
