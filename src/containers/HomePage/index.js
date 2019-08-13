@@ -156,7 +156,6 @@ const StyledResultMessage = props => (
   </Typography>
 );
 
-/* eslint-disable react/prefer-stateless-function */
 export class HomePage extends React.Component {
   constructor(props) {
     super(props);
@@ -560,30 +559,29 @@ export class HomePage extends React.Component {
                   {!this.props.submitResult &&
                     !this.props.submitError &&
                     this.props.submitting && (
-                      <div align="center">
-                        <CircularProgress />
-                      </div>
-                    )}
+                    <div align="center">
+                      <CircularProgress />
+                    </div>
+                  )}
 
                   {this.props.submitResult &&
                     this.state.isMapCollapsed &&
                     this.props.submitResult.result &&
                     this.props.submitResult.result.length > 0 && (
-                      <div style={{ padding: 10, paddingTop: 0 }}>
-                        <SearchResults
-                          bm={this.props.submitResult.bm}
-                          days={this.props.submitResult.days}
-                          results={this.props.submitResult.result}
-                          isMapView={this.props.isMapView}
-                        />
-                        <Pagination
-                          pp={10}
-                          currentPage={this.state.page}
-                          changePageFn={this.changePage}
-                          numItems={this.props.submitResult.count}
+                    <div style={{ padding: 10, paddingTop: 0 }}>
+                      <SearchResults
+                        days={this.props.submitResult.days}
+                        results={this.props.submitResult.result}
+                        isMapView={this.props.isMapView}
                       />
-                      </div>
-                    )}
+                      <Pagination
+                        pp={10}
+                        currentPage={this.state.page}
+                        changePageFn={this.changePage}
+                        numItems={this.props.submitResult.count}
+                      />
+                    </div>
+                  )}
                 </Grid>
 
                 <Grid
