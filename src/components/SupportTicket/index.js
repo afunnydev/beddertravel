@@ -13,6 +13,12 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
+import { makeStyles } from '@material-ui/core/styles';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+
 import BedderValidator from 'bedder/bedderValidator';
 
 const CREATE_TICKET_MUTATION = gql`
@@ -23,7 +29,18 @@ const CREATE_TICKET_MUTATION = gql`
   }
 `;
 
+const useStyles = makeStyles(() => ({
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  formControl: {
+    minWidth: '100%',
+  }
+}));
+
 const SupportTicket = ({ open, onClose, enqueueSnackbar }) => {
+  const classes = useStyles();
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const vs = BedderValidator.getValidators();
@@ -53,7 +70,28 @@ const SupportTicket = ({ open, onClose, enqueueSnackbar }) => {
       <DialogContent>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Validation
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="subject-simple">Select a subject</InputLabel>
+                <Select
+                  value={subject}
+                  onChange={
+                    (e) => {
+                      console.log(e.target.value);
+                      setSubject(e.target.value);
+                    }
+                  }
+                  inputProps={{
+                    name: 'subject',
+                    id: 'subject-simple',
+                  }}
+                >
+                  <MenuItem value={'1'}>Regarding Subject 1</MenuItem>
+                  <MenuItem value={'2'}>Regarding Subject 2</MenuItem>
+                  <MenuItem value={'3'}>Regarding Subject 3</MenuItem>
+                </Select>
+            </FormControl>
+
+            {/* <Validation
               group="supportTicket"
               componentTag="TextField"
               onChangeCallback="onChange"
@@ -69,7 +107,7 @@ const SupportTicket = ({ open, onClose, enqueueSnackbar }) => {
                   shrink: true
                 }}
               />
-            </Validation>
+            </Validation> */}
           </Grid>
 
           <Grid item xs={12}>
