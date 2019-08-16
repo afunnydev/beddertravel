@@ -1,4 +1,5 @@
 import React from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import styled from 'styled-components';
@@ -33,6 +34,23 @@ const UTILS_DATA_QUERY = gql`
 
 const MainLayout = ({ role, width, client, children}) => {
   const toggleMenu = (state) => client.writeData({ data: { menuOpen: state } });
+
+  /*
+  * Code that reorient the browser window to portrait when
+  * in landscape mode. The results are almost impossible
+  * to predict and the outcome is not 100%. My recommendation
+  * is to simply display "This app is optimized for Portrait Only"
+  * instead of using the code below.
+  * For more details, see: https://www.quora.com/Can-I-use-Javascript-to-force-a-mobile-browser-to-stay-in-portrait-or-landscape-mode
+  */
+  // useEffect(() => {
+  //   if (window.innerHeight < window.innerWidth) {
+  //     document.getElementsByTagName("body")[0].style.transform = "rotate(-90deg)";
+  //     document.getElementsByTagName("body")[0].style.width = "100vh";
+  //     document.getElementsByTagName("body")[0].style.height = "100vh";
+  //     document.getElementsByTagName("body")[0].style.overflow = "scroll";le);
+  //   }
+  // });
 
   return (
     <Query query={UTILS_DATA_QUERY}>
