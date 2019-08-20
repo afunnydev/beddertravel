@@ -12,6 +12,10 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Grid from '@material-ui/core/Grid';
 import MenuItem from '@material-ui/core/MenuItem';
 import Tooltip from '@material-ui/core/Tooltip';
+import FormGroup from '@material-ui/core/FormGroup';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
 
 import BedderConfig from 'bedder/bedderConfig';
 import BedderValidator from 'bedder/bedderValidator';
@@ -41,6 +45,7 @@ const BUSINESS_UNIT_QUERY = gql`
       currency
       isDeleted
       isNew
+      acceptAutomatically
     }
   }
 `;
@@ -66,6 +71,10 @@ const Room = (props) => {
 
   const onChangeCurrency = (newCurrency) => props.client.writeData(
     { id: `BusinessUnit:${props.unitId}`, data: { currency: newCurrency } }
+  );
+
+  const onChangeAcceptAutomatically = (value) => props.client.writeData(
+    { id: `BusinessUnit:${props.unitId}`, data: { acceptAutomatically: value } }
   );
 
   const onChangeAmenities = (amenityKey) => {
@@ -286,6 +295,31 @@ const Room = (props) => {
                     }}
                   />
                 </Validation>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormControl component="fieldset">
+                  <FormLabel component="legend" style={{ fontSize: 14 }}>Do you want to accept booking automatically?</FormLabel>
+                  <FormGroup row>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={businessUnit.acceptAutomatically}
+                          onChange={() => onChangeAcceptAutomatically(true)}
+                        />
+                      }
+                      label="Yes"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={!businessUnit.acceptAutomatically}
+                          onChange={() => onChangeAcceptAutomatically(false)}
+                        />
+                      }
+                      label="No"
+                    />
+                  </FormGroup>
+                </FormControl>
               </Grid>
             </Grid>
           </>

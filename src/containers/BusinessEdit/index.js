@@ -27,6 +27,7 @@ const BUSINESS_QUERY = gql`
       howToFind
       activities
       amenities
+      smsValidation
       address {
         id
         lat
@@ -57,6 +58,7 @@ const BUSINESS_QUERY = gql`
         currency
         isDeleted
         isNew
+        acceptAutomatically
       }
     }
   }

@@ -61,6 +61,7 @@ const CheckoutButton = ({ user, enqueueSnackbar, history, deposit, businessUnitI
           image={DefaultImage}
           name="Bedder Travel"
           description={name}
+          allowRememberMe={false}
           // TODO: Add more info to checkout.
           // billingAddress={true}
           // zipCode={true}

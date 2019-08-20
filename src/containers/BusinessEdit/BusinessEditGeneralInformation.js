@@ -13,6 +13,7 @@ import BedderConfig from 'bedder/bedderConfig';
 import calculateProgress from 'utils/calculateProgress';
 
 import Amenities from 'components/Amenities';
+import AcceptViaSms from 'components/AcceptViaSms';
 import ProgressTitle from './ProgressTitle.js';
 import BusinessEditAddress from './BusinessEditAddress.js';
 
@@ -22,6 +23,10 @@ const propertyMoods = BedderConfig.getPropertyMoods();
 const BusinessEditGeneralInformation = (props) => {
   const onChange = (event) => props.client.writeData(
     { id: `Business:${props.id}`, data: { [event.target.name]: event.target.value } }
+  );
+
+  const changeSmsValidation = (value) => props.client.writeData(
+    { id: `Business:${props.id}`, data: { smsValidation: value } }
   );
 
   const onChangeAmenities = (amenityKey) => {
@@ -116,6 +121,10 @@ const BusinessEditGeneralInformation = (props) => {
           </Grid>
 
           <Grid item xs={12}>
+            <AcceptViaSms checked={props.smsValidation} onClick={changeSmsValidation}/>
+          </Grid>
+
+          <Grid item xs={12}>
             <div style={{ marginBottom: 10, marginTop: 10 }}>
               <ShrinkedInputLabel>On-site amenities</ShrinkedInputLabel>
             </div>
@@ -140,6 +149,7 @@ BusinessEditGeneralInformation.propTypes = {
   propertyType: PropTypes.string,
   amenities: PropTypes.string,
   address: PropTypes.object,
+  smsValidation: PropTypes.bool.isRequired,
   client: PropTypes.object.isRequired,
 };
 
