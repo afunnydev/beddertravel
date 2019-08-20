@@ -74,7 +74,8 @@ class FilterBy extends React.Component {
               Price
             </Typography>
           </Grid>
-          <Grid item xs={5}>
+          {/* The sort by price is removed because the fonctionnality doesn't work on the backend to make sure the cheapest price is returned for a business. Fixed the issue in the backend before making it available for user. */}
+          {/* <Grid item xs={5}>
             <Button
               variant="contained"
               style={{ marginRight: 5 }}
@@ -92,7 +93,7 @@ class FilterBy extends React.Component {
             >
               <TrendingDownIcon />
             </Button>
-          </Grid>
+          </Grid> */}
 
           <div className={classes.divider} />
 

@@ -1,13 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { compose } from 'redux';
 
 import { withStyles } from '@material-ui/core/styles';
-
 import withMobileDialog from '@material-ui/core/withMobileDialog';
-
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
-
-import { compose } from 'redux';
 
 import BusinessItem from 'components/BusinessItem';
 
@@ -31,12 +29,10 @@ const styles = () => ({
 
 const SearchResults = props => {
   const { classes } = props;
-
   const isMobile = props.width === 'xs' || props.width === 'sm';
-
   let gridListStyle = props.isMapView ? classes.gridListMap : classes.gridList;
-
   gridListStyle = isMobile ? classes.gridListMobile : gridListStyle;
+  
   return (
     <React.Fragment>
       <GridList
@@ -53,9 +49,7 @@ const SearchResults = props => {
             classes={{ tile: classes.gridListTile }}
             style={{ padding: 0 }}
           >
-            <BusinessItem bm={props.bm} days={props.days} value={{ ...row }}>
-              {i}
-            </BusinessItem>
+            <BusinessItem days={props.days} value={{ ...row }} />
           </GridListTile>
         ))}
       </GridList>
@@ -63,7 +57,13 @@ const SearchResults = props => {
   );
 };
 
-SearchResults.propTypes = {};
+SearchResults.propTypes = {
+  days: PropTypes.number.isRequired,
+  results: PropTypes.array.isRequired,
+  isMapView: PropTypes.bool.isRequired,
+  classes: PropTypes.object.isRequired,
+  width: PropTypes.string.isRequired
+};
 
 export default compose(
   withStyles(styles),
