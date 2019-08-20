@@ -21,6 +21,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 import BackButton from 'components/BackButton';
 import MessageError from 'components/MessageError';
+import AcceptViaSms from 'components/AcceptViaSms';
 
 import BedderValidator from 'bedder/bedderValidator';
 import Bedder from 'bedder/bedder';
@@ -50,6 +51,7 @@ export class BusinessAddPage extends React.Component {
   saveToState = e => this.setState({ [e.target.name]: e.target.value });
   handleChange = (name, value) => this.setState({ [name]: value });
   handlePhoneChange = value => this.setState({ ownerPhone: value });
+  handleSmsChange = value => this.setState({ smsNotification: value })
 
   handleSubmit = async (submitfn) => {
     const validateField = fieldValidatorCore.checkGroup('addBusiness');
@@ -195,32 +197,7 @@ export class BusinessAddPage extends React.Component {
                 </Validation>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <FormControl component="fieldset">
-                  <FormLabel component="legend" style={{ fontSize: 14 }}>Does the owner want to accept bookings via SMS?</FormLabel>
-                  <FormGroup row>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={this.state.smsNotification}
-                          onChange={() => this.handleChange('smsNotification', true)}
-                          value="checkedA"
-                        />
-                      }
-                      label="Yes"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={!this.state.smsNotification}
-                          onChange={() => this.handleChange('smsNotification', false)}
-                          value="checkedB"
-                        />
-                      }
-                      label="No"
-                    />
-                  </FormGroup>
-                  <FormHelperText style={{ marginTop: '-3px' }}>The owner will still be able to accept bookings via his account, or by email.</FormHelperText>
-                </FormControl>
+                <AcceptViaSms checked={this.state.smsNotification} onClick={this.handleSmsChange}/>
               </Grid>
               {this.state.smsNotification && <React.Fragment>
                 <Grid item xs={12} sm={6}>
