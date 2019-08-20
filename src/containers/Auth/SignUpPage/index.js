@@ -57,11 +57,19 @@ export class SignUpPage extends React.Component {
     super(props, context);
     this.state = {
       withEmail: false,
-      hasValidationID: props.match.params.validationID ? true : false,
-      validationID: props.match.params.validationID,
-      email: '',
+      hasValidationID: false,
+      email: ''
     };
     this.vRefs = BedderValidator.makeRefs(BedderValidator.getSignupPage());
+  }
+
+  componentDidMount() {
+    if (this.props.match.params.validationID) {
+      this.setState({
+        hasValidationID: true,
+        email: atob(this.props.match.params.validationID)
+      });
+    }
   }
 
   responseFacebook = async (response, facebookSignup) => {
@@ -84,18 +92,9 @@ export class SignUpPage extends React.Component {
   verificationStep = (email) => {
     this.setState({ 
       hasValidationID: true, 
-      validationID: 10293109238129038, 
-      // This value needs to be connected to the datalayer. 
-      // The verificationID generated for the account should be assigned here as well as in the URL sent in the validaiton email.
-      
-      /* TODO: 
-      * [] Once this value is set up dynamically via the data layer, we can update the signUp form to redirect to the optional 
-      * url /auth/signUp/:validationID?
-      */
-     
-      email });
-  
-    console.log(this.state);
+      email 
+    });
+    this.props.history.push(`/auth/signUp/${btoa(email)}`);
   };
 
   render() {
