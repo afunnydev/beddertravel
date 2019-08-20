@@ -41,7 +41,7 @@ const useStyles = makeStyles(() => ({
 
 const SupportTicket = ({ open, onClose, enqueueSnackbar }) => {
   const classes = useStyles();
-  const [subject, setSubject] = useState('');
+  const [subject, setSubject] = useState('0');
   const [message, setMessage] = useState('');
   const vs = BedderValidator.getValidators();
 
@@ -54,6 +54,8 @@ const SupportTicket = ({ open, onClose, enqueueSnackbar }) => {
 
   const onCompleted = () => {
     enqueueSnackbar('We received your inquiry. We will be in touch shortly.', { variant: 'success' });
+    setSubject('0');
+    setMessage('');
     onClose();
   };
 
@@ -72,42 +74,23 @@ const SupportTicket = ({ open, onClose, enqueueSnackbar }) => {
           <Grid item xs={12}>
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="subject-simple">Select a subject</InputLabel>
-                <Select
-                  value={subject}
-                  onChange={
-                    (e) => {
-                      console.log(e.target.value);
-                      setSubject(e.target.value);
-                    }
-                  }
-                  inputProps={{
-                    name: 'subject',
-                    id: 'subject-simple',
-                  }}
-                >
-                  <MenuItem value={'1'}>Regarding Subject 1</MenuItem>
-                  <MenuItem value={'2'}>Regarding Subject 2</MenuItem>
-                  <MenuItem value={'3'}>Regarding Subject 3</MenuItem>
-                </Select>
-            </FormControl>
-
-            {/* <Validation
-              group="supportTicket"
-              componentTag="TextField"
-              onChangeCallback="onChange"
-              validators={[vs.notEmpty]}
-            >
-              <TextField
-                fullWidth
-                name="subject"
-                onChange={(e) => setSubject(e.target.value)}
+              <Select
                 value={subject}
-                label="Subject"
-                InputLabelProps={{
-                  shrink: true
+                onChange={
+                  (e) => {
+                    setSubject(e.target.value);
+                  }
+                }
+                inputProps={{
+                  name: 'subject',
+                  id: 'subject-simple',
                 }}
-              />
-            </Validation> */}
+              >
+                <MenuItem value="0">Regarding Subject 1</MenuItem>
+                <MenuItem value="1">Regarding Subject 2</MenuItem>
+                <MenuItem value="2">Regarding Subject 3</MenuItem>
+              </Select>
+            </FormControl>
           </Grid>
 
           <Grid item xs={12}>
