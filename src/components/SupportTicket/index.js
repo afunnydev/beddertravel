@@ -13,6 +13,12 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
+import { makeStyles } from '@material-ui/core/styles';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+
 import BedderValidator from 'bedder/bedderValidator';
 
 const CREATE_TICKET_MUTATION = gql`
@@ -23,8 +29,19 @@ const CREATE_TICKET_MUTATION = gql`
   }
 `;
 
+const useStyles = makeStyles(() => ({
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  formControl: {
+    minWidth: '100%',
+  }
+}));
+
 const SupportTicket = ({ open, onClose, enqueueSnackbar }) => {
-  const [subject, setSubject] = useState('');
+  const classes = useStyles();
+  const [subject, setSubject] = useState('0');
   const [message, setMessage] = useState('');
   const vs = BedderValidator.getValidators();
 
@@ -37,6 +54,8 @@ const SupportTicket = ({ open, onClose, enqueueSnackbar }) => {
 
   const onCompleted = () => {
     enqueueSnackbar('We received your inquiry. We will be in touch shortly.', { variant: 'success' });
+    setSubject('0');
+    setMessage('');
     onClose();
   };
 
@@ -53,23 +72,25 @@ const SupportTicket = ({ open, onClose, enqueueSnackbar }) => {
       <DialogContent>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Validation
-              group="supportTicket"
-              componentTag="TextField"
-              onChangeCallback="onChange"
-              validators={[vs.notEmpty]}
-            >
-              <TextField
-                fullWidth
-                name="subject"
-                onChange={(e) => setSubject(e.target.value)}
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="subject-simple">Select a subject</InputLabel>
+              <Select
                 value={subject}
-                label="Subject"
-                InputLabelProps={{
-                  shrink: true
+                onChange={
+                  (e) => {
+                    setSubject(e.target.value);
+                  }
+                }
+                inputProps={{
+                  name: 'subject',
+                  id: 'subject-simple',
                 }}
-              />
-            </Validation>
+              >
+                <MenuItem value="0">Regarding Subject 1</MenuItem>
+                <MenuItem value="1">Regarding Subject 2</MenuItem>
+                <MenuItem value="2">Regarding Subject 3</MenuItem>
+              </Select>
+            </FormControl>
           </Grid>
 
           <Grid item xs={12}>
